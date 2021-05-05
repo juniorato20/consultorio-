@@ -1,0 +1,104 @@
+{% extends 'login/vista_principal.html' %}
+{% block titulo %}
+Listado de doctores
+{% endblock titulo %}
+
+{% block body %}
+{% if doctores %}
+<div class="card-default">
+   
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Especialidad</th>
+                    <th>Sexo</th>
+                    <th>Direccion</th>
+                    <th>Celular</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in doctores %}
+                <tr >
+                    <td>{{p.nombre}}</td>
+                    <td>{{p.apellido}}</td>
+                    <td>{{p.especialidad}}</td>
+                    <td>{{p.sexo}}</td>
+                    <td>{{p.direccion}}</td>
+                    <td>{{p.celular}}</td>
+                    <td>
+                        <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
+                            <i class="fas fa-edit"></i></button>
+                            <a href="{% url 'eliminar_doctor' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
+                                class="fas fa-trash-alt"></i></a>
+                                     
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
+                registro</button>
+        </div>
+    </div>
+</div>
+{% else %}
+<h1>No existen Pacientes Registrados</h1>
+{% endif %}
+<div class="modal face" id="creacion" role="dialog">
+</div>
+<div class="modal face" id="edicion" role="dialog">
+</div>
+{% if is_paginated %}
+<div class="mt-2">
+    <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a href="#" class="page-link">Previous</a>
+        </li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+        
+        <li class="page-item {% if page_obj.number == i %} active {% endif %}">
+            <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+        </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a href="#" class="page-link">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock body %}
+
+{% block extrajs %}
+<script type="text/javascript">
+    var $ = jQuery.noConflict();
+    function abrir_modal_creacion(url){
+        $('#creacion').load(url, function(){
+            $(this).modal('show')
+        });
+    }
+    function abrir_modal_edicion(url){
+        $('#edicion').load(url, function(){
+            $(this).modal('show')
+        });
+    }
+</script>
+
+{% endblock extrajs %}

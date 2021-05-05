@@ -1,0 +1,16 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <h2 class="modal-title">Creacion de Citas</h2>
+       
+        <form action="{% url 'crear_cita' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit"><i class="fas fa-save "></i> Guardar</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

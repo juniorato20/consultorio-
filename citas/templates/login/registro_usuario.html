@@ -1,0 +1,63 @@
+{% extends "login/base.html" %}
+{% block title %} Registrar Usuario {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>NUEVO USUARIO</h2>
+    <form method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <div class="fieldwrapper col-sm12 control-label">
+            <div>Usuario</div>
+            <div class="col-sm-8 row-nombre">
+                <input type="text" name="username" id="username" required="True" class="form-control">
+            </div>
+        </div>
+
+        <div class="fieldwrapper col-sm12 control-label">
+            <div>Contraseña</div>
+            <div class="col-sm-8 row-nombre">
+                <input type="password" name="password1" id="password1" required="True" class="form-control">
+            </div>
+        </div>
+
+        <div class="fieldwrapper col-sm12 control-label">
+            <div> Confirmar Contraseña</div>
+            <div class="col-sm-8 row-nombre">
+                <input type="password" name="password2" id="password2" required="True" class="form-control">
+            </div>
+        </div>
+
+        <div class="fieldwrapper col-sm12 control-label">
+            <div>Celular</div>
+            <div class="col-sm-8 row-nombre">
+                <input type="text" name="celular" id="celular" required="True" class="form-control">
+            </div>
+        </div>
+
+        <div class="fieldwrapper col-sm12 control-label">
+            <div>Direccion</div>
+            <div class="col-sm-8 row-nombre">
+                <input type="text" name="direccion" id="direccion" required="True" class="form-control">
+            </div>
+        </div>
+
+        <div class="fieldwrapper col-sm12 control-label">
+            <div>Cedula</div>
+            <div class="col-sm-8 row-nombre">
+                <input type="text" name="cedula" id="cedula" required="True" class="form-control">
+            </div>
+        </div>
+
+        <div class="fieldwrapper col-sm12 control-label">
+            {{ form.foto.erros }}
+            <label for="{{ form.foto.id_for_label}}">Foto</label>
+            {{ form.foto }}
+        </div>
+        <br>
+        <footer>
+            <button class="btn btn-info" type="submit">Guardar</button>
+            <button class="btn btn-danger" onclick="window.location='/login/'">Salir</button>
+        </footer>
+    </form>
+</div>
+{% endblock %}

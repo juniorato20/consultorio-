@@ -1,0 +1,70 @@
+{% extends 'login/vista_principal.html' %}
+{% block titulo %}
+Listado de Citas
+{% endblock titulo %}
+
+{% block body %}
+
+{% if citas %}
+<div class="card-default">
+   
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Doctor</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Descripcion</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in citas %}
+                <tr>
+                    <td>{{p.paciente}}</td>
+                    <td>{{p.doctor}}</td>
+                    <td>{{p.fecha}}</td>
+                    <td>{{p.hora}}</td>
+                    <td>{{p.descripcion}}</td>
+                    <td>
+                        <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_cita' p.id %}')">
+                            <i class="fas fa-edit"></i></button>
+                        <a href="{% url 'eliminar_cita' p.id %}" class="btn btn-danger btn-xs btn-flat">
+                            <i class="fas fa-trash-alt"></i> </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')"><i class="fas fa-plus"></i></i> Nuevo
+                registro</button>
+        </div>
+    </div>
+</div>
+{% else %}
+<h1>No existen Citas Registrados</h1>
+{% endif %}
+<div class="modal face" id="creacion" role="dialog">
+</div>
+<div class="modal face" id="edicion" role="dialog">
+</div>
+{% endblock body %}
+
+{% block extrajs %}
+<script type="text/javascript">
+    var $ = jQuery.noConflict();
+    function abrir_modal_creacion(url) {
+        $('#creacion').load(url, function () {
+            $(this).modal('show')
+        });
+    }
+    function abrir_modal_edicion(url) {
+        $('#edicion').load(url, function () {
+            $(this).modal('show')
+        });
+    }
+</script>
+{% endblock extrajs %}
