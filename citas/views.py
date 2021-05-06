@@ -77,7 +77,7 @@ class CrearPaciente(SuccessMessageMixin,CreateView):
 class ListadoPaciente(ListView):
     template_name= 'paciente/listar_paciente.html'
     queryset = Paciente.objects.all().order_by('-id')
-    paginate_by = 5
+    paginate_by = 3
     context_object_name = 'pacientes'
     
 class ActualizarPaciente(SuccessMessageMixin,UpdateView):
@@ -109,9 +109,9 @@ class CrearCita(SuccessMessageMixin,CreateView):
         return  "Se ha Creado Correctamente"
 
 class ListadoCita(ListView):
-    model = Cita 
     template_name= 'cita/listar_cita.html'
-    queryset = Cita.objects.filter(estado=True)
+    queryset = Paciente.objects.all().order_by('-id')
+    paginate_by = 3
     context_object_name = 'citas'
 
 class ActualizarCita(SuccessMessageMixin,UpdateView):
@@ -145,7 +145,7 @@ class CrearDoctor(SuccessMessageMixin,CreateView):
 class ListadoDoctor(ListView):
     template_name = 'doctor/listar_doctor.html'
     queryset = Doctor.objects.all().order_by('-id')
-    paginate_by = 5
+    paginate_by = 3
     context_object_name = 'doctores'
 
 class ActualizarDoctor(SuccessMessageMixin,UpdateView):
@@ -178,7 +178,7 @@ class CrearReporte(SuccessMessageMixin,CreateView):
 class ListadoReporte(ListView):
     template_name= 'reporte/listar_reporte.html'
     queryset = Reporte.objects.all().order_by('-id')
-    paginate_by = 1
+    paginate_by = 3
     context_object_name = 'reportes'
 
 class ActualizarReporte(SuccessMessageMixin,UpdateView):
