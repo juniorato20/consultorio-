@@ -7,16 +7,23 @@ Listado de Reportes
 {% if reportes %}
 
 <div class="card-default">
-    <div class= "busqueda">
-        <form class="navbar-search pulll-left" action="">
-            <input type="text" class="search-query" placeholder="Buscarr">
-            <div class="btn-group">
-                <button class="btn btn-primary" type="submit"><i></i> </button>
+    <form action="" method="POST">
+        <div class="row">
+          <div class="col-auto mb-4 mb-md-0">
+            <p class="pt-2"><strong>Listado de reportes</strong></p>
+          </div>
+          <div class="col-md-5 col-12 mb-4 mb-md-0">
+            <div class="form-outline mb-4">
+              <input type="text" class="form-control" placeholder="Buscar" name="buscar" value="" />
             </div>
-        </form>
-
-    </div>
-    
+          </div>
+          <div class="col-auto mb-4 mb-md-0">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search fa-sm"></i>
+            </button>
+          </div>
+        </div>
+      </form>   
     <div class="card-body">
         <table class="table">
             <thead>
