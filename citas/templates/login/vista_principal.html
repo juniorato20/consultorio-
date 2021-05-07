@@ -90,10 +90,10 @@
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {% if user.is_authenticated %}
                             Usuario: <b>{{ user | upper }}</b>
-                            {% endif %}
+                            
                             <img src="{% static 'images/admin.jpg' %}" class="rounded-circle" alt="Cinque Terre" width="50px" height="50px">
                         </a>
-                        
+                        {% endif %}
                         <div class="user-menu dropdown-menu">
                             <a class="nav-link" href="#"><i class="fa fa- user"></i>Perfil</a>
                             <a class="nav-link" href="#"><i class="fa fa -cog"></i>Administración</a>
