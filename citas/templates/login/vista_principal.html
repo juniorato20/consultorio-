@@ -91,8 +91,9 @@
                             {% if user.is_authenticated %}
                             Usuario: <b>{{ user | upper }}</b>
                             {% endif %}
-                            <img class="user-avatar rounded-circle" src="{% static 'images/admin.jpg' %}" alt="User Avatar">
+                            <img src="{% static 'images/admin.jpg' %}" class="rounded-circle" alt="Cinque Terre" width="304" height="236">
                         </a>
+                        
                         <div class="user-menu dropdown-menu">
                             <a class="nav-link" href="#"><i class="fa fa- user"></i>Perfil</a>
                             <a class="nav-link" href="#"><i class="fa fa -cog"></i>Administración</a>
@@ -143,6 +144,7 @@
     
         })
     </script>
+    
     {% endfor %}
     {% endif %}
     {% block extrajs %}
