@@ -6,37 +6,23 @@ Listado de Pacientes
 {% block body %}
 {% if pacientes %}
 <div class=" card-default">
-    <form action="">
-        <!--Grid row-->
+    <form action="" method="POST">
         <div class="row">
-          <!--Grid column-->
           <div class="col-auto mb-4 mb-md-0">
             <p class="pt-2"><strong>Listado de pacientes</strong></p>
           </div>
-          <!--Grid column-->
-  
-          <!--Grid column-->
           <div class="col-md-5 col-12 mb-4 mb-md-0">
-            <!-- Email input -->
             <div class="form-outline mb-4">
-              <input type="email" id="form5Example2" class="form-control" />
-              
+              <input type="text" class="form-control" placeholder="Buscar" name="buscar" value="" />
             </div>
           </div>
-          <!--Grid column-->
-  
-          <!--Grid column-->
           <div class="col-auto mb-4 mb-md-0">
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary mb-4">
-              Buscador
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
-          <!--Grid column-->
         </div>
-        <!--Grid row-->
       </form>
-
  
     <div class="card-body">
         <table class="table" >
