@@ -5,46 +5,77 @@ Listado de doctores
 
 {% block body %}
 {% if doctores %}
-<div class="card-default">
-   
-    <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Especialidad</th>
-                    <th>Sexo</th>
-                    <th>Direccion</th>
-                    <th>Celular</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in doctores %}
-                <tr >
-                    <td>{{p.nombre}}</td>
-                    <td>{{p.apellido}}</td>
-                    <td>{{p.especialidad}}</td>
-                    <td>{{p.sexo}}</td>
-                    <td>{{p.direccion}}</td>
-                    <td>{{p.celular}}</td>
-                    <td>
-                        <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
-                            <i class="fas fa-edit"></i></button>
-                            <a href="{% url 'eliminar_doctor' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
-                                class="fas fa-trash-alt"></i></a>
-                                     
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="card-footer">
-            <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
-                registro</button>
+<div class=" card-default">
+    <form action="">
+        <!--Grid row-->
+        <div class="row">
+          <!--Grid column-->
+          <div class="col-auto mb-4 mb-md-0">
+            <p class="pt-2"><strong>Listado de doctores</strong></p>
+          </div>
+          <!--Grid column-->
+  
+          <!--Grid column-->
+          <div class="col-md-5 col-12 mb-4 mb-md-0">
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <input type="email" id="form5Example2" class="form-control" />
+              
+            </div>
+          </div>
+          <!--Grid column-->
+  
+          <!--Grid column-->
+          <div class="col-auto mb-4 mb-md-0">
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary mb-4">
+              Buscador
+            </button>
+          </div>
+          <!--Grid column-->
         </div>
+        <!--Grid row-->
+      </form>
+
+     <div class="card-body">
+        
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Especialidad</th>
+                <th>Sexo</th>
+                <th>Direccion</th>
+                <th>Celular</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in doctores %}
+            <tr>
+                <td>{{p.nombre}}</td>
+                <td>{{p.apellido}}</td>
+                <td>{{p.especialidad}}</td>
+                <td>{{p.sexo}}</td>
+                <td>{{p.direccion}}</td>
+                <td>{{p.celular}}</td>
+                <td>
+                    <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
+                        <i class="fas fa-edit"></i></button>
+                    <a href="{% url 'eliminar_doctor' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
+                            class="fas fa-trash-alt"></i></a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
+            registro</button>
     </div>
+</div>
 </div>
 {% else %}
 <h1>No existen Doctores Registrados</h1>
@@ -67,7 +98,7 @@ Listado de doctores
         </li>
         {% endif %}
         {% for i in paginator.page_range %}
-        
+
         <li class="page-item {% if page_obj.number == i %} active {% endif %}">
             <a href="?page={{ i }}" class="page-link">{{ i }}</a>
         </li>
@@ -89,13 +120,13 @@ Listado de doctores
 {% block extrajs %}
 <script type="text/javascript">
     var $ = jQuery.noConflict();
-    function abrir_modal_creacion(url){
-        $('#creacion').load(url, function(){
+    function abrir_modal_creacion(url) {
+        $('#creacion').load(url, function () {
             $(this).modal('show')
         });
     }
-    function abrir_modal_edicion(url){
-        $('#edicion').load(url, function(){
+    function abrir_modal_edicion(url) {
+        $('#edicion').load(url, function () {
             $(this).modal('show')
         });
     }
