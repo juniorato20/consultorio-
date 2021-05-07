@@ -110,7 +110,7 @@ class CrearCita(SuccessMessageMixin,CreateView):
 
 class ListadoCita(ListView):
     template_name= 'cita/listar_cita.html'
-    queryset = Paciente.objects.all().order_by('-id')
+    queryset = Citas.objects.all().order_by('-id')
     paginate_by = 3
     context_object_name = 'citas'
 

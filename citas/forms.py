@@ -70,7 +70,6 @@ class PacienteForm(forms.ModelForm):
             'nombre': 'Ingrese su nombre',
             'apellido' : 'Ingrese su apellido',
             'direccion' : 'Ingrese su direccion',
-            
             'sexo' : 'Sexo',
             'correo' : 'Ingrese su correo',
             'celular' : 'Ingrese su celular'
