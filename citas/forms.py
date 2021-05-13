@@ -163,7 +163,8 @@ class CitaForm(forms.ModelForm):
             'fecha' : forms.DateInput(
                 attrs = {
                     'class' : 'form-control',
-                    'placeholder' : '12/12/2021'
+                    'placeholder' : '12/12/2021',
+                    'id' : 'fecha'
                 }
             ),
             'descripcion' : forms.TextInput(

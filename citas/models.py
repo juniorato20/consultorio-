@@ -32,6 +32,7 @@ class Paciente(models.Model):
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     correo = models.EmailField()
     celular = models.CharField( max_length=10)
+    estado = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Paciente'

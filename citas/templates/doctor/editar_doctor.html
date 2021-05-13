@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <h2 class="modal-title">Editar Doctor</h2>
+        <h2 class="modal-title">Actualizar Doctor</h2>
        
         <form action="{% url 'editar_doctor' object.id %}" method="POST">
             {% csrf_token %}

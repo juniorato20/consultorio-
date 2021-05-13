@@ -1,5 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
+        <h2 class="modal-title">Actualizar Cita</h2>
       
         <form action="{% url 'editar_cita' object.id %}" method="POST">
             {% csrf_token %}
