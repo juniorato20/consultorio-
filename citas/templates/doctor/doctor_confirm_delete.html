@@ -6,7 +6,7 @@ Confirmar Eliminacion
 <form method="POST">
     {% csrf_token %}
     <p><strong>Desea eliminar el doctor</strong></p>
-    <h3>{{ object.nombre}} {{object.apellido }}</h3>
+    <h3> {{ object.nombre}} {{object.apellido }} </h3>
     <button class="btn btn-danger" type="submit">Confirmar</button>
     <a href="{% url 'listar_doctor' %}">Cancelar</a>
 </form>

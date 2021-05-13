@@ -43,17 +43,14 @@ Listado de Reportes
                     <td>
                         <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
                             <i class="fas fa-edit"></i></button>
-                        <a href="{% url 'eliminar_reporte' p.id%}" class="btn btn-danger btn-xs btn-flat"><i
+                        <a href= "{% url 'eliminar_reporte' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
                                 class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <div class="card-footer">
-            <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
-                registro</button>
-        </div>
+        
     </div>
 </div>
 {% else %}
@@ -62,6 +59,10 @@ Listado de Reportes
 <div class="modal face" id="creacion" role="dialog">
 </div>
 <div class="modal face" id="edicion" role="dialog">
+</div>
+<div class="card-footer">
+    <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        registro</button>
 </div>
 
 {% if is_paginated %}

@@ -8,7 +8,7 @@ Confirmar Eliminacion
     <p><strong>Desea eliminar al paciente</strong></p>
     <h3>{{ object.nombre}} {{object.apellido }}</h3>
     <button class="btn btn-danger" type="submit">Confirmar</button>
-    <a href="{% url 'listar_paciente' %}">Cancelar</a>
+    <a href="{%  url 'listar_paciente' %}">Cancelar</a>
 </form>
 
 {% endblock body %}

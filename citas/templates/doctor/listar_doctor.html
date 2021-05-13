@@ -8,60 +8,57 @@ Listado de doctores
 <div class=" card-default">
     <form action="" method="POST">
         <div class="row">
-          <div class="col-auto mb-4 mb-md-0">
-            <p class="pt-2"><strong>Listado de doctores</strong></p>
-          </div>
-          <div class="col-md-5 col-12 mb-4 mb-md-0">
-            <div class="form-outline mb-4">
-              <input type="text" class="form-control" placeholder="Buscar" name="buscar" value="" />
+            <div class="col-auto mb-4 mb-md-0">
+                <p class="pt-2"><strong>Listado de doctores</strong></p>
             </div>
-          </div>
-          <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-search fa-sm"></i>
-            </button>
-          </div>
+            <div class="col-md-5 col-12 mb-4 mb-md-0">
+                <div class="form-outline mb-4">
+                    <input type="text" class="form-control" placeholder="Buscar" name="buscar" value="" />
+                </div>
+            </div>
+            <div class="col-auto mb-4 mb-md-0">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
         </div>
-      </form>
-     <div class="card-body">
-        
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Especialidad</th>
-                <th>Sexo</th>
-                <th>Direccion</th>
-                <th>Celular</th>
-                <th>Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in doctores %}
-            <tr>
-                <td>{{p.nombre}}</td>
-                <td>{{p.apellido}}</td>
-                <td>{{p.especialidad}}</td>
-                <td>{{p.sexo}}</td>
-                <td>{{p.direccion}}</td>
-                <td>{{p.celular}}</td>
-                <td>
-                    <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
-                        <i class="fas fa-edit"></i></button>
-                    <a href="{% url 'eliminar_doctor' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
-                            class="fas fa-trash-alt"></i></a>
+    </form>
+    <div class="card-body">
 
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="card-footer">
-        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
-            registro</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Especialidad</th>
+                    <th>Sexo</th>
+                    <th>Direccion</th>
+                    <th>Celular</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in doctores %}
+                <tr>
+                    <td>{{p.nombre}}</td>
+                    <td>{{p.apellido}}</td>
+                    <td>{{p.especialidad}}</td>
+                    <td>{{p.sexo}}</td>
+                    <td>{{p.direccion}}</td>
+                    <td>{{p.celular}}</td>
+                    <td>
+                        <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
+                            <i class="fas fa-edit"></i></button>
+                        <a href="{% url 'eliminar_doctor' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
+                                class="fas fa-trash-alt"></i></a>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
     </div>
-</div>
 </div>
 {% else %}
 <h1>No existen Doctores Registrados</h1>
@@ -69,6 +66,11 @@ Listado de doctores
 <div class="modal face" id="creacion" role="dialog">
 </div>
 <div class="modal face" id="edicion" role="dialog">
+</div>
+<div class="card-footer">
+    <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i
+            class="fas fa-plus"></i></i> Nuevo
+        registro</button>
 </div>
 {% if is_paginated %}
 <div class="mt-2">
