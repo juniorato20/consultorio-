@@ -43,7 +43,7 @@ Listado de Reportes
                     <td>
                         <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
                             <i class="fas fa-edit"></i></button>
-                        <a href= "{% url 'eliminar_reporte' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
+                        <a href= "{% url 'eliminar_reporte' p.id %}"onclick="" class="btn btn-danger btn-xs btn-flat"><i
                                 class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
@@ -112,6 +112,15 @@ Listado de Reportes
         $('#edicion').load(url, function () {
             $(this).modal('show')
         });
+    }
+    function eliminar(url){
+        if (!confirmar("ALERTA!! va a eliminar este registro, si desea eliminarlo de click en ACEPTAR\n de lo contrario de click en CANCELAR.")){
+            return false;
+        }
+        else{
+            document.location = url;
+            return true;
+        }
     }
 </script>
 {% endblock extrajs %}

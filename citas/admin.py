@@ -8,7 +8,7 @@ class PacienteResource(resources.ModelResource):
        model = Paciente
 
 class PacienteAdmin(ImportExportModelAdmin):
-    list_display = ('nombre','apellido','direccion','sexo','correo','celular','estado')
+    list_display = ('nombre','apellido','direccion','sexo','correo','fecha_nacimiento','celular','estado')
     search_fields = ['nombre', 'apellido']
     resources_class = PacienteResource
 

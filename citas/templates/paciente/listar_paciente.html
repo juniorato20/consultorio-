@@ -33,6 +33,7 @@ Listado de Pacientes
                     <th>Direccion</th>
                     <th>Sexo</th>
                     <th>Correo</th>
+                    <th>Fecha Nacimiento</th>
                     <th>Celular</th>
                     <th>Opciones</th>
                 </tr>
@@ -45,6 +46,7 @@ Listado de Pacientes
                     <td>{{p.direccion}}</td>
                     <td>{{p.sexo}}</td>
                     <td>{{p.correo}}</td>
+                    <td>{{p.fecha_nacimiento}}</td>
                     <td>{{p.celular}}</td>
                     <td>
                         <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_paciente' p.id %}')">

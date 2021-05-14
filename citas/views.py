@@ -3,12 +3,12 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import *
-from django.db.models import Q
 from django.urls import reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.core.paginator import Paginator
+
 from .forms import * 
 from .models import *
 
@@ -77,7 +77,7 @@ class CrearPaciente(SuccessMessageMixin,CreateView):
 
 class ListadoPaciente(ListView):
     template_name= 'paciente/listar_paciente.html'
-    queryset = Paciente.objects.all().order_by('-id')
+    queryset = Paciente.objects.all().order_by('-id','nombre')
     paginate_by = 3
     context_object_name = 'pacientes'
     
@@ -111,7 +111,7 @@ class CrearCita(SuccessMessageMixin,CreateView):
 
 class ListadoCita(ListView):
     template_name= 'cita/listar_cita.html'
-    queryset = Cita.objects.all().order_by('-id')
+    queryset = Cita.objects.all().order_by('-id','fecha')
     paginate_by = 3
     context_object_name = 'citas'
 
@@ -149,6 +149,11 @@ class ListadoDoctor(ListView):
     paginate_by = 3
     context_object_name = 'doctores'
 
+    
+
+
+    
+
 class ActualizarDoctor(SuccessMessageMixin,UpdateView):
     model = Doctor
     form_class = DoctorForm
@@ -158,14 +163,16 @@ class ActualizarDoctor(SuccessMessageMixin,UpdateView):
         print(cleaned_data)
         return  "Se ha Actualizado Correctamente"
 
-class EliminarDoctor(SuccessMessageMixin,DeleteView):
+class EliminarDoctor(DeleteView):
     model = Doctor
     template_name = 'doctor/doctor_confirm_delete.html'
-    success_url = reverse_lazy('listar_doctor')
-    def get_success_message(self, cleaned_data):
-        print(cleaned_data)
-        return  "Se ha Elininado Correctamente"
-    
+    def post(self, request, pk, *args, **kwargs):
+        object = Doctor.objects.get(id=pk)
+        object.estado = False
+        object.save()
+        return redirect('listar_doctor')
+
+       
 #========================== VISTAS BASADOS EN CLASES REPORTE =======================#
 class CrearReporte(SuccessMessageMixin,CreateView):
     model = Reporte
@@ -178,7 +185,7 @@ class CrearReporte(SuccessMessageMixin,CreateView):
 
 class ListadoReporte(ListView):
     template_name= 'reporte/listar_reporte.html'
-    queryset = Reporte.objects.all().order_by('-id')
+    queryset = Reporte.objects.all().order_by('-id','fecha')
     paginate_by = 3
     context_object_name = 'reportes'
 
@@ -191,12 +198,11 @@ class ActualizarReporte(SuccessMessageMixin,UpdateView):
         print(cleaned_data)
         return  "Se ha Actualizado Correctamente"
 
-class EliminarReporte(SuccessMessageMixin, DeleteView):
+class EliminarReporte(DeleteView):
     model = Reporte
-    success_url = reverse_lazy('listar_reporte')
     template_name = 'reporte/reporte_confirm_delete.html'
-    success_message = 'Reporte %(nombre)s Eliminar'
-    
-    def get_success_message(self, cleaned_data):
-        print(cleaned_data)
-        return  "Se ha Elininado Correctamente"
+    def post(self, request, pk, *args, **kwargs):
+        object = Reporte.objects.get(id=pk)
+        object.estado = False
+        object.save()
+        return redirect('listar_reporte')

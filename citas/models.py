@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.safestring import mark_safe
+from django.utils.safestring  import mark_safe
 genero = [
     ('Hombre', 'Hombre'),
     ('Mujer', 'Mujer'),
@@ -19,8 +19,10 @@ class Doctor(models.Model):
     celular = models.CharField( max_length=10)
 
     class Meta:
+        ordering = ["nombre"]
         verbose_name = 'Doctor'
         verbose_name_plural = 'Doctores'
+    
 
 def __str__(self):
         return self.nombre
@@ -31,10 +33,12 @@ class Paciente(models.Model):
     direccion = models.TextField(max_length=225,blank=False, null=False)
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     correo = models.EmailField()
+    fecha_nacimiento = models.DateField()
     celular = models.CharField( max_length=10)
     estado = models.BooleanField(default=True)
 
     class Meta:
+        ordering = ["nombre"]
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pacientes'
 
@@ -69,6 +73,7 @@ class Cita(models.Model):
     estado = models.BooleanField(default=True)
 
     class Meta:
+        ordering = ["fecha","doctor"]
         verbose_name = 'Cita'
         verbose_name_plural = 'Citas'
 
@@ -82,6 +87,7 @@ class Reporte(models.Model):
     estado = models.BooleanField( default=True)
     
     class Meta:
+        ordering = ["fecha"]
         verbose_name = 'Reporte'
         verbose_name_plural = 'Reportes'
 
