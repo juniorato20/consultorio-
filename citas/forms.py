@@ -68,15 +68,15 @@ class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
         fields = ['nombre', 'apellido', 'direccion',
-                  'sexo', 'correo', 'celular']
+                  'sexo', 'correo', 'fecha_nacimiento','celular']
         labels = {
             'nombre': 'Ingrese su nombre',
             'apellido': 'Ingrese su apellido',
             'direccion': 'Ingrese su direccion',
             'sexo': 'Sexo',
-            'fecha_nacimiento' : 'Facha Nacimiento',
             'correo': 'Ingrese su correo',
-            'celular': 'Ingrese su celular'
+            'fecha_nacimiento' : 'Facha Nacimiento',
+            'celular': 'Ingrese su celular',
         }
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Juan Diego', }),
