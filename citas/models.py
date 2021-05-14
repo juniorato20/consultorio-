@@ -17,6 +17,7 @@ class Doctor(models.Model):
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     direccion = models.TextField( max_length=225,blank=True, null=False)
     celular = models.CharField( max_length=10)
+    estado = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["nombre"]

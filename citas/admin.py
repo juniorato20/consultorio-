@@ -18,7 +18,7 @@ class DoctorResource(resources.ModelResource):
        model = Doctor
 
 class DoctorAdmin(ImportExportModelAdmin):
-    list_display = ('nombre','apellido','especialidad','sexo','direccion','celular')
+    list_display = ('nombre','apellido','especialidad','sexo','direccion','celular','estado')
     search_fields = ['nombre','apellido']
     resources_class = DoctorResource
 
