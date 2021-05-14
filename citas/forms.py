@@ -74,6 +74,7 @@ class PacienteForm(forms.ModelForm):
             'apellido': 'Ingrese su apellido',
             'direccion': 'Ingrese su direccion',
             'sexo': 'Sexo',
+            'fecha_nacimiento' : 'Facha Nacimiento',
             'correo': 'Ingrese su correo',
             'celular': 'Ingrese su celular'
         }
@@ -82,6 +83,7 @@ class PacienteForm(forms.ModelForm):
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zumbi '}),
             'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'DD-MM-AA', }),
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0989765432', 'maxlength': '9999999999'})
                    }
 
