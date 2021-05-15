@@ -150,5 +150,5 @@ class ActualizarReporte(SuccessMessageMixin,UpdateView):
 class EliminarReporte(DeleteView):
     model = Reporte
     template_name = 'reporte/reporte_confirm_delete.html'
-    success_url = reverse_lazy('listar_doctor')
+    success_url = reverse_lazy('listar_reporte')
     success_message = "Elimado Correctamente"
