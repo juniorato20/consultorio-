@@ -68,14 +68,14 @@ class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
         fields = ['nombre', 'apellido', 'direccion',
-                  'sexo', 'correo', 'fecha_nacimiento','celular']
+                  'sexo', 'correo','celular']
         labels = {
             'nombre': 'Ingrese su nombre',
             'apellido': 'Ingrese su apellido',
             'direccion': 'Ingrese su direccion',
             'sexo': 'Sexo',
             'correo': 'Ingrese su correo',
-            'fecha_nacimiento' : 'Facha Nacimiento',
+            
             'celular': 'Ingrese su celular',
         }
         widgets = {
@@ -83,7 +83,7 @@ class PacienteForm(forms.ModelForm):
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zumbi '}),
             'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
-            'fecha_nacimiento': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'DD-MM-AA', }),
+            
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0989765432', 'maxlength': '9999999999'})
                    }
 
@@ -133,6 +133,6 @@ class ReporteForm(forms.ModelForm):
             'descripcion': 'Ingrese descripcion',
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'class': 'form-control', 'placeholder': '12/12/2021'}),
+            'fecha': forms.DateInput(attrs={'class': 'form-control', 'placeholder': ''}),
             'descripcion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'descripcion'}),
                    }

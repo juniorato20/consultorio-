@@ -1,45 +1,22 @@
 from django.contrib import admin
 from .models import  *
-from import_export import resources
-from import_export.admin import ImportExportModelAdmin
 
-class PacienteResource(resources.ModelResource):
-    class Meta:
-       model = Paciente
-
-class PacienteAdmin(ImportExportModelAdmin):
-    list_display = ('nombre','apellido','direccion','sexo','correo','fecha_nacimiento','celular','estado')
+class PacienteAdmin(admin.ModelAdmin):
+    list_display = ('nombre','apellido','direccion','sexo','correo','celular')
     search_fields = ['nombre', 'apellido']
-    resources_class = PacienteResource
 
-
-class DoctorResource(resources.ModelResource):
-    class Meta:
-       model = Doctor
-
-class DoctorAdmin(ImportExportModelAdmin):
-    list_display = ('nombre','apellido','especialidad','sexo','direccion','celular','estado')
+class DoctorAdmin(admin.ModelAdmin):
+    list_display = ('nombre','apellido','especialidad','sexo','direccion','celular')
     search_fields = ['nombre','apellido']
-    resources_class = DoctorResource
 
-class CitaResource(resources.ModelResource):
-    class Meta:
-       model = Cita
-
-class CitaAdmin(ImportExportModelAdmin):
-    list_display = ('paciente','doctor','fecha','hora','descripcion','estado')
+class CitaAdmin(admin.ModelAdmin):
+    list_display = ('paciente','doctor','fecha','hora','descripcion')
     search_fields = ['fecha']
-    resources_class = CitaResource
-
-class ReporteResource(resources.ModelResource):
-    class Meta:
-        model = Reporte
-
-class ReporteAdmin(ImportExportModelAdmin):
-    list_display = ('paciente','fecha','descripcion','estado')
+   
+class ReporteAdmin(admin.ModelAdmin):
+    list_display = ('paciente','fecha','descripcion')
     search_fields = ['paciente']
-    resources_class = ReporteResource
-
+ 
 class PerfilAdmin(admin.ModelAdmin):
     list_diplay =('cedula','usuario','celular','direccion','foto_perfil')
     search_fields = ['cedula','usuario']

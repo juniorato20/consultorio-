@@ -18,15 +18,15 @@ from django.urls import path,include
 from citas.views import *
 from django.contrib.auth.decorators import login_required
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', login_view, name="vista_login"),
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
     path('logout/', logout_view, name="vista_logout"),
-    path('registrar/', registrar_view, name="vista_registar"),
-
+    path('filtro/', busqueda, name="paciente_busqueda"),
+   
+   
     # path('', LoginFormView.as_view(), name='login'),
     # path('logout/', LogoutView.as_view(), name='logout'),
     # path('reset/password/', ResetPasswordView.as_view(), name='reset_password'),

@@ -1,14 +1,12 @@
 {% extends 'login/vista_principal.html' %}
-{% block titulo %}
-Confirmar Eliminacion
-{% endblock titulo %}
+{% block titulo %}Confirmar Eliminacion {% endblock titulo %}
 {% block body %}
-<form method="POST">
+<h2 class="page-header">Confirmacion para eliminar {{ cita.paciente }}</h2>
+    <form method="post" action="">
     {% csrf_token %}
-    <p><strong>Desea eliminar la cita</strong></p>
-    <h3>{{ object.paciente }} </h3>
-    <button class="btn btn-danger" type="submit">Confirmar</button>
-    <a href="{% url 'listar_cita' %}">Cancelar</a>
-</form>
+    <p>¿Seguro que quieres eliminar el paciente {{ cita.paciente }}?</p>
+        <button type="submit" class="btn btn-danger">Si, eliminar</button>
+        <a href="{% url 'listar_cita'%}" class="btn btn-primary" role="button">Cancelar</a>
+    </form>
 
 {% endblock body %}

@@ -38,16 +38,13 @@ FONTAWESOME_CSS_URL = 'myapp/css/fontawesome.min.css'  # relative url
 INSTALLED_APPS = [
 
     'django.contrib.admin',
-    
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'citas',
     'django_crontab',
-    'import_export',
     
 ]
 

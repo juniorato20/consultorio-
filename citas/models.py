@@ -9,6 +9,21 @@ ocupacion = [
     ('Odontologo', 'Odontologo'),
     ('Odontologa', 'Odontologa'),
 ]
+class Paciente(models.Model):
+    nombre = models.CharField(max_length=225, blank=False, null=False)
+    apellido = models.CharField( max_length=225, blank=False, null=False)
+    direccion = models.TextField(max_length=225,blank=False, null=False)
+    sexo = models.CharField(max_length=30,choices=genero, default='available')
+    correo = models.EmailField()
+    celular = models.CharField( max_length=10)
+  
+    class Meta:
+        ordering = ["nombre"]
+        verbose_name = 'Paciente'
+        verbose_name_plural = 'Pacientes'
+    
+    def __str__(self):
+        return self.nombre
 
 class Doctor(models.Model):
     nombre = models.CharField( max_length=225, blank=False, null=False)
@@ -17,31 +32,12 @@ class Doctor(models.Model):
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     direccion = models.TextField( max_length=225,blank=True, null=False)
     celular = models.CharField( max_length=10)
-    estado = models.BooleanField(default=True)
-
+  
     class Meta:
         ordering = ["nombre"]
         verbose_name = 'Doctor'
         verbose_name_plural = 'Doctores'
     
-
-def __str__(self):
-        return self.nombre
-
-class Paciente(models.Model):
-    nombre = models.CharField(max_length=225, blank=False, null=False)
-    apellido = models.CharField( max_length=225, blank=False, null=False)
-    direccion = models.TextField(max_length=225,blank=False, null=False)
-    sexo = models.CharField(max_length=30,choices=genero, default='available')
-    correo = models.EmailField()
-    fecha_nacimiento = models.DateField()
-    celular = models.CharField( max_length=10)
-    estado = models.BooleanField(default=True)
-
-    class Meta:
-        ordering = ["nombre"]
-        verbose_name = 'Paciente'
-        verbose_name_plural = 'Pacientes'
 
     def __str__(self):
         return self.nombre
@@ -66,12 +62,11 @@ tiempo = [
 ]
 
 class Cita(models.Model):
-    paciente = models.ForeignKey( Paciente, on_delete=models.CASCADE, default='available')
+    paciente = models.ForeignKey( Paciente , on_delete=models.CASCADE, default='available')
     doctor = models.ForeignKey( Doctor, on_delete=models.CASCADE, default='available')
     fecha = models.DateField()
     hora = models.CharField( max_length=50,choices=tiempo, default='available')
     descripcion = models.CharField(max_length=225, blank=True, null=False)
-    estado = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["fecha","doctor"]
@@ -85,8 +80,7 @@ class Reporte(models.Model):
     paciente = models.ForeignKey( Paciente, on_delete=models.CASCADE, default='available')
     fecha = models.DateField()
     descripcion = models.CharField(max_length=225, blank=True, null=False)
-    estado = models.BooleanField( default=True)
-    
+     
     class Meta:
         ordering = ["fecha"]
         verbose_name = 'Reporte'

@@ -1,65 +1,61 @@
 {% extends 'login/vista_principal.html' %}
+
 {% block titulo %}
 Listado de Pacientes
 {% endblock titulo %}
 
 {% block body %}
 {% if pacientes %}
-<div class=" card-default">
-    <form action="" method="POST">
-        <div class="row">
-          <div class="col-auto mb-4 mb-md-0">
-            <p class="pt-2"><strong>Listado de pacientes</strong></p>
-          </div>
-          <div class="col-md-5 col-12 mb-4 mb-md-0">
-            <div class="form-outline mb-4">
-              <input type="text" class="form-control" placeholder="Buscar" name="buscar" value="" />
-            </div>
-          </div>
-          <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-search fa-sm"></i>
-            </button>
-          </div>
+<div class="card-default">
+    <div class="row">
+        <div class="col-auto mb-4 mb-md-0">
+            <p class="pt-2"><strong>Listado de Pacientes</strong></p>
         </div>
-      </form>
- 
-    <div class="card-body">
-        <table class="table" >
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Direccion</th>
-                    <th>Sexo</th>
-                    <th>Correo</th>
-                    <th>Fecha Nacimiento</th>
-                    <th>Celular</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in pacientes %}
-                <tr>
-                    <td>{{p.nombre}}</td>
-                    <td>{{p.apellido}}</td>
-                    <td>{{p.direccion}}</td>
-                    <td>{{p.sexo}}</td>
-                    <td>{{p.correo}}</td>
-                    <td>{{p.fecha_nacimiento}}</td>
-                    <td>{{p.celular}}</td>
-                    <td>
-                        <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_paciente' p.id %}')">
-                            <i class="fas fa-edit"></i></button>
-                            <a href="{% url 'eliminar_paciente' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
-                                    class="fas fa-trash-alt"></i></a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-    </div>
+        <form action="{% url 'paciente_busqueda' %}" method="get" class="col-md-5 col-10 mb-4 mb-md-0">
+            <div class="form-group">
+                <div class="form-outline mb-4">
+                    <input type="text" class="form-control" name="q" placeholder="Pacientes" />
+                </div>
+                <div class="col-auto mb-4 mb-md-0">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Direccion</th>
+                <th>Sexo</th>
+                <th>Correo</th>
+                <th>Celular</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pacientes %}
+            <tr>
+                <td>{{p.nombre}}</td>
+                <td>{{p.apellido}}</td>
+                <td>{{p.direccion}}</td>
+                <td>{{p.sexo}}</td>
+                <td>{{p.correo}}</td>
+                <td>{{p.celular}}</td>
+                <td>
+                    <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_paciente' p.id %}')">
+                        <i class="fas fa-edit"></i></button>
+                    <a href="{% url 'eliminar_paciente' p.id %}" class="btn btn-danger btn-xs btn-flat"><i
+                            class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 </div>
 {% else %}
 <h1>No existen Pacientes Registrados</h1>
@@ -75,7 +71,6 @@ Listado de Pacientes
 {% if is_paginated %}
 <div class="mt-2">
     <ul class="pagination">
-
         {% if page_obj.has_previous %}
         <li class="page-item">
             <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Previous</a>
@@ -86,7 +81,6 @@ Listado de Pacientes
         </li>
         {% endif %}
         {% for i in paginator.page_range %}
-        
         <li class="page-item {% if page_obj.number == i %} active {% endif %}">
             <a href="?page={{ i }}" class="page-link">{{ i }}</a>
         </li>
@@ -102,14 +96,8 @@ Listado de Pacientes
         {% endif %}
     </ul>
 </div>
-
-
 {% endif %}
-
-
 {% endblock body %}
-
-
 {% block extrajs %}
 <script type="text/javascript">
     var $ = jQuery.noConflict();
@@ -124,5 +112,4 @@ Listado de Pacientes
         });
     }
 </script>
-
 {% endblock extrajs %}
