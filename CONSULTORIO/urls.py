@@ -24,14 +24,8 @@ urlpatterns = [
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
     path('logout/', logout_view, name="vista_logout"),
-    path('filtro/', busqueda, name="paciente_busqueda"),
+    # path('filtro/', busqueda, name="paciente_busqueda"),
    
-   
-    # path('', LoginFormView.as_view(), name='login'),
-    # path('logout/', LogoutView.as_view(), name='logout'),
-    # path('reset/password/', ResetPasswordView.as_view(), name='reset_password'),
-    # path('change/password/<str:token>/', ChangePasswordView.as_view(), name='change_password'),
-    # # path('logout/', LogoutRedirectView.as_view(), name='logout')
     path('',include('citas.urls')),
     
     #=============== URL CON VISTAS BASADAS EN CLASES PACIENTE  ==============#

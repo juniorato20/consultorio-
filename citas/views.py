@@ -1,19 +1,22 @@
+from django.db.models import query
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, request
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import *
 from django.urls import reverse_lazy
+from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .forms import * 
 from .models import *
 
-def busqueda(request):
-    q = request.GET.get('q','')
-    pacientes = Paciente.objects.filter()
-    return render(request, 'paciente/listar_paciente.html', {'pacientes': pacientes}) 
+# def busqueda(self):
+#     q = request.GET.get('q','')
+#     query = (Q(nombre_icontains=q)| Q(apellido_icontains=q))
+#     pacientes = Paciente.objects.filter(query)
+#     return render(request, 'paciente/paciente_busqueda.html', {'pacientes': pacientes}) 
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -54,10 +57,19 @@ class CrearPaciente(SuccessMessageMixin,CreateView):
 
 class ListadoPaciente(ListView): 
     model = Paciente
+    form_class = PacienteForm
     template_name= 'paciente/listar_paciente.html'
-    queryset = Paciente.objects.all().order_by('-id','nombre')
+    queryset = Paciente.objects.all()
     paginate_by = 3
     context_object_name = 'pacientes'
+
+    # def get_queryset(self):
+    #     query = self.request.GET.get('q')
+    #     if query:
+    #         object_list = self.model.objects.filter(nombre__icontains=query)
+    #     else:
+    #         object_list = self.model.objects.none()
+    #     return object_list
 
 class ActualizarPaciente(SuccessMessageMixin,UpdateView):
     model = Paciente

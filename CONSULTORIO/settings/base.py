@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 from pathlib import Path
 import os
-
+from decouple import config
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'buvk)-5e6wdf9^n33@&y9z%^t1h8y&a62nyog0x=@$^@iswzd5'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,6 +30,13 @@ ALLOWED_HOSTS = []
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 # Application definition
+
+
+CRONJOBS = (
+    ('* / 1 * * * *', 'El nombre de su aplicación. El nombre del archivo py donde se encuentra la función de sincronización. El nombre de la función de sincronización'),
+         ('0 0 1 * *', 'El nombre de su aplicación. El nombre del archivo py donde se encuentra la función temporizada. El nombre de la función temporizada', '> Ruta y nombre del archivo de salida'),
+)
+
 
 # default uses locally shipped version at 'fontawesome/css/font-awesome.min.css'
 FONTAWESOME_CSS_URL = '//cdn.example.com/fontawesome-min.css'  # absolute url
@@ -44,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'citas',
+    'widget_tweaks',
     'django_crontab',
     
 ]
@@ -119,9 +127,10 @@ STATICFILES_DIRS=(
     os.path.join(BASE_DIR, 'static'),
 )
 
+
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 25
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_PORT = 587
 EMAIL_HOST_USER ='softwareweb.1997@gmail.com'
-EMAIL_HOST_PASSWORD = 'aplicacionweb'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
