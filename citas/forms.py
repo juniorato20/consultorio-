@@ -1,9 +1,17 @@
 from django import forms
 from .models import *
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
-
+# class FormularioLogin(AuthenticationForm):
+#     def __init__(self, *args, **kwargs):
+#         super(FormularioLogin, self).__init__(*args, **kwargs)
+#         self.fields['username'].widget.attrs['class'] = 'form-control'
+#         self.fields['username'].widget.attrs['placeholder'] = 'nombre de usuario'
+#         self.fields['password'].widget.attrs['class'] = 'form-control'
+#         self.fields['password'].widget.attrs['placeholder'] = 'contraseña'
+        
+        
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput(render_value=False))
@@ -70,6 +78,7 @@ class PacienteForm(forms.ModelForm):
         fields = ['nombre', 'apellido', 'direccion',
                   'sexo', 'correo','celular']
         labels = {
+           
             'nombre': 'Ingrese su nombre',
             'apellido': 'Ingrese su apellido',
             'direccion': 'Ingrese su direccion',
@@ -79,6 +88,7 @@ class PacienteForm(forms.ModelForm):
             'celular': 'Ingrese su celular',
         }
         widgets = {
+            
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Juan Diego', }),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zumbi '}),
@@ -94,6 +104,7 @@ class DoctorForm(forms.ModelForm):
         fields = ['nombre', 'apellido', 'especialidad',
                   'sexo', 'direccion', 'celular']
         labels = {
+        
             'nombre': 'Ingrese su nombre',
             'apellido': 'Ingrese su apellido',
             'especialidad': 'Ingrese su especialidad',
@@ -102,6 +113,7 @@ class DoctorForm(forms.ModelForm):
             'celular': 'Ingrese su celular'
         }
         widgets = {
+            
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Julia Maria', }),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cabrera Cordero'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Yantzaza'}),
@@ -112,11 +124,11 @@ class DoctorForm(forms.ModelForm):
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ['paciente', 'doctor', 'fecha', 'hora', 'descripcion']
+        fields = ['paciente','doctor', 'fecha', 'hora', 'descripcion']
         labels = {
             'fecha': 'Ingrese fecha',
             'hora': 'Ingrese hora',
-            'direccion': 'Ingrese su direccion'
+            'descrpcion': 'Ingrese su descrpcion'
         }
         widgets = {
             'fecha': forms.DateInput(attrs={'class': 'form-control', 'placeholder': '12/12/2021', }),

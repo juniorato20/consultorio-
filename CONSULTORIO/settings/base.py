@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'citas',
-
+    'rest_framework',
     'widget_tweaks',
     'django_crontab',
     

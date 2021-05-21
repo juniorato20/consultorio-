@@ -2,51 +2,52 @@
 {% block titulo %}
 Listado de Citas
 {% endblock titulo %}
-
 {% block body %}
-
-{% if citas %}
 <div class="card-default">
-    <form action="" method="POST">
+    <form action="" method="GET">
         <div class="row">
           <div class="col-auto mb-4 mb-md-0">
             <p class="pt-2"><strong>Listado de citas</strong></p>
           </div>
           <div class="col-md-5 col-12 mb-4 mb-md-0">
             <div class="form-outline mb-4">
-              <input type="text" class="form-control" placeholder="Buscar" name="buscar" value="" />
+                
+              <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
             </div>
           </div>
           <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" value="listar_cita">
                 <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
-      </form>
-
-   
-    <div class="card-body">
-        <table class="table">
+    </form>
+      <div class="card-footer">
+        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover text-center">
             <thead>
                 <tr>
-                    <th>Paciente</th>
-                    <th>Doctor</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Descripcion</th>
-                    <th>Opciones</th>
+                    <th class="text-center">Paciente</th>
+                    <th class="text-center">Doctor</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Hora</th>
+                    <th class="text-center">Descripcion</th>
+                    <th class="text-center">Opciones</th>
                 </tr>
             </thead>
+            {% if citas %}
             <tbody>
                 {% for p in citas %}
                 <tr>
-                    <td>{{p.paciente}}</td>
-                    <td>{{p.doctor}}</td>
-                    <td>{{p.fecha}}</td>
-                    <td>{{p.hora}}</td>
-                    <td>{{p.descripcion}}</td>
-                    <td>
+                    <td class="text-center">{{p.paciente}}</td>
+                    <td class="text-center">{{p.doctor}}</td>
+                    <td class="text-center">{{p.fecha}}</td>
+                    <td class="text-center">{{p.hora}}</td>
+                    <td class="text-center">{{p.descripcion}}</td>
+                    <td class="text-center">
                         <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_cita' p.id %}')">
                             <i class="fas fa-edit"></i></button>
                         <a href="#"onclick="eliminardoctor({{ p.id }})" class="btn btn-danger btn-xs btn-flat">
@@ -55,21 +56,18 @@ Listado de Citas
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
-        
-    </div>
-</div>
-{% else %}
+            {% else %}
 <h1>No existen Citas Registrados</h1>
 {% endif %}
+        </table>
+    </div>
+</div>
+
 <div class="modal face" id="creacion" role="dialog">
 </div>
 <div class="modal face" id="edicion" role="dialog">
 </div>
-<div class="card-footer">
-    <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')"><i class="fas fa-plus"></i></i> Nuevo
-        registro</button>
-</div>
+
 {% if is_paginated %}
 <div class="mt-2">
     <ul class="pagination">
@@ -100,12 +98,8 @@ Listado de Citas
         {% endif %}
     </ul>
 </div>
-
-
 {% endif %}
-
 {% endblock body %}
-
 {% block extrajs %}
 <script type="text/javascript">
     var $ = jQuery.noConflict();
@@ -131,7 +125,7 @@ Listado de Citas
         })
         .then(function(result){
             if(result.isConfirmed){
-                window.location.href ="EliminarDoctor"+id+"/"
+                window.location.href ="eliminar_cita"+id+"/"
                 }  
         })
     }

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.utils.safestring  import mark_safe
 genero = [
@@ -10,13 +11,18 @@ ocupacion = [
     ('Odontologa', 'Odontologa'),
 ]
 class Paciente(models.Model):
-    nombre = models.CharField(max_length=225, blank=False, null=False)
-    apellido = models.CharField( max_length=225, blank=False, null=False)
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=225, unique=True, blank=False, null=False)
+    apellido = models.CharField( max_length=225, unique=True, blank=False, null=False)
     direccion = models.TextField(max_length=225,blank=False, null=False)
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     correo = models.EmailField()
     celular = models.CharField( max_length=10)
-  
+
+    def clean(self):
+        if self.nombre == '':
+            raise ValidationError('')
+            
     class Meta:
         ordering = ["nombre"]
         verbose_name = 'Paciente'
@@ -26,6 +32,7 @@ class Paciente(models.Model):
         return self.nombre
 
 class Doctor(models.Model):
+    id = models.AutoField(primary_key=True)
     nombre = models.CharField( max_length=225, blank=False, null=False)
     apellido = models.CharField( max_length=225, blank=False, null=False)
     especialidad = models.CharField( max_length=100, choices=ocupacion, default='available')
@@ -38,7 +45,6 @@ class Doctor(models.Model):
         verbose_name = 'Doctor'
         verbose_name_plural = 'Doctores'
     
-
     def __str__(self):
         return self.nombre
 
@@ -62,21 +68,27 @@ tiempo = [
 ]
 
 class Cita(models.Model):
+    id = models.AutoField(primary_key=True)
     paciente = models.ForeignKey( Paciente , on_delete=models.CASCADE, default='available')
     doctor = models.ForeignKey( Doctor, on_delete=models.CASCADE, default='available')
     fecha = models.DateField()
     hora = models.CharField( max_length=50,choices=tiempo, default='available')
     descripcion = models.CharField(max_length=225, blank=True, null=False)
+    
+    # def clean(self):
+    #     if self.fecha == '':
+    #         raise ValidationError('cita Ocupada')
 
     class Meta:
-        ordering = ["fecha","doctor"]
+        ordering = ["doctor"]
         verbose_name = 'Cita'
         verbose_name_plural = 'Citas'
 
-def __str__(self):
-    return self.fecha
+    def __str__(self):
+        return self.fecha
 
 class Reporte(models.Model):
+    id = models.AutoField(primary_key=True)
     paciente = models.ForeignKey( Paciente, on_delete=models.CASCADE, default='available')
     fecha = models.DateField()
     descripcion = models.CharField(max_length=225, blank=True, null=False)
@@ -94,6 +106,7 @@ def url_perfil(self, filename):
     return ruta
 
 class Perfil(models.Model):
+    id = models.AutoField(primary_key=True)
     usuario = models.OneToOneField( User, on_delete=models.CASCADE, default='available')
     celular = models.CharField('Celular', max_length=10)
     direccion = models.TextField('Direccion')

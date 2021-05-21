@@ -20,12 +20,14 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+#=============== URL CON VISTAS BASADAS EN CLASES LOGIN  ==============#
+    # path('login/', Login.as_view(), name='login'),
+    # path('logout/', LogoutUsuario.as_view(), name='logout'),
+
     path('', login_view, name="vista_login"),
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
-    path('logout/', logout_view, name="vista_logout"),
-    # path('filtro/', busqueda, name="paciente_busqueda"),
-   
+    path('logout/', logout_view, name="vista_logout"),  
     path('',include('citas.urls')),
     
     #=============== URL CON VISTAS BASADAS EN CLASES PACIENTE  ==============#
@@ -52,4 +54,4 @@ urlpatterns = [
     path('editar_doctor/<int:pk>/',login_required(ActualizarDoctor.as_view()), name = 'editar_doctor'),
     path('eliminar_doctor/<int:pk>/',login_required(EliminarDoctor.as_view()), name = 'eliminar_doctor'),
 ]
-admin.site.site_header = 'CONSULTORIO ODONTOLOGICO '
+# admin.site.site_header = 'CONSULTORIO ODONTOLOGICO '

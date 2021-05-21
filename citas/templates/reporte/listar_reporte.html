@@ -2,45 +2,48 @@
 {% block titulo %}
 Listado de Reportes
 {% endblock titulo %}
-
 {% block body %}
-{% if reportes %}
-
 <div class="card-default">
-    <form action="" method="POST">
+    <form action="" method="GET">
         <div class="row">
           <div class="col-auto mb-4 mb-md-0">
             <p class="pt-2"><strong>Listado de reportes</strong></p>
           </div>
           <div class="col-md-5 col-12 mb-4 mb-md-0">
             <div class="form-outline mb-4">
-              <input type="text" class="form-control" placeholder="Buscar" name="buscar" value="" />
+                
+              <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
             </div>
           </div>
           <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" value="listar_reporte">
                 <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
-      </form>  
-    <div class="card-body">
-        <table class="table">
+    </form> 
+      <div class="card-footer">
+        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        </button>
+    </div>
+      <div class="table-responsive">
+        <table class="table table-hover text-center">
             <thead>
                 <tr>
-                    <th>Paciente</th>
-                    <th>Fecha</th>
-                    <th>Descripcion</th>
-                    <th>Opciones</th>
+                    <th class="text-center">Paciente</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Descripcion</th>
+                    <th class="text-center">Opciones</th>
                 </tr>
             </thead>
+            {% if reportes %}
             <tbody>
                 {% for p in reportes %}
                 <tr>
-                    <td>{{p.paciente}}</td>
-                    <td>{{p.fecha}}</td>
-                    <td>{{p.descripcion}}</td>
-                    <td>
+                    <td class="text-center">{{p.paciente}}</td>
+                    <td class="text-center">{{p.fecha}}</td>
+                    <td class="text-center">{{p.descripcion}}</td>
+                    <td class="text-center">
                         <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
                             <i class="fas fa-edit"></i></button>
                         <a href= "#"onclick="eliminarreporte({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
@@ -49,21 +52,20 @@ Listado de Reportes
                 </tr>
                 {% endfor %}
             </tbody>
+
         </table>
+        {% else %}
+<h1>No existen reportes Registrados</h1>
+{% endif %}
         
     </div>
 </div>
-{% else %}
-<h1>No existen reportes Registrados</h1>
-{% endif %}
+
 <div class="modal face" id="creacion" role="dialog">
 </div>
 <div class="modal face" id="edicion" role="dialog">
 </div>
-<div class="card-footer">
-    <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
-        registro</button>
-</div>
+
 
 {% if is_paginated %}
 <div class="mt-2">
@@ -125,7 +127,7 @@ Listado de Reportes
         })
         .then(function(result){
             if(result.isConfirmed){
-                window.location.href ="EliminarDoctor"+id+"/"
+                window.location.href ="/eliminar_reporte/"+id+"/"
                 }  
         })
     }
