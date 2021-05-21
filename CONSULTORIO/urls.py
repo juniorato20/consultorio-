@@ -54,4 +54,4 @@ urlpatterns = [
     path('editar_doctor/<int:pk>/',login_required(ActualizarDoctor.as_view()), name = 'editar_doctor'),
     path('eliminar_doctor/<int:pk>/',login_required(EliminarDoctor.as_view()), name = 'eliminar_doctor'),
 ]
-# admin.site.site_header = 'CONSULTORIO ODONTOLOGICO '
+admin.site.site_header = 'CONSULTORIO ODONTOLOGICO '
