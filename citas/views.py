@@ -137,7 +137,9 @@ class CrearDoctor(SuccessMessageMixin,CreateView):
     success_message = "%(nombre)s %(apellido)s se ha creado correctamente"
 
 class ListadoDoctor(ListView):
+    model = Doctor
     template_name = 'doctor/listar_doctor.html'
+    form_class = DoctorForm
     queryset = Doctor.objects.all()
     paginate_by = 3
     context_object_name = 'doctores'  

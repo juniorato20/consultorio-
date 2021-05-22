@@ -1,163 +1,138 @@
 {% extends 'login/vista_principal.html' %}
 {% block titulo %}
-Listado de doctores
+Listado de Pacientes
 {% endblock titulo %}
 {% block body %}
-<!-- {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %} -->
-<div class="card-default"></div>
-<form action="" method="GET">
-    <div class="row">
-        <div class="col-auto mb-4 mb-md-0">
+<div class="card-default">
+    <form action="" method="GET">
+        <div class="row">
+          <div class="col-auto mb-4 mb-md-0">
             <p class="pt-2"><strong>Listado de doctores</strong></p>
-        </div>
-        <div class="col-md-5 col-12 mb-4 mb-md-0">
+          </div>
+          <div class="col-md-5 col-12 mb-4 mb-md-0">
             <div class="form-outline mb-4">
-
-                <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
+                
+              <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
             </div>
-        </div>
-        <div class="col-auto mb-4 mb-md-0">
+          </div>
+          <div class="col-auto mb-4 mb-md-0">
             <button type="submit" class="btn btn-primary" value="listar_doctor">
                 <i class="fas fa-search fa-sm"></i>
             </button>
+          </div>
+        </div>
+    </form>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        </button>
+    </div>
+        <div class="table-responsive">
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th class="text-center">Cedula</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Apellido</th>
+                        <th class="text-center">Especialidad</th>
+                        <th class="text-center">Sexo</th>
+                        <th class="text-center">Direccion</th>
+                        <th class="text-center">Correo</th>
+                        <th class="text-center">Celular</th>
+                        <th class="text-center">Opciones</th>
+                    </tr>
+                </thead>
+                {% if doctores %}
+                <tbody>
+                    {% for p in doctores %}
+                    <tr>
+                        <td class="text-center">{{p.cedula}}</td>
+                        <td class="text-center">{{p.nombre}}</td>
+                        <td class="text-center">{{p.apellido}}</td>
+                        <td class="text-center">{{p.especialidad}}</td>
+                        <td class="text-center">{{p.sexo}}</td>
+                        <td class="text-center">{{p.direccion}}</td>
+                        <td class="text-center">{{p.correo}}</td>
+                        <td class="text-center">{{p.celular}}</td>
+                        <td>
+                            <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
+                                <i class="fas fa-edit"></i></button>
+                            <a href="#"onclick="eliminardoctor({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
+                                    class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% else %}
+                <h1>No existen Doctores Registrados</h1>
+                {% endif %}
+            </table>
         </div>
     </div>
-</form>
-<div class="card-footer">
-    <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i
-            class="fas fa-plus"></i></i> Nuevo
-    </button>
-</div>
-<div class="table-responsive">
-    <table class="table table-hover text-center">
-        <thead>
-            <tr>
-                <th class="text-center">Cedula</th>
-                <th class="text-center">Nombre</th>
-                <th class="text-center">Apellido</th>
-                <th class="text-center">Especialidad</th>
-                <th class="text-center">Sexo</th>
-                <th class="text-center">Direccion</th>
-                <th class="text-center">Correo</th>
-                <th class="text-center">Celular</th>
-                <th class="text-center">Opciones</th>
-            </tr>
-        </thead>
-        {% if doctores %}
-        <tbody>
-            {% for p in doctores %}
-            <tr>
-                <td class="text-center">{{p.cedula}}</td>
-                <td class="text-center">{{p.nombre}}</td>
-                <td class="text-center">{{p.apellido}}</td>
-                <td class="text-center">{{p.especialidad}}</td>
-                <td class="text-center">{{p.sexo}}</td>
-                <td class="text-center">{{p.direccion}}</td>
-                <td class="text-center">{{p.correo}}</td>
-                <td class="text-center">{{p.celular}}</td>
-                <td class="text-center">
-                    <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
-                        <i class="fas fa-edit"></i></button>
-                    <a href="#"onclick="eliminardoctor({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
-                            class="fas fa-trash-alt"></i></a>
-
-                </td>
-            </tr>
+  
+    <div class="modal face" id="creacion" role="dialog">
+    </div>
+    <div class="modal face" id="edicion" role="dialog">
+    </div>
+    
+    {% if is_paginated %}
+    <div class="mt-2">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a href="#" class="page-link">Previous</a>
+            </li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+            <li class="page-item {% if page_obj.number == i %} active {% endif %}">
+                <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+            </li>
             {% endfor %}
-
-        </tbody>
-        {% else %}
-        <h1>No existen Doctores Registrados</h1>
-        {% endif %}
-    </table>
-
-</div>
-</div>
-
-<div class="modal face" id="creacion" role="dialog">
-</div>
-<div class="modal face" id="edicion" role="dialog">
-</div>
-
-{% if is_paginated %}
-<div class="mt-2">
-    <ul class="pagination">
-
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Previous</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <a href="#" class="page-link">Previous</a>
-        </li>
-        {% endif %}
-        {% for i in paginator.page_range %}
-
-        <li class="page-item {% if page_obj.number == i %} active {% endif %}">
-            <a href="?page={{ i }}" class="page-link">{{ i }}</a>
-        </li>
-        {% endfor %}
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <a href="#" class="page-link">Next</a>
-        </li>
-        {% endif %}
-    </ul>
-</div>
-{% endif %}
-{% endblock body %}
-{% block extrajs %}
-<script type="text/javascript">
-    var $ = jQuery.noConflict();
-    function abrir_modal_creacion(url) {
-        $('#creacion').load(url, function () {
-            $(this).modal('show')
-        });
-    }
-    function abrir_modal_edicion(url) {
-        $('#edicion').load(url, function () {
-            $(this).modal('show')
-        });
-    }
-    function eliminardoctor(id) {
-        Swal.fire({
-            "title": "Esta seguro de eliminar el doctor",
-            "text": "Una vez eliminado, no se puede restaurar",
-            "icon": "question",
-            "showCancelButton": true,
-            "confirmButtonColor": '#3085d6',
-            "cancelButtonColor": '#d33',
-            "confirmButtonText": 'Yes, delete it!'
-        })
-            .then(function (result) {
-                if (result.isConfirmed) {
-                    window.location.href = "eliminar_doctor"+ id + "/"
-                    /*   var request = $.ajax({
-                    type: "POST",
-                    url: "{% url 'eliminar_doctor' %}",
-                    data: {
-                        "csrfmiddlewaretoken": "{{ csrf_token }}",
-                        "pk": id                    
-                    },
-                });
-                    request.done(function(response) {
-                        alert("Identificador eliminado");
-                        // Cierra el modal, oculta el identificador eliminado, etc.
-                    }); */
-
-                }
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a href="#" class="page-link">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endblock body %}
+    {% block extrajs %}
+    <script type="text/javascript">
+        var $ = jQuery.noConflict();
+        function abrir_modal_creacion(url) {
+            $('#creacion').load(url, function () {
+                $(this).modal('show')
+            });
+        }
+        function abrir_modal_edicion(url) {
+            $('#edicion').load(url, function () {
+                $(this).modal('show')
+            });
+        }
+        function eliminardoctor(id) {
+            Swal.fire({
+                "title": "¿Estás seguro?",
+                "text": "Una vez eliminado, no se puede restaurar",
+                "icon": "warning",
+                "showCancelButton": true,
+                "confirmButtonColor": '#3085d6',
+                "cancelButtonColor": '#d33',
+                "confirmButtonText": 'Yes, delete it!'
             })
-    }
-</script>
-{% endblock extrajs %}
+                .then(function (result) {
+                    if (result.isConfirmed) {
+                        window.location.href = "eliminar_doctor" + id + "/"
+                    }
+                })
+        }
+
+    </script>
+    {% endblock extrajs %}
