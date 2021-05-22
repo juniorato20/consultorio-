@@ -34,7 +34,7 @@ Listado de Citas
                     <th class="text-center">Doctor</th>
                     <th class="text-center">Fecha</th>
                     <th class="text-center">Hora</th>
-                    <th class="text-center">Descripcion</th>
+                    <th class="text-center">Tratamiento</th>
                     <th class="text-center">Opciones</th>
                 </tr>
             </thead>
@@ -46,11 +46,11 @@ Listado de Citas
                     <td class="text-center">{{p.doctor}}</td>
                     <td class="text-center">{{p.fecha}}</td>
                     <td class="text-center">{{p.hora}}</td>
-                    <td class="text-center">{{p.descripcion}}</td>
+                    <td class="text-center">{{p.tratamiento}}</td>
                     <td class="text-center">
                         <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_cita' p.id %}')">
                             <i class="fas fa-edit"></i></button>
-                        <a href="#"onclick="eliminardoctor({{ p.id }})" class="btn btn-danger btn-xs btn-flat">
+                        <a href="#"onclick="eliminarcita({{ p.id }})" class="btn btn-danger btn-xs btn-flat">
                             <i class="fas fa-trash-alt"></i> </a>
                     </td>
                 </tr>
@@ -113,7 +113,7 @@ Listado de Citas
             $(this).modal('show')
         });
     }
-    function eliminardoctor(id) {
+    function eliminarcita(id) {
         Swal.fire({
             "title": "¿Estás seguro?",
             "text": "Una vez eliminado, no se puede restaurar",

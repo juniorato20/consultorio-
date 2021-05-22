@@ -1,13 +1,13 @@
 {% extends 'login/vista_principal.html' %}
 {% block titulo %}
-Listado de Reportes
+Listado de Trtamientos
 {% endblock titulo %}
 {% block body %}
 <div class="card-default">
     <form action="" method="GET">
         <div class="row">
           <div class="col-auto mb-4 mb-md-0">
-            <p class="pt-2"><strong>Listado de reportes</strong></p>
+            <p class="pt-2"><strong>Listado de tratamiento</strong></p>
           </div>
           <div class="col-md-5 col-12 mb-4 mb-md-0">
             <div class="form-outline mb-4">
@@ -16,37 +16,37 @@ Listado de Reportes
             </div>
           </div>
           <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary" value="listar_reporte">
+            <button type="submit" class="btn btn-primary" value="listar_tratamiento">
                 <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
     </form> 
       <div class="card-footer">
-        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_tratamiento' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
     </div>
       <div class="table-responsive">
         <table class="table table-hover text-center">
             <thead>
                 <tr>
-                    <th class="text-center">Paciente</th>
-                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Nombre</th>
                     <th class="text-center">Descripcion</th>
+                    <th class="text-center">Precio</th>
                     <th class="text-center">Opciones</th>
                 </tr>
             </thead>
-            {% if reportes %}
+            {% if tratamientos %}
             <tbody>
-                {% for p in reportes %}
+                {% for p in tratamientos %}
                 <tr>
-                    <td class="text-center">{{p.paciente}}</td>
-                    <td class="text-center">{{p.fecha}}</td>
+                    <td class="text-center">{{p.nombre}}</td>
                     <td class="text-center">{{p.descripcion}}</td>
+                    <td class="text-center">{{p.precio}}</td>
                     <td class="text-center">
-                        <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
+                        <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_tratamiento' p.id %}')">
                             <i class="fas fa-edit"></i></button>
-                        <a href= "#"onclick="eliminarreporte({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
+                        <a href= "#"onclick="eliminartratamiento({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
                                 class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
@@ -55,7 +55,7 @@ Listado de Reportes
 
         </table>
         {% else %}
-<h1>No existen reportes Registrados</h1>
+<h1>No existen tratamientos registrados</h1>
 {% endif %}
         
     </div>
@@ -115,7 +115,7 @@ Listado de Reportes
             $(this).modal('show')
         });
     }
-    function eliminarreporte(id) {
+    function eliminartratamiento(id) {
         Swal.fire({
             "title": "¿Estás seguro?",
             "text": "Una vez eliminado, no se puede restaurar",
@@ -127,7 +127,7 @@ Listado de Reportes
         })
         .then(function(result){
             if(result.isConfirmed){
-                window.location.href ="/eliminar_reporte/"+id+"/"
+                window.location.href ="/eliminar_tratamiento/"+id+"/"
                 }  
         })
     }

@@ -13,38 +13,12 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import *
 from django.contrib import messages
-from .forms import * 
-from .models import *
-
-
-
-# class Login(FormView):
-#     form_class = FormularioLogin
-#     template_name = 'login/login.html'
-#     success_url = reverse_lazy('lista_paciente')
-
-#     @method_decorator(csrf_protect)
-#     @method_decorator(never_cache)
-#     def dispatch(self, request, *args, **kwargs):
-#         if request.user.is_authenticated():
-#             return HttpResponseRedirect(self.get_success_url())
-#         else:
-#             return super(Login,self).dispatch(request, *args, **kwargs)
-
-#     def form_valid(self,form):
-#         login(self.request,form.get_user())
-#         return super(Login,self).form_valid(form)
-
-# class LogoutUsuario(RedirectView):
-#     pattern_name = "login" 
-
-#     def get(self,request, *args, **kwargs):
-#         logout(request)
-#         return super(login, self).get(request, *args, **kwargs)    
+from citas.forms import * 
+from citas.models import *
 
 def login_view(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('listar_paciente')
     else:
         if request.method == 'POST':
             form = LoginForm(request.POST)
@@ -71,7 +45,7 @@ def inicio_view(request):
     ctx = {'citas': citas}
     return render(request,'inicio/vista_principal.html',ctx)
 
-#========================== VISTAS BASADOS EN CLASES PACIENTE =======================#   
+# #========================== VISTAS BASADOS EN CLASES PACIENTE =======================#   
 class CrearPaciente(SuccessMessageMixin,CreateView):
     model = Paciente
     template_name='paciente/crear_paciente.html'
@@ -122,9 +96,8 @@ class CrearCita(SuccessMessageMixin,CreateView):
     success_message = "Cita creada correctamente"
 
 class ListadoCita(ListView):
-    model = Cita 
+    model = Doctor
     template_name= 'cita/listar_cita.html'
-    form_class = PacienteForm
     queryset = Cita.objects.all()
     paginate_by = 3
     context_object_name = 'citas'
@@ -195,47 +168,47 @@ class EliminarDoctor(SuccessMessageMixin,DeleteView):
     success_url = reverse_lazy('listar_doctor')
     success_message = "%(nombre)s %(apellido)sElimado Correctamente"
 
-    # def delete(self, request, *args, **kwargs):
-    #     obj = self.get_object()
-    #     messages.success(self.request, self.success_message % obj.__dict__)
-    #     return super(EliminarDoctor, self).delete(request, *args, **kwargs)
+#========================== VISTAS BASADOS EN CLASES TRATAMIENTO=======================#
+class CrearTratamiento(SuccessMessageMixin,CreateView):
+    model = Tratamiento
+    template_name = 'tratamiento/crear_tratamiento.html'
+    form_class = TratamientoForm
+    success_url = reverse_lazy('listar_tratamiento')
+    success_message = "%(nombre)s  se ha creado correctamente"
 
-#========================== VISTAS BASADOS EN CLASES REPORTE =======================#
-class CrearReporte(SuccessMessageMixin,CreateView):
-    model = Reporte
-    template_name = 'reporte/crear_reporte.html'
-    form_class = ReporteForm
-    success_url = reverse_lazy('listar_reporte')
-    success_message = "%(paciente)s creado correctamente"
-
-class ListadoReporte(ListView):
-    template_name= 'reporte/listar_reporte.html'
-    queryset = Reporte.objects.all()
+class ListadoTratamiento(ListView):
+    template_name = 'tratamiento/listar_tratamiento.html'
+    queryset = Tratamiento.objects.all()
     paginate_by = 3
-    context_object_name = 'reportes'
+    context_object_name = 'tratamientos'  
 
     def get_queryset(self):
         query = self.request.GET.get('q')
         print(query)
-        reportes=None
+        tratamientos=None
         if query != None:
-            reportes = Reporte.objects.filter(fecha__icontains=query)
+            tratamientos = Tratamiento.objects.filter(nombre__icontains=query)
         elif query == None:
-            reportes=Reporte.objects.all()
+            tratamientos=Tratamiento.objects.all()
         else:
-            reportes=Reporte.objects.none()
+            tratamientos=Tratamiento.objects.none()
 
-        return reportes
+        return tratamientos 
 
-class ActualizarReporte(SuccessMessageMixin,UpdateView):
-    model = Reporte
-    template_name = 'reporte/editar_reporte.html'
-    form_class = ReporteForm
-    success_url = reverse_lazy('listar_reporte')
-    success_message = "Modificado Correctamente"
+class ActualizarTratamiento(SuccessMessageMixin,UpdateView):
+    model = Tratamiento
+    template_name = 'tratamiento/editar_tratamiento.html'
+    form_class = TratamientoForm
+    success_url = reverse_lazy('listar_tratamiento')
+    success_message = "%(nombre)s  se actualizo correctamente"
+   
+class EliminarTratamiento(SuccessMessageMixin,DeleteView):
+    model = Tratamiento
+    template_name = 'tratamiento/tratamiento_confirm_delete.html'
+    success_url = reverse_lazy('listar_tratamiento')
+    success_message = "%(nombre)s Elimado Correctamente"
 
-class EliminarReporte(SuccessMessageMixin,DeleteView):
-    model = Reporte
-    template_name = 'reporte/reporte_confirm_delete.html'
-    success_url = reverse_lazy('listar_reporte')
-    success_message = "Elimado Correctamente"
+
+
+
+

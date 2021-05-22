@@ -2,6 +2,9 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.utils.safestring  import mark_safe
+
+from django.db import models
+
 genero = [
     ('Hombre', 'Hombre'),
     ('Mujer', 'Mujer'),
@@ -10,18 +13,31 @@ ocupacion = [
     ('Odontologo', 'Odontologo'),
     ('Odontologa', 'Odontologa'),
 ]
+
+class Tratamiento(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255, blank=False, null=False,unique=True )
+    descripcion = models.CharField(max_length=255, blank=False, null=False)
+    precio = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        ordering = ["nombre"]
+        verbose_name = 'Tratamiento'
+        verbose_name_plural = 'Tratamientos'
+
+    def __str__(self):
+        return self.nombre
+
 class Paciente(models.Model):
     id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=225, unique=True, blank=False, null=False)
+    cedula = models.CharField(max_length=10, unique=True)
+    nombre = models.CharField(max_length=225, blank=False, null=False)
     apellido = models.CharField( max_length=225, unique=True, blank=False, null=False)
     direccion = models.TextField(max_length=225,blank=False, null=False)
+    fecha = models.DateField()
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     correo = models.EmailField()
     celular = models.CharField( max_length=10)
-
-    def clean(self):
-        if self.nombre == '':
-            raise ValidationError('')
             
     class Meta:
         ordering = ["nombre"]
@@ -29,16 +45,19 @@ class Paciente(models.Model):
         verbose_name_plural = 'Pacientes'
     
     def __str__(self):
-        return self.nombre
+        return self.nombre + " " + self.apellido
 
 class Doctor(models.Model):
     id = models.AutoField(primary_key=True)
+    cedula = models.CharField(max_length=10, unique=True)
     nombre = models.CharField( max_length=225, blank=False, null=False)
     apellido = models.CharField( max_length=225, blank=False, null=False)
     especialidad = models.CharField( max_length=100, choices=ocupacion, default='available')
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     direccion = models.TextField( max_length=225,blank=True, null=False)
+    correo = models.EmailField()
     celular = models.CharField( max_length=10)
+
   
     class Meta:
         ordering = ["nombre"]
@@ -46,7 +65,7 @@ class Doctor(models.Model):
         verbose_name_plural = 'Doctores'
     
     def __str__(self):
-        return self.nombre
+        return self.nombre + " " + self.apellido
 
 tiempo = [
     ('8:00/8:30 AM', '8:00/8:30 AM'),
@@ -71,35 +90,19 @@ class Cita(models.Model):
     id = models.AutoField(primary_key=True)
     paciente = models.ForeignKey( Paciente , on_delete=models.CASCADE, default='available')
     doctor = models.ForeignKey( Doctor, on_delete=models.CASCADE, default='available')
+    tratamiento = models.ForeignKey(Tratamiento,  on_delete=models.CASCADE, default='available' )
     fecha = models.DateField()
     hora = models.CharField( max_length=50,choices=tiempo, default='available')
-    descripcion = models.CharField(max_length=225, blank=True, null=False)
-    
-    # def clean(self):
-    #     if self.fecha == '':
-    #         raise ValidationError('cita Ocupada')
+   
 
     class Meta:
         ordering = ["doctor"]
         verbose_name = 'Cita'
         verbose_name_plural = 'Citas'
 
-    def __str__(self):
-        return self.fecha
+def str (self):
+    return self.paciente.nombre
 
-class Reporte(models.Model):
-    id = models.AutoField(primary_key=True)
-    paciente = models.ForeignKey( Paciente, on_delete=models.CASCADE, default='available')
-    fecha = models.DateField()
-    descripcion = models.CharField(max_length=225, blank=True, null=False)
-     
-    class Meta:
-        ordering = ["fecha"]
-        verbose_name = 'Reporte'
-        verbose_name_plural = 'Reportes'
-
-def __str__(self):
-    return self.paciente
 
 def url_perfil(self, filename):
     ruta = "static/Perfiles/%s/%s" % (self.usuario, str(filename))
@@ -107,7 +110,7 @@ def url_perfil(self, filename):
 
 class Perfil(models.Model):
     id = models.AutoField(primary_key=True)
-    usuario = models.OneToOneField( User, on_delete=models.CASCADE, default='available')
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, default='available')
     celular = models.CharField('Celular', max_length=10)
     direccion = models.TextField('Direccion')
     cedula = models.CharField('Cedula', max_length=10)

@@ -1,5 +1,6 @@
 from django import forms
-from .models import *
+from django.forms import fields, widgets
+from citas.models import *
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
@@ -75,23 +76,24 @@ class ChangePasswordForm(forms.Form):
 class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
-        fields = ['nombre', 'apellido', 'direccion',
-                  'sexo', 'correo','celular']
+        fields = ['cedula','nombre', 'apellido', 'direccion', 'fecha','sexo', 'correo','celular']
         labels = {
            
-            'nombre': 'Ingrese su nombre',
-            'apellido': 'Ingrese su apellido',
-            'direccion': 'Ingrese su direccion',
+           'cedula' : 'Cedula',
+            'nombre': 'Nombre',
+            'apellido':'Apellido',
+            'direccion': 'Direccion',
+            'fecha' : 'Fecha Nacimento',
             'sexo': 'Sexo',
-            'correo': 'Ingrese su correo',
-            
+            'correo': 'Correo',
             'celular': 'Ingrese su celular',
         }
         widgets = {
-            
+            'celula' : forms.NumberInput(attrs={'class':'form-control', 'placeholder':'1900754632'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Juan Diego', }),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zumbi '}),
+            'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
             'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
             
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0989765432', 'maxlength': '9999999999'})
@@ -101,10 +103,10 @@ class PacienteForm(forms.ModelForm):
 class DoctorForm(forms.ModelForm):
     class Meta:
         model = Doctor
-        fields = ['nombre', 'apellido', 'especialidad',
+        fields = ['cedula','nombre', 'apellido', 'especialidad',
                   'sexo', 'direccion', 'celular']
         labels = {
-        
+            'cedula' : 'Cedula',        
             'nombre': 'Ingrese su nombre',
             'apellido': 'Ingrese su apellido',
             'especialidad': 'Ingrese su especialidad',
@@ -113,7 +115,7 @@ class DoctorForm(forms.ModelForm):
             'celular': 'Ingrese su celular'
         }
         widgets = {
-            
+            'cedula' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':'1900876534'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Julia Maria', }),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cabrera Cordero'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Yantzaza'}),
@@ -124,27 +126,37 @@ class DoctorForm(forms.ModelForm):
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ['paciente','doctor', 'fecha', 'hora', 'descripcion']
+        fields = ['paciente','doctor', 'fecha', 'hora', 'tratamiento']
         labels = {
             'fecha': 'Ingrese fecha',
             'hora': 'Ingrese hora',
-            'descrpcion': 'Ingrese su descrpcion'
+        
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'class': 'form-control', 'placeholder': '12/12/2021', }),
-            'descripcion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'excelente servicio', }),
+            'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+            
                    }
-
-
-class ReporteForm(forms.ModelForm):
+    
+class TratamientoForm(forms.ModelForm):
     class Meta:
-        model = Reporte
-        fields = ['paciente', 'fecha', 'descripcion']
+        model = Tratamiento
+        fields = ['nombre', 'descripcion', 'precio']
         labels = {
-            'fecha': 'Ingrese fecha',
-            'descripcion': 'Ingrese descripcion',
+            'nombre' : 'Nombre',
+            'descripcion': 'Descripcion',
+            'precio' : 'Precio'
+
+
         }
+
         widgets = {
-            'fecha': forms.DateInput(attrs={'class': 'form-control', 'placeholder': ''}),
-            'descripcion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'descripcion'}),
-                   }
+
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
+            'descripcion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
+            'precio': forms.NumberInput(attrs={'class':'form-control'}),
+            
+
+            }
+
+
+

@@ -38,11 +38,13 @@ Listado de doctores
     <table class="table table-hover text-center">
         <thead>
             <tr>
+                <th class="text-center">Cedula</th>
                 <th class="text-center">Nombre</th>
                 <th class="text-center">Apellido</th>
                 <th class="text-center">Especialidad</th>
                 <th class="text-center">Sexo</th>
                 <th class="text-center">Direccion</th>
+                <th class="text-center">Correo</th>
                 <th class="text-center">Celular</th>
                 <th class="text-center">Opciones</th>
             </tr>
@@ -51,11 +53,13 @@ Listado de doctores
         <tbody>
             {% for p in doctores %}
             <tr>
+                <td class="text-center">{{p.cedula}}</td>
                 <td class="text-center">{{p.nombre}}</td>
                 <td class="text-center">{{p.apellido}}</td>
                 <td class="text-center">{{p.especialidad}}</td>
                 <td class="text-center">{{p.sexo}}</td>
                 <td class="text-center">{{p.direccion}}</td>
+                <td class="text-center">{{p.correo}}</td>
                 <td class="text-center">{{p.celular}}</td>
                 <td class="text-center">
                     <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
@@ -138,7 +142,7 @@ Listado de doctores
         })
             .then(function (result) {
                 if (result.isConfirmed) {
-                    window.location.href = "EliminarDoctor"+id+ "/"
+                    window.location.href = "eliminar_doctor"+ id + "/"
                     /*   var request = $.ajax({
                     type: "POST",
                     url: "{% url 'eliminar_doctor' %}",
@@ -156,5 +160,4 @@ Listado de doctores
             })
     }
 </script>
-
 {% endblock extrajs %}
