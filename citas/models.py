@@ -2,7 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.utils.safestring  import mark_safe
-
 from django.db import models
 
 genero = [
@@ -52,8 +51,8 @@ class Doctor(models.Model):
     cedula = models.CharField(max_length=10, unique=True)
     nombre = models.CharField( max_length=225, blank=False, null=False)
     apellido = models.CharField( max_length=225, blank=False, null=False)
-    especialidad = models.CharField( max_length=100, choices=ocupacion, default='available')
-    sexo = models.CharField(max_length=30,choices=genero, default='available')
+    especialidad = models.CharField( max_length=60, choices=ocupacion, default='available')
+    sexo = models.CharField(max_length=30 ,choices=genero, default='available')
     direccion = models.TextField( max_length=225,blank=True, null=False)
     correo = models.EmailField()
     celular = models.CharField( max_length=10)

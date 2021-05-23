@@ -51,11 +51,13 @@
         </div>
         <div class="align-self-center w-100 px-lg-5 py-lg-4 p-4">
           <h2 class="font-weight-bold mb-4">Consultorio Odontologico</h2>
+         <div>
           {% if mensaje %}
           <div class="alert alert-danger alert-dismissible fade show">
             <strong>Error!</strong> {{mensaje}} <button type="button" class="close" data-dismiss="alert">&times;</button></div>
       {% endif %}
-       
+
+         </div>       
           <form class="mb-5" method="POST" action="/login/">
             {% csrf_token %}
             <div class="mb-4">
@@ -70,6 +72,10 @@
               <a href="" class="form-text text-muted text-decoration-none">¿Has olvidado tu contraseña?</a>
             </div>
             <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+            <div class="register-link m-t-15 text-center">
+              <br>
+              <p>Don't have account ? <a href="{% url 'vista_registar' %}"> Registrar</a></p>
+          </div>
           </form>
           {% if message %}
           <script type="text/javascript">
@@ -90,11 +96,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
     integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
     crossorigin="anonymous"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   
-   
-        
-    
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>    
     {% if messages %}
     {% for m in messages %}
     <script>
