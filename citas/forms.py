@@ -1,17 +1,8 @@
 from django import forms
 from django.forms import fields, widgets
 from citas.models import *
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import  UserCreationForm
 from django.contrib.auth.models import User
-
-# class FormularioLogin(AuthenticationForm):
-#     def __init__(self, *args, **kwargs):
-#         super(FormularioLogin, self).__init__(*args, **kwargs)
-#         self.fields['username'].widget.attrs['class'] = 'form-control'
-#         self.fields['username'].widget.attrs['placeholder'] = 'nombre de usuario'
-#         self.fields['password'].widget.attrs['class'] = 'form-control'
-#         self.fields['password'].widget.attrs['placeholder'] = 'contraseña'
-        
         
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput())
@@ -26,6 +17,7 @@ class PerfilForm(UserCreationForm):
     celular = forms.CharField(widget=forms.TextInput())
     direccion = forms.CharField(widget=forms.TextInput())
     cedula = forms.CharField(widget=forms.TextInput())
+    correo = forms.EmailField(widget=forms.TextInput())
     foto = forms.ImageField()
 
 

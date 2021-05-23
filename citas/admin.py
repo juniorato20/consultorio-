@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import  *
 
+
 class TratamientoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'descripcion','precio')
     search_fields = ['nombre']
@@ -18,7 +19,7 @@ class CitaAdmin(admin.ModelAdmin):
     search_fields = ['fecha']
  
 class PerfilAdmin(admin.ModelAdmin):
-    list_diplay =('cedula','usuario','celular','direccion','foto_perfil')
+    list_diplay =('usuario','celular','direccion','cedula','correo','foto_perfil')
     search_fields = ['cedula','usuario']
     
 admin.site.register(Tratamiento,TratamientoAdmin)    
@@ -26,3 +27,4 @@ admin.site.register(Paciente,PacienteAdmin)
 admin.site.register(Doctor,DoctorAdmin)
 admin.site.register(Cita,CitaAdmin)
 admin.site.register(Perfil,PerfilAdmin)
+

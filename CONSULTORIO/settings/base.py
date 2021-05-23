@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'widget_tweaks',
     'django_crontab',
+    'crispy_forms',
     
 ]
 
@@ -66,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'CONSULTORIO.urls'
 
@@ -128,10 +131,13 @@ STATICFILES_DIRS=(
     os.path.join(BASE_DIR, 'static'),
 )
 
+# LOGIN_REDIRECT_URL = reverse_lazy('adopcion:solicitud_listar')
+# LOGOUT_REDIRECT_URL = reverse_lazy('login')
+
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.googlemail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER ='softwareweb.1997@gmail.com'
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'jhunniorguerrero@gmail.com'
+EMAIL_HOST_PASSWORD = 'cursodjango16'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

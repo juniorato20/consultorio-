@@ -17,7 +17,9 @@ from citas.forms import *
 from citas.models import *
 
 def login_view(request):
+    mensaje = None
     if request.user.is_authenticated:
+
         return HttpResponseRedirect('listar_paciente')
     else:
         if request.method == 'POST':
@@ -26,17 +28,27 @@ def login_view(request):
                 username = form.cleaned_data['username']
                 password = form.cleaned_data['password']
                 usuario = authenticate(username=username,password=password)
-                if usuario is not None and usuario.is_active:
-                    login(request,usuario)
-                    messages.success(request,"BIENVENIDO AL CONSULTORIO ODONTOLOGICO")
-                    return HttpResponseRedirect('/lista_paciente/')
-        form = LoginForm()
-        ctx = {'form': form}
+                if usuario is not None:
+                    if usuario.is_active:
+                        login(request,usuario)
+                        messages.success(request,"BIENVENIDO AL CONSULTORIO ODONTOLOGICO")
+                        return HttpResponseRedirect('/lista_paciente/')
+                    else: 
+                        mensaje = "Usuario inactivo"
+                        
+                else:
+                    mensaje = "Usuario o contraseña invalido"
+            else:
+                form = LoginForm()
+      
+        ctx = {'mensaje': mensaje}
+      
+
         return render(request, 'login/login.html', ctx)
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'Te has desconectado con exito.')
+    messages.success(request, 'TE HAS DESCONECTADO CON EXISTO')
     return HttpResponseRedirect('/login/')
 
 @login_required(login_url= '/login/')
@@ -44,6 +56,31 @@ def inicio_view(request):
     citas = Paciente.objects.all()
     ctx = {'citas': citas}
     return render(request,'inicio/vista_principal.html',ctx)
+
+
+def registrar_view(request):
+    info = "inicializar"
+    if request.method == 'POST':
+        form = PerfilForm(request.POST,request.FILES)
+        if form.is_valid():
+            user = form.save()
+            perfil = Perfil()
+            perfil.usuario = user
+            perfil.celular = form.cleaned_data['celular']
+            perfil.direccion = form.cleaned_data['direccion']
+            perfil.cedula= form.cleaned_data['cedula']
+            perfil.cedula= form.cleaned_data['correo']
+            perfil.save()
+            info = "Guardado Satisfactoriamente"
+            ctx = {'info':info}
+            return render(request, 'login/resgistro_exitoso.html',ctx)
+    else:
+        form = PerfilForm()
+        form.fields['username'].help_text = None
+        form.fields['password1'].help_text = None
+        form.fields['password2'].help_text = None
+    ctx ={'form':form, 'info': info}
+    return render(request, 'login/registro_usuario.html',ctx)
 
 # #========================== VISTAS BASADOS EN CLASES PACIENTE =======================#   
 class CrearPaciente(SuccessMessageMixin,CreateView):
@@ -67,6 +104,7 @@ class ListadoPaciente(ListView):
         pacientes=None
         if query != None:
             pacientes = Paciente.objects.filter(nombre__icontains=query)
+        
         elif query == None:
             pacientes =Paciente.objects.all()
         else:

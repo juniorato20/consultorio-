@@ -114,6 +114,7 @@ class Perfil(models.Model):
     celular = models.CharField('Celular', max_length=10)
     direccion = models.TextField('Direccion')
     cedula = models.CharField('Cedula', max_length=10)
+    correo = models.EmailField()
     foto = models.ImageField('Foto', upload_to=url_perfil)
 
     class Meta:

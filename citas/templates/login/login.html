@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 
 <head>
@@ -15,6 +16,7 @@
 
   <title>Consultorio</title>
 </head>
+
 
 <body class="bg-dark">
   <section>
@@ -50,11 +52,11 @@
         <div class="align-self-center w-100 px-lg-5 py-lg-4 p-4">
           <h2 class="font-weight-bold mb-4">Consultorio Odontologico</h2>
           {% if mensaje %}
-          <div class="alert alert-danger">
-            {{ mensaje }}
-          </div>
-          {% endif %}
-          <form class="mb-5" method="POST">
+          <div class="alert alert-danger alert-dismissible fade show">
+            <strong>Error!</strong> {{mensaje}} <button type="button" class="close" data-dismiss="alert">&times;</button></div>
+      {% endif %}
+       
+          <form class="mb-5" method="POST" action="/login/">
             {% csrf_token %}
             <div class="mb-4">
               <label for="Username" class="form-label font-weight-bold">Usuario</label>
@@ -69,6 +71,11 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
           </form>
+          {% if message %}
+          <script type="text/javascript">
+             alert("{{message}}");
+          </script>
+          {% endif %}
 
         </div>
 
@@ -83,6 +90,27 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
     integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
     crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+   
+   
+        
+    
+    {% if messages %}
+    {% for m in messages %}
+    <script>
+        Swal.fire({
+            position: 'top-center',
+      icon: 'success',
+      title: '{{m}}',
+      showConfirmButton: false,
+      timer: 1500
+    
+        })
+        
+    </script>
+
+    {% endfor %}
+    {% endif %}
 </body>
 
 </html>

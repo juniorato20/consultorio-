@@ -17,6 +17,7 @@ from django.urls import path,include
 from citas.views import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import admin
+# from django.contrib.auth.views import  password_reset, password_reset_done, password_reset_confirm, password_reset_complete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +27,25 @@ urlpatterns = [
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
     path('logout/', logout_view, name="vista_logout"),  
+    path('registrar/', registrar_view, name="vista_registar"),
     path('',include('citas.urls')),
+    
+
+    # path('reset/password_reset', password_reset, 
+    #     {'template_name':'registration/password_reset_form.html',
+    #     'email_template_name': 'registration/password_reset_email.html'}, 
+    #     name='password_reset'), 
+    # path('password_reset_done', password_reset_done, 
+    #     {'template_name': 'registration/password_reset_done.html'}, 
+    #     name='password_reset_done'),
+    # path('reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$', password_reset_confirm, 
+    #     {'template_name': 'registration/password_reset_confirm.html'},
+    #     name='password_reset_confirm'
+    #     ),
+    # path('reset/done', password_reset_complete, {'template_name': 'registration/password_reset_complete.html'},
+    #     name='password_reset_complete'),
+
+   
     
 #     #=============== URL CON VISTAS BASADAS EN CLASES PACIENTE  ==============#
     path('lista_paciente/', login_required(ListadoPaciente.as_view()), name ='listar_paciente'),
