@@ -86,7 +86,7 @@ class PacienteForm(forms.ModelForm):
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zumbi '}),
             'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%y"),
-            # 'sexo' : forms.ChoiceField(widget=forms.Select, choices=genero),
+            'sexo' :  forms.Select(attrs={'class': 'form-control'}),
             'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0989765432', 'maxlength': '9999999999'})
             }
@@ -113,6 +113,8 @@ class DoctorForm(forms.ModelForm):
         widgets = {
             'cedula' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':'1900876534'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Julia Maria', }),
+            'especialidad' :  forms.Select(attrs={'class': 'form-control'}),
+            'sexo' :  forms.Select(attrs={'class': 'form-control'}),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cabrera Cordero'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Yantzaza'}),
             'correo' : forms.EmailInput(attrs={'class' : 'form-control', 'placeholder': 'ejemplo2020@gmail.com'}),
@@ -129,7 +131,12 @@ class CitaForm(forms.ModelForm):
         
         }
         widgets = {
+            'paciente' :  forms.Select(attrs={'class': 'form-control'}),
+            'doctor' :  forms.Select(attrs={'class': 'form-control'}),
+
             'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+            'hora' :  forms.Select(attrs={'class': 'form-control'}),
+            'tratamiento' :  forms.Select(attrs={'class': 'form-control'}),
             
                    }
     
