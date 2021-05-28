@@ -15,9 +15,13 @@ class DoctorAdmin(admin.ModelAdmin):
     search_fields = ['nombre','apellido']
 
 class CitaAdmin(admin.ModelAdmin):
-    list_display = ('paciente','doctor','tratamiento','fecha','hora')
+    list_display = ('paciente','doctor','tratamiento','fecha','hora','estado')
     search_fields = ['fecha']
- 
+    
+class ReporteAdmin(admin.ModelAdmin):
+    list_display = ('id','paciente','observacion','fecha')
+    search_fields = ['id']
+    
 class PerfilAdmin(admin.ModelAdmin):
     list_diplay =('usuario','celular','direccion','cedula','correo','foto_perfil')
     search_fields = ['cedula','usuario']
@@ -26,5 +30,6 @@ admin.site.register(Tratamiento,TratamientoAdmin)
 admin.site.register(Paciente,PacienteAdmin)
 admin.site.register(Doctor,DoctorAdmin)
 admin.site.register(Cita,CitaAdmin)
+admin.site.register(Reporte,ReporteAdmin)
 admin.site.register(Perfil,PerfilAdmin)
 

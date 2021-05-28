@@ -32,10 +32,9 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 # Application definition
 
 
-CRONJOBS = (
-    ('* / 1 * * * *', 'El nombre de su aplicación. El nombre del archivo py donde se encuentra la función de sincronización. El nombre de la función de sincronización'),
-         ('0 0 1 * *', 'El nombre de su aplicación. El nombre del archivo py donde se encuentra la función temporizada. El nombre de la función temporizada', '> Ruta y nombre del archivo de salida'),
-)
+CRONJOBS = [
+    ('','')
+]
 
 
 # default uses locally shipped version at 'fontawesome/css/font-awesome.min.css'
@@ -123,13 +122,19 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATIC_URL = '/static/'
-STATICFILES_DIRS=(
-    os.path.join(BASE_DIR, 'static'),
-)
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/')
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # LOGIN_REDIRECT_URL = reverse_lazy('adopcion:solicitud_listar')
 # LOGOUT_REDIRECT_URL = reverse_lazy('login')

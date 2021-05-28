@@ -43,7 +43,6 @@ def login_view(request):
       
         ctx = {'mensaje': mensaje}
       
-
         return render(request, 'login/login.html', ctx)
 
 def logout_view(request):
@@ -56,7 +55,6 @@ def inicio_view(request):
     citas = Paciente.objects.all()
     ctx = {'citas': citas}
     return render(request,'inicio/vista_principal.html',ctx)
-
 
 def registrar_view(request):
     info = "inicializar"
@@ -119,7 +117,7 @@ class ActualizarPaciente(SuccessMessageMixin,UpdateView):
     success_url = reverse_lazy('listar_paciente')
     success_message = "%(nombre)s %(apellido)s se ha actualizado correctamente"
 
-class EliminarPaciente(DeleteView):
+class EliminarPaciente(SuccessMessageMixin,DeleteView):
     model = Paciente
     template_name = 'paciente/paciente_confirm_delete.html'
     success_url = reverse_lazy('listar_paciente')
@@ -134,25 +132,13 @@ class CrearCita(SuccessMessageMixin,CreateView):
     success_message = "Cita creada correctamente"
 
 class ListadoCita(ListView):
-    model = Doctor
+    model = Cita
     template_name= 'cita/listar_cita.html'
-    queryset = Cita.objects.all()
-    paginate_by = 3
-    context_object_name = 'citas'
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        print(query)
-        citas=None
-        if query != None:
-            citas = Cita.objects.filter(fecha__icontains=query)
-        elif query == None:
-            citas=Cita.objects.all()
-        else:
-            citas=Cita.objects.none()
-
-        return citas
-
+        queryset = self.model.objects.filter(estado = True)
+        return queryset
+   
 class ActualizarCita(SuccessMessageMixin,UpdateView):
     model = Cita
     template_name = 'cita/editar_cita.html'

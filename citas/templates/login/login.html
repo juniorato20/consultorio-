@@ -60,7 +60,7 @@
          </div>       
           <form class="mb-5" method="POST" action="/login/">
             {% csrf_token %}
-            <div class="mb-4">
+            <div class="mb-4" >
               <label for="Username" class="form-label font-weight-bold">Usuario</label>
               <input type="text" class="form-control bg-dark-x border-0" id="username" name="username"
                 placeholder="Usuario" aria-describedby="Username">
@@ -69,6 +69,10 @@
               <label for="Password" class="form-label font-weight-bold">Contraseña</label>
               <input type="password" class="form-control bg-dark-x border-0 mb-2" placeholder="Ingresa tu contraseña"
                 id="password" name="password">
+
+                
+
+
               <a href="" class="form-text text-muted text-decoration-none">¿Has olvidado tu contraseña?</a>
             </div>
             <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>

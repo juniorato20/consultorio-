@@ -91,10 +91,6 @@ class PacienteForm(forms.ModelForm):
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0989765432', 'maxlength': '9999999999'})
             }
                 
-    def clean(self): 
-        somefield = self.cleaned_data.get('somefield') 
-        if not somefield: raise forms.ValidationError('Some field is blank')
-
 
 class DoctorForm(forms.ModelForm):
     class Meta:

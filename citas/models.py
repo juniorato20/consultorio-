@@ -39,7 +39,7 @@ class Paciente(models.Model):
     celular = models.CharField( max_length=10)
             
     class Meta:
-        ordering = ["nombre"]
+        ordering = ["nombre","apellido"]
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pacientes'
     
@@ -59,7 +59,7 @@ class Doctor(models.Model):
 
   
     class Meta:
-        ordering = ["nombre"]
+        ordering = ["nombre", "apellido"]
         verbose_name = 'Doctor'
         verbose_name_plural = 'Doctores'
     
@@ -92,16 +92,29 @@ class Cita(models.Model):
     tratamiento = models.ForeignKey(Tratamiento,  on_delete=models.CASCADE, default='available' )
     fecha = models.DateField()
     hora = models.CharField( max_length=50,choices=tiempo, default='available')
-   
+    estado = models.BooleanField(default = True)
 
     class Meta:
-        ordering = ["doctor"]
+        ordering = ["doctor","id"]
         verbose_name = 'Cita'
         verbose_name_plural = 'Citas'
 
 def str (self):
     return self.paciente.nombre
 
+class Reporte(models.Model):
+    id = models.AutoField(primary_key=True)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, default='available')
+    observacion= models.TextField( max_length=225,blank=True, null=False)
+    fecha = models.DateField()
+
+    class Meta:
+        ordering = ["id"]
+        verbose_name = 'Reporte'
+        verbose_name_plural = 'Reportes'
+
+def str (self):
+    return self.id
 
 def url_perfil(self, filename):
     ruta = "static/Perfiles/%s/%s" % (self.usuario, str(filename))
