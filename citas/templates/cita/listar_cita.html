@@ -69,7 +69,11 @@ Listado de Citas
                         tratamiento : "{{Citas.tratamiento}}",
                         start : "{{Citas.fecha| date:'Y-m-d'}}",
                         end : "{{Citas.fecha| date:'Y-m-d'}}",
-                        url: 'http://google.com/
+                        url: 'http://google.com/'
+                    },
+                    {% endfor %}
+
+                ]
          
         });
         calendar.render();
