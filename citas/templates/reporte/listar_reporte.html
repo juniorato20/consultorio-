@@ -1,6 +1,6 @@
 {% extends 'login/vista_principal.html' %}
 {% block titulo %}
-Listado de Pacientes
+Listado de Reportes
 {% endblock titulo %}
 {% block body %}
 
@@ -8,7 +8,7 @@ Listado de Pacientes
     <form action="" method="GET">
         <div class="row">
           <div class="col-auto mb-4 mb-md-0">
-            <p class="pt-2"><strong>Listado de pacientes</strong></p>
+            <p class="pt-2"><strong>Listado de reportes</strong></p>
           </div>
           <div class="col-auto mb-4 mb-md-0">
             <div class="form-outline mb-4">
@@ -17,45 +17,37 @@ Listado de Pacientes
             </div>
           </div>
           <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary" value="listar_paciente">
+            <button type="submit" class="btn btn-primary" value="listar_reporte">
                 <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
     </form>
     <div class="card-footer">
-        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_paciente' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
     </div>
         <div class="table-responsive">
             <table class="table table-hover text-center">
                 <thead>
                     <tr>
-                        <th class="text-center">Cedula</th>
-                        <th class="text-center">Nombre</th>
-                        <th class="text-center">Apellido</th>
-                        <th class="text-center">Direccion</th>
-                        <th class="text-center">Sexo</th>
-                        <th class="text-center">Correo</th>
-                        <th class="text-center">Celular</th>
+                        <th class="text-center">Paciente</th>
+                        <th class="text-center">Observacion</th>
+                        <th class="text-center">Fecha</th>
                         <th class="text-center">Opciones</th>
                     </tr>
                 </thead>
-                {% if pacientes %}
+                {% if reportes %}
                 <tbody>
-                    {% for p in pacientes %}
+                    {% for p in reportes %}
                     <tr>
-                        <td class="text-center">{{p.cedula}}</td>
-                        <td class="text-center">{{p.nombre}}</td>
-                        <td class="text-center">{{p.apellido}}</td>
-                        <td class="text-center">{{p.direccion}}</td>
-                        <td class="text-center">{{p.sexo}}</td>
-                        <td class="text-center">{{p.correo}}</td>
-                        <td class="text-center">{{p.celular}}</td>
+                        <td class="text-center">{{p.paciente}}</td>
+                        <td class="text-center">{{p.observacion}}</td>
+                        <td class="text-center">{{p.fecha}}</td>
                         <td>
-                            <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_paciente' p.id %}')">
+                            <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
                                 <i class="fas fa-edit"></i></button>
-                            <a href="#"onclick="eliminarpaciente({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
+                            <a href="#"onclick="eliminarreporte({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
                                     class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
@@ -67,10 +59,12 @@ Listado de Pacientes
             </table>
         </div>
     </div>
-      <div class="modal face" id="creacion" role="dialog">
+  
+    <div class="modal face" id="creacion" role="dialog">
     </div>
     <div class="modal face" id="edicion" role="dialog">
     </div>
+    
     {% if is_paginated %}
     <div class="mt-2">
         <ul class="pagination">
@@ -114,7 +108,7 @@ Listado de Pacientes
                 $(this).modal('show')
             });
         }
-        function eliminarpaciente(id) {
+        function eliminarreporte(id) {
             Swal.fire({
                 "title": "¿Estás seguro?",
                 "text": "Una vez eliminado, no se puede restaurar",
@@ -126,7 +120,7 @@ Listado de Pacientes
             })
                 .then(function (result) {
                     if (result.isConfirmed) {
-                        window.location.href = "eliminar_paciente" + id + "/"
+                        window.location.href = "eliminar_reporte" + id + "/"
                     }
                 })
         }

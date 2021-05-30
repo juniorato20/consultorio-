@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.utils.safestring  import mark_safe
@@ -39,7 +41,7 @@ class Paciente(models.Model):
     celular = models.CharField( max_length=10)
             
     class Meta:
-        ordering = ["nombre","apellido"]
+        ordering = ["apellido","nombre"]
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pacientes'
     
@@ -59,7 +61,7 @@ class Doctor(models.Model):
 
   
     class Meta:
-        ordering = ["nombre", "apellido"]
+        ordering = ["apellido", "nombre"]
         verbose_name = 'Doctor'
         verbose_name_plural = 'Doctores'
     
@@ -133,10 +135,18 @@ class Perfil(models.Model):
         verbose_name = 'Perfil'
         verbose_name_plural = 'Perfiles'
 
+    def __str__(self):
+        return self.usuario.username
+
 def foto_perfil(self):
     return mark_safe('<a href="/%s" target="blank"><img src"/%s" hight="50px" widht="50px"/></a>' % (self.foto, self.foto))
 
 foto_perfil.allow_tags = True
 
-def __str__(self):
-    return self.usuario.username
+def crear_usuario_perfil(sender, instance, created, **kwargs):
+    if created:
+        Perfil.objects.create(usuario=instance)
+
+def guardar_usuario_perfil(sender, instance, **kwargs):
+    instance.perfil.save()
+

@@ -23,7 +23,7 @@ class ReporteAdmin(admin.ModelAdmin):
     search_fields = ['id']
     
 class PerfilAdmin(admin.ModelAdmin):
-    list_diplay =('usuario','celular','direccion','cedula','correo','foto_perfil')
+    list_diplay =('usuario','celular','direccion','cedula','correo','foto')
     search_fields = ['cedula','usuario']
     
 admin.site.register(Tratamiento,TratamientoAdmin)    

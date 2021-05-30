@@ -1,0 +1,11 @@
+{% extends 'login/vista_principal.html' %}
+{% block titulo %}Confirmar Eliminacion {% endblock titulo %}
+{% block body %}
+<h2 class="page-header">Confirmacion para eliminar {{ reporte.paciente }}</h2>
+    <form method="post" action="">
+    {% csrf_token %}
+    <p>¿Seguro que quieres eliminar el reporte {{ reporte.paciente }}?</p>
+        <button type="submit" class="btn btn-danger">Si, eliminar</button>
+        <a href="{% url 'listar_reporte'%}" class="btn btn-primary" role="button">Cancelar</a>
+    </form>
+{% endblock body %}

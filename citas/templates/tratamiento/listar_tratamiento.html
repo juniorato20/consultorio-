@@ -73,11 +73,11 @@ Listado de Trtamientos
 
         {% if page_obj.has_previous %}
         <li class="page-item">
-            <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Previous</a>
+            <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Anterior</a>
         </li>
         {% else %}
         <li class="page-item disabled">
-            <a href="#" class="page-link">Previous</a>
+            <a href="#" class="page-link">Anterior</a>
         </li>
         {% endif %}
         {% for i in paginator.page_range %}
@@ -88,17 +88,15 @@ Listado de Trtamientos
         {% endfor %}
         {% if page_obj.has_next %}
         <li class="page-item">
-            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Proximo</a>
         </li>
         {% else %}
         <li class="page-item disabled">
-            <a href="#" class="page-link">Next</a>
+            <a href="#" class="page-link">Proximo</a>
         </li>
         {% endif %}
     </ul>
 </div>
-
-
 {% endif %}
 {% endblock body %}
 

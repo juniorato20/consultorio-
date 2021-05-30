@@ -74,6 +74,15 @@ urlpatterns = [
     path('crear_tratamiento/',login_required(CrearTratamiento.as_view()), name = 'crear_tratamiento'),
     path('editar_tratamiento/<int:pk>/',login_required(ActualizarTratamiento.as_view()), name = 'editar_tratamiento'),
     path('eliminar_tratamiento/<int:pk>/',login_required(EliminarTratamiento.as_view()), name = 'eliminar_tratamiento'),
+ 
+    path('lista_reporte/',login_required(ListadoReporte.as_view()), name ='listar_reporte'),
+    path('crear_reporte/',login_required(CrearReporte.as_view()), name = 'crear_reporte'),
+    path('editar_reporte/<int:pk>/',login_required(ActualizarReporte.as_view()), name = 'editar_reporte'),
+    path('eliminar_reporte/<int:pk>/',login_required(EliminarReporte.as_view()), name = 'eliminar_reporte'),
+ 
+    
+
+
  ] 
 
 admin.site.site_header = 'CONSULTORIO ODONTOLOGICO '

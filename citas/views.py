@@ -1,4 +1,5 @@
 from django.db.models import query
+from django.http.response import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, request
 from django.contrib.auth.decorators import login_required
@@ -56,23 +57,30 @@ def inicio_view(request):
     ctx = {'citas': citas}
     return render(request,'inicio/vista_principal.html',ctx)
 
+##------------METODO REGISTRAR USUARIO------------
 def registrar_view(request):
     info = "inicializar"
     if request.method == 'POST':
-        form = PerfilForm(request.POST,request.FILES)
+        form = PerfilForm(request.POST)
         if form.is_valid():
             user = form.save()
+            print(user +"Se guardo el usuario")
             perfil = Perfil()
             perfil.usuario = user
             perfil.celular = form.cleaned_data['celular']
             perfil.direccion = form.cleaned_data['direccion']
             perfil.cedula= form.cleaned_data['cedula']
-            perfil.cedula= form.cleaned_data['correo']
+            perfil.correo= form.cleaned_data['correo']
+         
             perfil.save()
+            print(perfil+"Se guardo el perfil")
             info = "Guardado Satisfactoriamente"
             ctx = {'info':info}
             return render(request, 'login/resgistro_exitoso.html',ctx)
+        else:
+            print(form)
     else:
+        
         form = PerfilForm()
         form.fields['username'].help_text = None
         form.fields['password1'].help_text = None
@@ -233,6 +241,50 @@ class EliminarTratamiento(SuccessMessageMixin,DeleteView):
     template_name = 'tratamiento/tratamiento_confirm_delete.html'
     success_url = reverse_lazy('listar_tratamiento')
     success_message = "%(nombre)s Elimado Correctamente"
+
+class CrearReporte(SuccessMessageMixin,CreateView):
+    model = Reporte
+    template_name = 'reporte/crear_reporte.html'
+    form_class = ReporteForm
+    success_url = reverse_lazy('listar_reporte')
+    success_message = "  se ha creado correctamente"
+
+class ListadoReporte(ListView):
+    template_name = 'reporte/listar_reporte.html'
+    queryset = Reporte.objects.all()
+    paginate_by = 3
+    context_object_name = 'reportes'  
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        print(query)
+        reportes=None
+        if query != None:
+            reportes = Reporte.objects.filter(paciente__icontains=query)
+        elif query == None:
+            reportes=Reporte.objects.all()
+        else:
+            reportes=Reporte.objects.none()
+
+        return reportes
+
+class ActualizarReporte(SuccessMessageMixin,UpdateView):
+    model = Reporte
+    template_name = 'reporte/editar_reporte.html'
+    form_class = ReporteForm
+    success_url = reverse_lazy('listar_reporte')
+    success_message = " se actualizo correctamente"
+
+class EliminarReporte(SuccessMessageMixin,DeleteView):
+    model = Reporte
+    template_name = 'reporte/reporte_confirm_delete.html'
+    success_url = reverse_lazy('listar_reporte')
+    success_message = "Elimado Correctamente"
+    
+
+
+
+
 
 
 

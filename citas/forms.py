@@ -15,12 +15,31 @@ class LoginForm(forms.Form):
 
 
 class PerfilForm(UserCreationForm):
+    # class Meta:
+    #     model = Perfil
+    #     fields = ['celular','direccion', 'cedula', 'correo', 'foto']
+    #     labels = {
+    #         'cedular' : 'Celular',
+    #         'direccion': 'Direccion',
+    #         'cedula':'Cedula',
+    #         'correo' : 'Correo',
+    #         'foto': 'Foto',
+          
+    #     }
+    #     widgets = {
+    #         'cedular' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':'0989786567'}),
+    #         'direccion': forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder': 'Juan Diego', }),
+    #         'cedula': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
+    #         'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
+            
+    #         }
+               
+
     celular = forms.CharField(widget=forms.TextInput())
     direccion = forms.CharField(widget=forms.TextInput())
     cedula = forms.CharField(widget=forms.TextInput())
     correo = forms.EmailField(widget=forms.TextInput())
     foto = forms.ImageField()
-
 
 class ResetPasswordForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -129,7 +148,6 @@ class CitaForm(forms.ModelForm):
         widgets = {
             'paciente' :  forms.Select(attrs={'class': 'form-control'}),
             'doctor' :  forms.Select(attrs={'class': 'form-control'}),
-
             'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
             'hora' :  forms.Select(attrs={'class': 'form-control'}),
             'tratamiento' :  forms.Select(attrs={'class': 'form-control'}),
@@ -146,7 +164,6 @@ class TratamientoForm(forms.ModelForm):
             'precio' : 'Precio'
 
         }
-
         widgets = {
 
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
@@ -154,6 +171,22 @@ class TratamientoForm(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class':'form-control'}),
 
             }
+
+class ReporteForm(forms.ModelForm):
+    class Meta:
+        model = Reporte
+        fields = ['paciente', 'observacion', 'fecha']
+        labels = {
+            'paciente' : 'Paciente ',
+            'observacion' : 'Observaciones',
+            'fecha' : 'Fecha'
+        }
+        widgets = {
+            'paciente' : forms.Select(attrs={'class': 'form-control'}),
+            'observacion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'xxxxxx', }),
+            'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+
+        }
 
 
 

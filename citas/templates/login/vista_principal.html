@@ -7,11 +7,8 @@
     <title>{% block titulo %}Consultorio {% endblock titulo %}</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
      <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/font-awesome-5.11.1/css/all.min.css' %}">
-    
-    
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/font-awesome-5.11.1/css/all.min.css' %}">   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
@@ -21,14 +18,10 @@
     <link rel="stylesheet" href="{% static 'css/cs-skin-elastic.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
      {% block head %}
-    
-
     {% endblock %}
-    
     {% block extra_css %}
     {% endblock extra_css %}
 </head>
-
 <body>
     <!-- Left Panel -->
     <aside id="left-panel" class="left-panel">
@@ -62,7 +55,12 @@
                             <li><i class="menu-icon fas fa-capsules"></i><a href="{% url 'listar_tratamiento' %}">Lista de Tratamientos </a></li>
                         </ul>
                      </li>
-
+                     <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-file-alt"></i></i>Reporte</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="menu-icon far fa-file-alt"></i><a href="{% url 'listar_reporte' %}">Lista de Reportes </a></li>
+                        </ul>
+                     </li>
                     <li>
                        <a href="{% url 'vista_logout' %}"  aria-haspopup="true" aria-expanded="false"><i class="menu-icon fas fa-power-off "></i> Salir</a>
                     </li>
@@ -81,30 +79,22 @@
                     <a class="navbar-brand hidden" href="./"><img src="{% static 'images/login.png' %}" alt="Logo"></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
-                 
             </div>
-            
             <div class="top-right">
                 <div class="header-menu">
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         
-                           
-                            
                             <img src="{% static 'images/admin.jpg' %}" class="rounded-circle" alt="Cinque Terre" width="50px" height="50px">
                         </a>
-                    
                         <div class="user-menu dropdown-menu">
                             <a class="nav-link" href="#"><i class="fa fa- user"></i>Perfil</a>
                             <a class="nav-link" href="#"><i class="fa fa -cog"></i>Administración</a>
                             <a class="nav-link" href="{% url 'vista_logout' %}"><i class="menu-icon fas fa-power-off"></i>Salir</a>
                         </div>
                     </div>
-
                 </div>
             </div>
         </header>
-
         <div class="content">
             <div>
                 <div class="row">
@@ -115,7 +105,6 @@
                                 <div class="card-body">
                                     <blockquote class="blockquote mb-0 text-light text-center">
                                         <h1 class="text-light">{{ user.username | upper }} BIENVENIDO A LA TIENDA EN LINEA</h1>
-                                    
                                     </blockquote>
                                 </div>
                             </div>
@@ -123,8 +112,7 @@
                       {% endblock body %}
                 </div>
             </div>
-        </div>
-        
+        </div>  
     <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
@@ -132,7 +120,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-     
     {% if messages %}
     {% for m in messages %}
     <script>
@@ -142,18 +129,11 @@
       title: '{{m}}"',
       showConfirmButton: false,
       timer: 1500
-    
-        })
-        
+       })
     </script>
- 
-    
     {% endfor %}
     {% endif %}
     {% block extrajs %}
     {% endblock extrajs %}
-   
 </body>
-
-
 </html>
