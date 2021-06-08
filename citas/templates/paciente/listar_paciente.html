@@ -3,7 +3,6 @@
 Listado de Pacientes
 {% endblock titulo %}
 {% block body %}
-
 <div class="card-default">
     <form action="" method="GET">
         <div class="row">
@@ -124,12 +123,13 @@ Listado de Pacientes
                 "cancelButtonColor": '#d33',
                 "confirmButtonText": 'Yes, delete it!'
             })
-                .then(function (result) {
-                    if (result.isConfirmed) {
-                        window.location.href = "eliminar_paciente" + id + "/"
-                    }
-                })
-        }
+            .then(function(result){
+            if(result.isConfirmed){
+                window.location.href ="/eliminar_paciente/"+id+"/"
+                }  
+        })
+    }
+  
 
     </script>
     {% endblock extrajs %}

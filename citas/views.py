@@ -20,7 +20,6 @@ from citas.models import *
 def login_view(request):
     mensaje = None
     if request.user.is_authenticated:
-
         return HttpResponseRedirect('listar_paciente')
     else:
         if request.method == 'POST':
@@ -35,15 +34,12 @@ def login_view(request):
                         messages.success(request,"BIENVENIDO AL CONSULTORIO ODONTOLOGICO")
                         return HttpResponseRedirect('/lista_paciente/')
                     else: 
-                        mensaje = "Usuario inactivo"
-                        
+                        mensaje = "Usuario inactivo"     
                 else:
                     mensaje = "Usuario o contraseña invalido"
             else:
                 form = LoginForm()
-      
         ctx = {'mensaje': mensaje}
-      
         return render(request, 'login/login.html', ctx)
 
 def logout_view(request):
@@ -61,26 +57,27 @@ def inicio_view(request):
 def registrar_view(request):
     info = "inicializar"
     if request.method == 'POST':
-        form = PerfilForm(request.POST)
+        form = PerfilForm(request.POST,request.FILES)
         if form.is_valid():
             user = form.save()
-            print(user +"Se guardo el usuario")
+            # message = "Image uploaded succesfully!"
+            # print(user +"Se guardo el usuario")
             perfil = Perfil()
             perfil.usuario = user
             perfil.celular = form.cleaned_data['celular']
             perfil.direccion = form.cleaned_data['direccion']
             perfil.cedula= form.cleaned_data['cedula']
             perfil.correo= form.cleaned_data['correo']
-         
+            perfil.foto= form.cleaned_data['foto']
+
             perfil.save()
             print(perfil+"Se guardo el perfil")
             info = "Guardado Satisfactoriamente"
             ctx = {'info':info}
-            return render(request, 'login/resgistro_exitoso.html',ctx)
+            return render(request,'login/resgistro_exitoso.html',ctx)
         else:
             print(form)
     else:
-        
         form = PerfilForm()
         form.fields['username'].help_text = None
         form.fields['password1'].help_text = None
@@ -110,7 +107,6 @@ class ListadoPaciente(ListView):
         pacientes=None
         if query != None:
             pacientes = Paciente.objects.filter(nombre__icontains=query)
-        
         elif query == None:
             pacientes =Paciente.objects.all()
         else:
@@ -142,6 +138,7 @@ class CrearCita(SuccessMessageMixin,CreateView):
 class ListadoCita(ListView):
     model = Cita
     template_name= 'cita/listar_cita.html'
+    context_object_name = 'citas'
 
     def get_queryset(self):
         queryset = self.model.objects.filter(estado = True)

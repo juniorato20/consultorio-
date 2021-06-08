@@ -117,13 +117,12 @@ Listado de Reportes
                 "confirmButtonColor": '#3085d6',
                 "cancelButtonColor": '#d33',
                 "confirmButtonText": 'Yes, delete it!'
-            })
-                .then(function (result) {
-                    if (result.isConfirmed) {
-                        window.location.href = "eliminar_reporte" + id + "/"
-                    }
-                })
-        }
-
+            }).then(function(result){
+            if(result.isConfirmed){
+                window.location.href ="/eliminar_reporte/"+id+"/"
+                }  
+        })
+    }
+  
     </script>
     {% endblock extrajs %}

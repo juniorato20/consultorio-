@@ -14,27 +14,7 @@ class LoginForm(forms.Form):
         fields = ['username', 'password']
 
 
-class PerfilForm(UserCreationForm):
-    # class Meta:
-    #     model = Perfil
-    #     fields = ['celular','direccion', 'cedula', 'correo', 'foto']
-    #     labels = {
-    #         'cedular' : 'Celular',
-    #         'direccion': 'Direccion',
-    #         'cedula':'Cedula',
-    #         'correo' : 'Correo',
-    #         'foto': 'Foto',
-          
-    #     }
-    #     widgets = {
-    #         'cedular' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':'0989786567'}),
-    #         'direccion': forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder': 'Juan Diego', }),
-    #         'cedula': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
-    #         'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
-            
-    #         }
-               
-
+class PerfilForm(UserCreationForm):              
     celular = forms.CharField(widget=forms.TextInput())
     direccion = forms.CharField(widget=forms.TextInput())
     cedula = forms.CharField(widget=forms.TextInput())
@@ -100,7 +80,7 @@ class PacienteForm(forms.ModelForm):
             'celular': 'Ingrese su celular',
         }
         widgets = {
-            'cedula' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':'1900876534'}),
+            'cedula' : forms.NumberInput(attrs={'class':'form-control', 'placeholder':'1900876534'}),
             'nombre': forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder': 'Juan Diego', }),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zumbi '}),
@@ -109,7 +89,6 @@ class PacienteForm(forms.ModelForm):
             'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0989765432', 'maxlength': '9999999999'})
             }
-                
 
 class DoctorForm(forms.ModelForm):
     class Meta:

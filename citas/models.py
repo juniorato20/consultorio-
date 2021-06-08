@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.utils.safestring  import mark_safe
 from django.db import models
-
 genero = [
     ('Hombre', 'Hombre'),
     ('Mujer', 'Mujer'),
@@ -14,7 +13,6 @@ ocupacion = [
     ('Odontologo', 'Odontologo'),
     ('Odontologa', 'Odontologa'),
 ]
-
 class Tratamiento(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255, blank=False, null=False,unique=True )
@@ -129,7 +127,7 @@ class Perfil(models.Model):
     direccion = models.TextField('Direccion')
     cedula = models.CharField('Cedula', max_length=10)
     correo = models.EmailField()
-    foto = models.ImageField('Foto', upload_to=url_perfil)
+    foto = models.ImageField(default=None, upload_to=url_perfil)
 
     class Meta:
         verbose_name = 'Perfil'

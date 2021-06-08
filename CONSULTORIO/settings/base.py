@@ -36,7 +36,6 @@ CRONJOBS = [
     ('','')
 ]
 
-
 # default uses locally shipped version at 'fontawesome/css/font-awesome.min.css'
 FONTAWESOME_CSS_URL = '//cdn.example.com/fontawesome-min.css'  # absolute url
 FONTAWESOME_CSS_URL = 'myapp/css/fontawesome.min.css'  # relative url
@@ -134,10 +133,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
-# LOGIN_REDIRECT_URL = reverse_lazy('adopcion:solicitud_listar')
-# LOGOUT_REDIRECT_URL = reverse_lazy('login')
 
 
 EMAIL_USE_TLS = True

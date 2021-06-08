@@ -127,12 +127,13 @@ Listado de Pacientes
                 "cancelButtonColor": '#d33',
                 "confirmButtonText": 'Yes, delete it!'
             })
-                .then(function (result) {
-                    if (result.isConfirmed) {
-                        window.location.href = "eliminar_doctor" + id + "/"
-                    }
-                })
-        }
+                .then(function(result){
+            if(result.isConfirmed){
+                window.location.href ="/eliminar_doctor/"+id+"/"
+                }  
+        })
+    }
+  
 
     </script>
     {% endblock extrajs %}

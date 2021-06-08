@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <h2 class="modal-title">Nuevo Reporte</h2>
+        <h2 class="d-flex justify-content-center">Nuevo Reporte</h2>
         <form action="{% url 'crear_reporte' %}" method="POST">
             {% csrf_token %}
             <div class="modal-body">
@@ -11,6 +11,7 @@
                 &nbsp;
                 <button class="btn btn-danger" type="button" data-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button>
             </div>
+            <br>
         </form>
     </div>
 </div>

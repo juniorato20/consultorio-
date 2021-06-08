@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{% block titulo %}Consultorio {% endblock titulo %}</title>
-    <meta name="description" content="Ela Admin - HTML5 Admin Template">
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
      <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/font-awesome-5.11.1/css/all.min.css' %}">   
@@ -86,11 +86,6 @@
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="{% static 'images/admin.jpg' %}" class="rounded-circle" alt="Cinque Terre" width="50px" height="50px">
                         </a>
-                        <div class="user-menu dropdown-menu">
-                            <a class="nav-link" href="#"><i class="fa fa- user"></i>Perfil</a>
-                            <a class="nav-link" href="#"><i class="fa fa -cog"></i>Administración</a>
-                            <a class="nav-link" href="{% url 'vista_logout' %}"><i class="menu-icon fas fa-power-off"></i>Salir</a>
-                        </div>
                     </div>
                 </div>
             </div>
