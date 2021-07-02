@@ -37,7 +37,6 @@ CRONJOBS = [
 ]
 
 # default uses locally shipped version at 'fontawesome/css/font-awesome.min.css'
-FONTAWESOME_CSS_URL = '//cdn.example.com/fontawesome-min.css'  # absolute url
 FONTAWESOME_CSS_URL = 'myapp/css/fontawesome.min.css'  # relative url
 
 INSTALLED_APPS = [
@@ -126,16 +125,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/')
-)
+]
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-EMAIL_USE_TLS = True
+#CORREO ELECTRONICO 
+
+# EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 25
+EMAIL_PORT = 587
 EMAIL_HOST_USER = 'jhunniorguerrero@gmail.com'
-EMAIL_HOST_PASSWORD = 'cursodjango16'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_PASSWORD = ''
+DOMAIN = ''

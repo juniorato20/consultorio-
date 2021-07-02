@@ -1,0 +1,46 @@
+{% extends 'login/vista_principal.html' %}
+
+{% block title %}Lista de Usuarios{% endblock title %}
+
+{% block body %}
+<h2 class="page-header"> Lista de Usuarios </h2>
+   <table class="table table-striped">
+        <thead>
+        <tr>
+            <td><strong> USUARIO </strong></td>
+            <td><strong> NOMBRE </strong></td>
+            <td><strong> APELLIDOS </strong></td>
+            <td><strong> CORREO </strong></td>
+            <td><strong> CONTRASEÑA </strong></td>
+            <td><strong> ACCIONES </strong></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for usuario in object_list %}
+            <tr>
+                <td>{{ usuario.first_name }}</td>
+                <td>{{ usuario.last_name }}</td>
+                <td>{{ usuario.username }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.password }}</td>
+                <td>
+                    <a href="{% url 'usuario:usuario_editar' usuario.id %}" class="btn btn-primary btn-xs">Editar</a>
+                    <a href="{% url 'usuario:usuario_eliminar' usuario.id %}" class="btn btn-danger btn-xs">Eliminar</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <ul class="pager">
+        <li>
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+        </li>
+        <li>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            {% endif %}
+        </li>
+    </ul>
+{% endblock body %}

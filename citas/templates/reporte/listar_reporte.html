@@ -17,24 +17,24 @@ Listado de Reportes
             </div>
           </div>
           <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary" value="listar_reporte">
+            <button type="submit" class="btn btn-outline-primary btn-flat" value="listar_reporte">
                 <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
     </form>
     <div class="card-footer">
-        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
     </div>
-        <div class="table-responsive">
-            <table class="table table-hover text-center">
+        <div class="card-body">
+            <table id="bootstrap-data-table" class="table table-striped table-bordered"">
                 <thead>
                     <tr>
                         <th class="text-center">Paciente</th>
                         <th class="text-center">Observacion</th>
                         <th class="text-center">Fecha</th>
-                        <th class="text-center">Opciones</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 {% if reportes %}
@@ -44,10 +44,10 @@ Listado de Reportes
                         <td class="text-center">{{p.paciente}}</td>
                         <td class="text-center">{{p.observacion}}</td>
                         <td class="text-center">{{p.fecha}}</td>
-                        <td>
-                            <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
+                        <td class="text-center">
+                            <button class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
                                 <i class="fas fa-edit"></i></button>
-                            <a href="#"onclick="eliminarreporte({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
+                            <a href="#"onclick="eliminarreporte({{ p.id }})" class="btn btn-outline-danger btn-flat"><i
                                     class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>

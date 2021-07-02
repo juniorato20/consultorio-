@@ -1,26 +1,53 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import authenticate
 from django.forms import fields, widgets
 from citas.models import *
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import  UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import  User
+from django.forms import ValidationError
         
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput(render_value=False))
+    
+
+    # def clean(self):
+    #     username = self.cleaned_data['usuario']
+    #     password = self.cleaned_data['password']
+    #     username = autenticar_rest(username,password)
+    #     if (not username):
+    #         msg = "Verificar su usuario o contraseña"
+    #         self.add_error('username', msg)
 
     class Meta:
         model = User
         fields = ['username', 'password']
-
-
-class PerfilForm(UserCreationForm):              
-    celular = forms.CharField(widget=forms.TextInput())
-    direccion = forms.CharField(widget=forms.TextInput())
-    cedula = forms.CharField(widget=forms.TextInput())
-    correo = forms.EmailField(widget=forms.TextInput())
-    foto = forms.ImageField()
-
+        
+class CustomCreationForm(UserCreationForm):
+    class Meta:
+        model = User 
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+        labels = {
+            'username' : 'Usuario',
+            'first_name' : 'Nombre',
+            'last_name':'Apellido',
+            'email' : 'Correo ',
+            'password1' : 'Contraseña',
+            'password2' : 'Confirmar contraseña',
+        }
+        widgets = {
+            'username' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':''}),
+            'first_name' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':''}),
+            'last_name' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':''}),
+            'email' : forms.EmailInput(attrs={'class': 'form-control', 'placeholder':''}),
+            'password1' : forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':''}),
+            'password2' : forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':''})
+            
+        
+        }
+       
 class ResetPasswordForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Ingrese un username',
@@ -31,15 +58,14 @@ class ResetPasswordForm(forms.Form):
     def clean(self):
         cleaned = super().clean()
         if not User.objects.filter(username=cleaned['username']).exists():
-            # self._errors['error'] = self._errors.get('error', self.error_class())
-            # self._errors['error'].append('El usuario no existe')
-            raise forms.ValidationError('El usuario no existe')
+            self._errors['error'] = self._errors.get('error', self.error_class())
+            self._errors['error'].append('El usuario no existe')
+           # raise forms.ValidationError('El usuario no existe')
         return cleaned
 
     def get_user(self):
         username = self.cleaned_data.get('username')
         return User.objects.get(username=username)
-
 
 class ChangePasswordForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -59,9 +85,9 @@ class ChangePasswordForm(forms.Form):
         password = cleaned['password']
         confirmPassword = cleaned['confirmPassword']
         if password != confirmPassword:
-            # self._errors['error'] = self._errors.get('error', self.error_class())
-            # self._errors['error'].append('El usuario no existe')
-            raise forms.ValidationError('Las contraseñas deben ser iguales')
+            self._errors['error'] = self._errors.get('error', self.error_class())
+            self._errors['error'].append('El usuario no existe')
+            #raise forms.ValidationError('Las contraseñas deben ser iguales')
         return cleaned
 
 
@@ -77,18 +103,47 @@ class PacienteForm(forms.ModelForm):
             'fecha' : 'Fecha Nacimento',
             'sexo': 'Sexo',
             'correo': 'Correo',
-            'celular': 'Ingrese su celular',
+            'celular': 'celular',
         }
         widgets = {
-            'cedula' : forms.NumberInput(attrs={'class':'form-control', 'placeholder':'1900876534'}),
-            'nombre': forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder': 'Juan Diego', }),
-            'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Torres Reyes', }),
-            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zumbi '}),
+            'cedula' : forms.NumberInput(attrs={'class':'form-control', 'placeholder':''}),
+            'nombre': forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder': '', }),
+            'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
+            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ' '}),
             'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%y"),
             'sexo' :  forms.Select(attrs={'class': 'form-control'}),
-            'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com', }),
-            'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0989765432', 'maxlength': '9999999999'})
+            'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': '', }),
+            'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '', 'maxlength': '9999999999'})
             }
+
+
+
+    def clean(self):
+        try:
+            sc = Paciente.objects.get(
+                cedula= self.cleaned_data['cedula'].upper()
+                )
+            if not self.instance.pk:
+                raise forms.ValidationError("REGISTRO YA EXISTENTE ")
+            elif self.instance.pk!= sc.pk:
+                raise forms.ValidationError("Cambio no permitido")
+        except Paciente.DoesNotExist: 
+
+            pass
+        return self.cleaned_data
+    
+    def clean_email(self, *args, **kwargs):
+        email = self.cleaned_data.get("email")
+        if not email.endwith("edu"):
+            raise forms.ValidationError("")
+        return email
+
+    
+    def clean_num(self):
+        numeros = self.cleaned_data
+        cedula = numeros.get('cedula')
+        if len(cedula) < 10 or len(cedula) >10:
+            raise forms.ValidationError('Debe ser de 10 Digitos')
 
 class DoctorForm(forms.ModelForm):
     class Meta:
@@ -105,15 +160,16 @@ class DoctorForm(forms.ModelForm):
             'celular': 'Celular'
         }
         widgets = {
-            'cedula' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':'1900876534'}),
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Julia Maria', }),
+            'cedula' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':''}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
             'especialidad' :  forms.Select(attrs={'class': 'form-control'}),
             'sexo' :  forms.Select(attrs={'class': 'form-control'}),
-            'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cabrera Cordero'}),
-            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Yantzaza'}),
-            'correo' : forms.EmailInput(attrs={'class' : 'form-control', 'placeholder': 'ejemplo2020@gmail.com'}),
-            'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0987908790', 'maxlength': '9999999999'})
+            'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
+            'correo' : forms.EmailInput(attrs={'class' : 'form-control', 'placeholder': ''}),
+            'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '', 'maxlength': '9999999999'})
                    }
+
 
 class CitaForm(forms.ModelForm):
     class Meta:
@@ -144,7 +200,6 @@ class TratamientoForm(forms.ModelForm):
 
         }
         widgets = {
-
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
             'descripcion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
             'precio': forms.NumberInput(attrs={'class':'form-control'}),
@@ -162,10 +217,8 @@ class ReporteForm(forms.ModelForm):
         }
         widgets = {
             'paciente' : forms.Select(attrs={'class': 'form-control'}),
-            'observacion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'xxxxxx', }),
+            'observacion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
             'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
 
         }
-
-
 

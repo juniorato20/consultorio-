@@ -5,60 +5,44 @@ Listado de Citas
 {% block extra_css %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="/path/to/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="/static/css/lib/datatable/dataTables.bootstrap.min.css"></link>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css"/>
+<link rel="stylesheet" href="/static/css/lib/datatable/dataTables.bootstrap.min.css" ></link>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"></link>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css"></link>
 <link rel="stylesheet" href="/static/fullcalendar/lib/main.css" ></link>
 {% endblock extra_css %}
 {% block body %}
-<style>
-    body {
-        margin: 30px 5px;
-        padding: 0;
-        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-        font-size: 14px;
-    }
-
-    #calendar {
-        max-width: 900px;
-        margin: 0 auto;
-    }
-</style>
 <div class="col-auto mb-4 mb-md-0">
     <p class="pt-2">
         <strong>Listado de Citas</strong>
     </p>
 </div>
 <div class="card-footer">
-    <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')"><i class="fas fa-plus"></i></i> Nuevo
-    </button>
+    <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')">
+        <i class="fas fa-plus"></i> Nuevo </button>
+       
 </div>
-<div id="calendar" class="card-block" style="padding: 20px;">
-   
-</div>
-<div class="modal face" id="creacion" role="dialog" >
-</div>
-<div class="modal face" id="edicion" role="dialog">
-</div>
+<div id="calendar" class="card-block" style="padding: 20px;"></div>
+<div class="modal face" id="creacion" role="dialog" ></div>
+<div class="modal face" id="edicion" role="dialog"></div>
 {% endblock body %}
 {% block extrajs %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 <script src="/static/js/lib/data-table/dataTables.bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.6.2.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="/static/fullcalendar/lib/main.js"></script>
 <script src="/static/fullcalendar/lib/locales-all.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function(){
-
         var calendarUI = document.getElementById('calendar');
           var calendar = new FullCalendar.Calendar(calendarUI,{
             initialView: 'dayGridMonth',
@@ -70,107 +54,91 @@ Listado de Citas
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
             },
             events: [
-        {% for Citas  in object_list %}
-        {   
-            title : "{{Citas.paciente}}", 
-            doctor : "{{Citas.doctor}}",
-            tratamiento : "{{Citas.tratamiento}}",
-            start : "{{Citas.fecha| date:'Y-m-d'}}",
-            end : "{{Citas.fecha| date:'Y-m-d'}}",  
-     
-            // display: 'background',
-        },
-        {% endfor %}         
-    ],
-    eventColor: 'red',  
-    editable: true,
-    navLinks: true, // can click day/week names to navigate views   
-    firstDay : 1,
-    slotDuration: '00:30:00',
-    scrollTime: '8:00:00',
-    selectable: true,
-    selectHelper: true,
-    eventLimit: true, 
-    // select: function( start, end){
-    //     var title = prompt('Titulo del evento');
-    //     if(title){
-    //         var start= $.fullCalendar.formatDate(start, "Y-MM-DD ");
-    //          var end= $.fullCalendar.formatDate(end, "Y-MM-DD ");
-    //         //  $.ajax({
-    //         //      url :'' ,
-    //         //      event {
-    //         //          title:title,
-    //         //          start: start,
-    //         //          end: end
-    //         //      },
-    //         //      type: 'POST',
-    //         //      success: function(){
-    //       //      displayMessage('Evento vreado con exito');
-                   
-    //         //      }
-
-    //         //  });
-    //     }
-    //    },
-    eventResize: function(event) {
-                    var start= $.fullCalendar.formatDate(event.start, "Y-MM-DD ");
-                    var end= $.fullCalendar.formatDate(event.end, "Y-MM-DD HH");
-                    var title= event.title;
-                    var id= event.id;
-                    $.ajax({
-                        url: "editar_cita" +event.id,
-                        data: {
-                            title: event.title,
-                            start: start,
-                            end: end,
-                            id: event.id
-                        },
-                        type: "POST",    
-                        success: function(data) {
-                            calendar.fullCalendar();
-                            alert('Evenement mis a jour');
-                        }
-                    })
+                {% for Citas  in object_list %}
+                {   
+                    id:"{{Citas.id}}",
+                    title : "{{Citas.id}} - {{Citas.paciente}}", 
+                    doctor : "{{Citas.doctor}}",
+                    tratamiento : "{{Citas.tratamiento}}",
+                    start : "{{Citas.fecha| date:'Y-m-d'}}",
+                    end : "{{Citas.fecha| date:'Y-m-d'}}", 
+                    extraParams: function(){
+                        return {
+                            id: "{{Citas.id}}",
+               }
+            },
+            failure: function() {
+                alert('there was an error while fetching events!');
                 },
-                eventDrop: function(event, delta) {
-                    var start= $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                    var end= $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-                    $.ajax({
-                        url: "eliminar_cita"+ event.id,
-                        data: {
-                            title: event.title,
-                            start: start,
-                            end: end,
-                            id: event.id
-                        },
-                        type: "POST",
-                        success: function(data) {
-                            calendar.fullCalendar('refetchEvents');
-                            alert("Evenement mis a jour");
+                
+                 // display: 'background',
+            },
+            {% endfor %}         
+        ],
+        eventColor: 'red',  
+        editable: true,
+        navLinks: true, // can click day/week names to navigate views   
+        firstDay : 1,
+        slotDuration: '00:30:00',
+        scrollTime: '8:00:00',
+        selectable: true,
+        selectHelper: true,
+        eventLimit: true, 
+        eventResize: function(event) {
+            var start= $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss ");
+            var end= $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+            var title= event.title;
+            var id= event.id;
+            $.ajax({
+                type:"GET",
+                url:  "{% url 'editar_cita' p.id %",
+                data: { 'title': title, 'start': start, 'end': end, 'id': id },
+                datatype: "json",  
+                success: function(data) {
+                    calendar.fullCalendar('refetchEvents');
+                    alert('Event Update');
+                    }
+                })
+            },
+            eventDrop: function(event) {
+                console.log(event.id);
+                var start= $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                var end= $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                var title = event.title;
+                var id = event.id;
+                $.ajax({
+                    type: "GET",
+                    url: "eliminardoctor({{ p.id }})",
+                    data: {'title': title, 'start': start, 'end': end, 'id': id },
+                    dataType: "json",
+                    success: function(data) {
+                        calendar.fullCalendar('refetchEvents');
+                        alert("Evenement mis a jour");
                         }
                     });
                 },
-                eventClick: function(event) {
+                eventClick: function (event) {
+                    console.log(event.event);
                     if (confirm("Desea eliminar elevento?")) {
                         var id= event.id;
                         $.ajax({
-                            url: "eliminar_cita" + event.id,
-                            data: {
-                                id: event.id
-                            },
                             type: "POST",
+                            url: "",
+                            data: { id: id },
                             success: function(data) {
-                                calendar.fullCalendar('removeEvent', event.id);
+                                calendar.fullCalendar('removeEvent', event.Citas.id);
                                 alert("Evento eliminado con existo");
                             }
-                        })
+                        });
                     }
                 },
             });
-     
             calendar.render();
         });
 </script>
+
+
+
 <script type="text/javascript">
     var $ = jQuery.noConflict();
     function abrir_modal_creacion(url) {
@@ -183,5 +151,5 @@ Listado de Citas
             $(this).modal('show')
         });
     }
-   </script>
+</script>
 {% endblock extrajs %}

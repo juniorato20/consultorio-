@@ -1,0 +1,9 @@
+{% extends 'login/vista_principal.html' %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <h3>Desea eliminar el usuario </h3>
+        <button class="btn btn-danger" type="submit">Sí, Eliminar</button>
+        <a href="{% url 'usuario:usuario_list' %}" class="btn btn-default">Cancelar</a>
+    </form>
+{% endblock %}

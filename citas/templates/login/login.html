@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/ffec4ec2ed.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/static/pantilla/style.css" />
+  <link rel="shortcut icon" href="/static/stalin/img/login.png">
   <title>Consultorio</title>
 </head>
 <body class="bg-dark">
@@ -52,22 +53,22 @@
           <form class="mb-5" method="POST" action="/login/">
             {% csrf_token %}
             <div class="mb-4" >
-              <label for="Username" class="form-label font-weight-bold">Usuario</label>
-              <input type="text" class="form-control bg-dark-x border-0" id="username" name="username"
-                placeholder="Usuario" aria-describedby="Username">
+              <span class="input-group-addon" for=Username><i class="icon_profile"></i></span>
+              <input type="text" class="form-control" id ="username" name="username" placeholder="Usuario" autofocus>
             </div>
             <div class="mb-4">
-              <label for="Password" class="form-label font-weight-bold">Contraseña</label>
-              <input type="password" class="form-control bg-dark-x border-0 mb-2" placeholder="Ingresa tu contraseña"
-                id="password" name="password">
-              <a href="" class="form-text text-muted text-decoration-none">¿Has olvidado tu contraseña?</a>
+              <span class="input-group-addon" for="Password"><i class="icon_key_alt"></i></span>
+              <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña">
+
+              <a href="{% url 'reset_password' %}" class="form-text text-muted text-decoration-none">¿Has olvidado tu contraseña?</a>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+            <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Iniciar sesión</button>
             <div class="register-link m-t-15 text-center">
               <br>
-              <p>Don't have account ? <a href="{% url 'vista_registar' %}"> Registrar</a></p>
+              <p>Don't have account ? <a href="{% url 'registro_usuario' %}" > Registrar</a></p>
           </div>
           </form>
+          
           {% if message %}
           <script type="text/javascript">
              alert("{{message}}");
@@ -91,6 +92,7 @@
     integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
     crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script> 
+    
     
     {% if messages %}
     {% for m in messages %}

@@ -21,36 +21,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-# from django.contrib.auth.views import  password_reset, password_reset_done, password_reset_confirm, password_reset_complete
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-
     path('', login_view, name="vista_login"),
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
     path('logout/', logout_view, name="vista_logout"),  
-    path('registrar/', registrar_view, name="vista_registar"),
-    path('',include('citas.urls')),
-    
+   path('registro/', registro_usuario, name="registro_usuario"),
+    path('reset/password/',ResetPasswordView.as_view(),name="reset_password"),
+    path('change/password/<str:token>/', ChangePasswordView.as_view(), name='change_password'),
+  
 
-    # path('reset/password_reset', password_reset, 
-    #     {'template_name':'registration/password_reset_form.html',
-    #     'email_template_name': 'registration/password_reset_email.html'}, 
-    #     name='password_reset'), 
-    # path('password_reset_done', password_reset_done, 
-    #     {'template_name': 'registration/password_reset_done.html'}, 
-    #     name='password_reset_done'),
-    # path('reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$', password_reset_confirm, 
-    #     {'template_name': 'registration/password_reset_confirm.html'},
-    #     name='password_reset_confirm'
-    #     ),
-    # path('reset/done', password_reset_complete, {'template_name': 'registration/password_reset_complete.html'},
-    #     name='password_reset_complete'),
 
-   
-    
+    path('',include('citas.urls')),   
 #     #=============== URL CON VISTAS BASADAS EN CLASES PACIENTE  ==============#
     path('lista_paciente/', login_required(ListadoPaciente.as_view()), name ='listar_paciente'),
     path('crear_paciente/', login_required(CrearPaciente.as_view()), name = 'crear_paciente'),
@@ -79,10 +62,6 @@ urlpatterns = [
     path('crear_reporte/',login_required(CrearReporte.as_view()), name = 'crear_reporte'),
     path('editar_reporte/<int:pk>/',login_required(ActualizarReporte.as_view()), name = 'editar_reporte'),
     path('eliminar_reporte/<int:pk>/',login_required(EliminarReporte.as_view()), name = 'eliminar_reporte'),
- 
-    
-
-
  ] 
 
 admin.site.site_header = 'CONSULTORIO ODONTOLOGICO '

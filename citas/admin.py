@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import  *
+from citas.models import  *
+
 
 
 class TratamientoAdmin(admin.ModelAdmin):
@@ -22,14 +23,13 @@ class ReporteAdmin(admin.ModelAdmin):
     list_display = ('id','paciente','observacion','fecha')
     search_fields = ['id']
     
-class PerfilAdmin(admin.ModelAdmin):
-    list_diplay =('usuario','celular','direccion','cedula','correo','foto')
-    search_fields = ['cedula','usuario']
+
     
 admin.site.register(Tratamiento,TratamientoAdmin)    
 admin.site.register(Paciente,PacienteAdmin)
 admin.site.register(Doctor,DoctorAdmin)
 admin.site.register(Cita,CitaAdmin)
 admin.site.register(Reporte,ReporteAdmin)
-admin.site.register(Perfil,PerfilAdmin)
+
+
 

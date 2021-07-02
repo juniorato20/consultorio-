@@ -1,0 +1,10 @@
+{% extends 'login/vista_principal.html' %}
+{% block title %}Crear Usuario{% endblock title %}
+{% block body %}
+    <h2 class="page-header"> Crear Usuario </h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+{% endblock body %}

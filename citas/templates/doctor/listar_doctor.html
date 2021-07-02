@@ -1,33 +1,32 @@
 {% extends 'login/vista_principal.html' %}
 {% block titulo %}
-Listado de Pacientes
+Listado de Doctores
 {% endblock titulo %}
 {% block body %}
 <div class="card-default">
     <form action="" method="GET">
         <div class="row">
           <div class="col-auto mb-4 mb-md-0">
-            <p class="pt-2"><strong>Listado de doctores</strong></p>
+            <p class="pt-2"><strong>Listado de Doctores</strong></p>
           </div>
           <div class="col-auto mb-4 mb-md-0">
             <div class="form-outline mb-4">
-                
               <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
             </div>
           </div>
           <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-primary" value="listar_doctor">
+            <button type="submit" class="btn btn-outline-primary btn-flat" value="listar_paciente">
                 <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
     </form>
     <div class="card-footer">
-        <button type="button" class="btn btn-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
-    </div>
-        <div class="table-responsive">
-            <table class="table table-hover text-center">
+    </div> 
+        <div class="card-body">
+            <table id="bootstrap-data-table" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th class="text-center">Cedula</th>
@@ -38,8 +37,8 @@ Listado de Pacientes
                         <th class="text-center">Direccion</th>
                         <th class="text-center">Correo</th>
                         <th class="text-center">Celular</th>
-                        <th class="text-center">Opciones</th>
-                    </tr>
+                        <th class="text-center">Acciones</th>
+                     </tr>
                 </thead>
                 {% if doctores %}
                 <tbody>
@@ -53,14 +52,14 @@ Listado de Pacientes
                         <td class="text-center">{{p.direccion}}</td>
                         <td class="text-center">{{p.correo}}</td>
                         <td class="text-center">{{p.celular}}</td>
-                        <td>
-                            <button class="btn btn-warning btn-xs btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
-                                <i class="fas fa-edit"></i></button>
-                            <a href="#"onclick="eliminardoctor({{ p.id }})" class="btn btn-danger btn-xs btn-flat"><i
-                                    class="fas fa-trash-alt"></i></a>
+                        <td class="text-center">
+                           <button class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_doctor' p.id %}')">
+                               <i class="fas fa-edit"></i></button>
+                            <a href="#"onclick="eliminardoctor({{ p.id }})" class="btn btn-outline-danger btn-flat"><i
+                                class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
-                    {% endfor %}
+                     {% endfor %}  
                 </tbody>
                 {% else %}
                 <h1>No existen Doctores Registrados</h1>
@@ -68,12 +67,10 @@ Listado de Pacientes
             </table>
         </div>
     </div>
-  
-    <div class="modal face" id="creacion" role="dialog">
+      <div class="modal face" id="creacion" role="dialog">
     </div>
-    <div class="modal face" id="edicion" role="dialog">
+      <div class="modal face" id="edicion" role="dialog">
     </div>
-    
     {% if is_paginated %}
     <div class="mt-2">
         <ul class="pagination">
@@ -127,13 +124,11 @@ Listado de Pacientes
                 "cancelButtonColor": '#d33',
                 "confirmButtonText": 'Yes, delete it!'
             })
-                .then(function(result){
-            if(result.isConfirmed){
-                window.location.href ="/eliminar_doctor/"+id+"/"
-                }  
+            .then(function (result){
+            if (result.isConfirmed){
+                window.location.href = "/eliminar_doctor/" + id + "/"
+                 }
         })
     }
-  
-
-    </script>
-    {% endblock extrajs %}
+   </script>
+   {% endblock extrajs %}

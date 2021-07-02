@@ -1,10 +1,12 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, User
 from django.utils.safestring  import mark_safe
 from django.db import models
+
 genero = [
     ('Hombre', 'Hombre'),
     ('Mujer', 'Mujer'),
@@ -115,36 +117,4 @@ class Reporte(models.Model):
 
 def str (self):
     return self.id
-
-def url_perfil(self, filename):
-    ruta = "static/Perfiles/%s/%s" % (self.usuario, str(filename))
-    return ruta
-
-class Perfil(models.Model):
-    id = models.AutoField(primary_key=True)
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE, default='available')
-    celular = models.CharField('Celular', max_length=10)
-    direccion = models.TextField('Direccion')
-    cedula = models.CharField('Cedula', max_length=10)
-    correo = models.EmailField()
-    foto = models.ImageField(default=None, upload_to=url_perfil)
-
-    class Meta:
-        verbose_name = 'Perfil'
-        verbose_name_plural = 'Perfiles'
-
-    def __str__(self):
-        return self.usuario.username
-
-def foto_perfil(self):
-    return mark_safe('<a href="/%s" target="blank"><img src"/%s" hight="50px" widht="50px"/></a>' % (self.foto, self.foto))
-
-foto_perfil.allow_tags = True
-
-def crear_usuario_perfil(sender, instance, created, **kwargs):
-    if created:
-        Perfil.objects.create(usuario=instance)
-
-def guardar_usuario_perfil(sender, instance, **kwargs):
-    instance.perfil.save()
-
+ 
