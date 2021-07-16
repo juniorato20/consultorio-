@@ -33,7 +33,7 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 CRONJOBS = [
     ('','')
@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+  
 ]
 
 
