@@ -101,7 +101,8 @@ class PacienteForm(forms.ModelForm):
             'apellido':'Apellidos Completos',
             'direccion': 'Direccion',
             'fecha' : 'Fecha Nacimento',
-            'sexo': 'Sexo',
+            'sexo': 'Sexo', 
+            'observacion': 'observaciones',
             'correo': 'Correo',
             'celular': 'celular',
         }
@@ -112,11 +113,10 @@ class PacienteForm(forms.ModelForm):
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ' '}),
             'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%y"),
             'sexo' :  forms.Select(attrs={'class': 'form-control'}),
+            'observacion' : forms.TextInput(attrs={'type' : 'form-control', 'placeholder':''}) ,
             'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': '', }),
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '', 'maxlength': '9999999999'})
             }
-
-
 
     def clean(self):
         try:
@@ -124,11 +124,10 @@ class PacienteForm(forms.ModelForm):
                 cedula= self.cleaned_data['cedula'].upper()
                 )
             if not self.instance.pk:
-                raise forms.ValidationError("REGISTRO YA EXISTENTE ")
+                raise forms.ValidationError("Paciente ya registrado")
             elif self.instance.pk!= sc.pk:
                 raise forms.ValidationError("Cambio no permitido")
         except Paciente.DoesNotExist: 
-
             pass
         return self.cleaned_data
     
@@ -138,7 +137,6 @@ class PacienteForm(forms.ModelForm):
             raise forms.ValidationError("")
         return email
 
-    
     def clean_num(self):
         numeros = self.cleaned_data
         cedula = numeros.get('cedula')
@@ -169,6 +167,19 @@ class DoctorForm(forms.ModelForm):
             'correo' : forms.EmailInput(attrs={'class' : 'form-control', 'placeholder': ''}),
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '', 'maxlength': '9999999999'})
                    }
+            
+    def clean(self):
+        try:
+            sc = Doctor.objects.get(
+                cedula= self.cleaned_data['cedula'].upper()
+                )
+            if not self.instance.pk:
+                raise forms.ValidationError("Doctor ya registrado ")
+            elif self.instance.pk!= sc.pk:
+                raise forms.ValidationError("Cambio no permitido")
+        except Doctor.DoesNotExist: 
+            pass
+        return self.cleaned_data
 
 
 class CitaForm(forms.ModelForm):

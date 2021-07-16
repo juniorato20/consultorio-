@@ -8,7 +8,7 @@ class TratamientoAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
 
 class PacienteAdmin(admin.ModelAdmin):
-    list_display = ('cedula','nombre','apellido','direccion','fecha','sexo','correo','celular')
+    list_display = ('cedula','nombre','apellido','direccion','fecha','observacion','sexo','correo','celular')
     search_fields = ['nombre', 'apellido']
 
 class DoctorAdmin(admin.ModelAdmin):
@@ -30,6 +30,7 @@ admin.site.register(Paciente,PacienteAdmin)
 admin.site.register(Doctor,DoctorAdmin)
 admin.site.register(Cita,CitaAdmin)
 admin.site.register(Reporte,ReporteAdmin)
+# admin.site.register(User)
 
 
 

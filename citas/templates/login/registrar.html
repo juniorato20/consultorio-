@@ -1,5 +1,6 @@
 <doctype html>
     <html lang="en">
+
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -9,20 +10,20 @@
             integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;600&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/ffec4ec2ed.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="/static/pantilla/style.css" />
-        <link rel="shortcut icon" href="/static/stalin/img/login.png">
+        <link rel="stylesheet" href="/static/plantilla/style.css" />
+        <link rel="shortcut icon" href="/static/plantilla/icono.png">
         <title>Registrar</title>
     </head>
 
     <body class="bg-dark-x">
-    
+
         <div class="container">
             <br>
             <h2 class="center">NUEVO USUARIO</h2>
             <form method="POST" action="">
                 {% csrf_token %}
                 {{form }}
-                
+
                 <footer>
                     <button class="btn btn-outline-primary btn-flat" type="submit"><i class="fas fa-save "></i>
                         Guardar</button>

@@ -17,11 +17,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
+   
     <link rel="stylesheet" href="/static/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="/static/lib/jquery-confirm-v3.3.4/jquery-confirm.min.css">
     <link rel="shortcut icon" href="/static/stalin/img/login.png">
+    <link rel="shortcut icon" href="/static/plantilla/icono.png">
     <link rel="stylesheet" href="/static/css/style.css">
 
     {% block head %}
@@ -29,64 +30,49 @@
     {% block extra_css %}
     {% endblock extra_css %}
 </head>
-
 <body>
-    Left Panel
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
-            <div id="main-menu" class="main-menu collapse navbar-collapse">
+            <div id="main-menu" class="main-menu ">
                 <ul class="nav navbar-nav">
                     <li class="active">
-                        <a href="{% url 'listar_paciente' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
+                        <a href="{% url 'vista_inicio' %}"><i class="menu-icon fa fa-laptop"></i> Inicio </a>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"> <i class="menu-icon fa fa-stethoscope"></i>Doctor</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-user-md"></i><a href="{% url 'listar_doctor' %}">Lista de Doctores</a>
-                            </li>
-                        </ul>
+
+                    <li class="active">
+                        <a href="{% url 'listar_doctor' %}" ><i class="menu-icon fa fa-stethoscope"></i> Doctor </a>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"> <i class="menu-icon fas fa-user"></i>Paciente</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fas fa-user-plus"></i><a href="{% url 'listar_paciente' %}">Lista de
-                                    Pacientes</a></li>
-                        </ul>
+
+                    <li class="active">
+                        <a href="{% url 'listar_paciente' %}" > <i class="menu-icon fas fa-user"></i> Paciente </a>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"> <i class="menu-icon fas fa-tooth"></i>Cita</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fas fa-teeth"></i><a href="{% url 'listar_cita' %}">Lista de Citas
-                                </a></li>
-                        </ul>
+
+                    <li class="active">
+                      
+                        <a href="{% url 'listar_cita' %}"><i class="menu-icon fas fa-teeth"></i> Citas </a></li>
+                      
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"> <i class="menu-icon fas fa-mortar-pestle"></i></i>Tratamiento</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon fas fa-capsules"></i><a href="{% url 'listar_tratamiento' %}">Lista
-                                    de Tratamientos </a></li>
-                        </ul>
+
+                    <li  class="active">
+                        <a href="{% url 'listar_tratamiento' %}" > <i class="menu-icon fas fa-mortar-pestle"></i></i> Tratamiento </a>
+                        
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"> <i class="menu-icon fas fa-file-alt"></i></i>Reporte</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="menu-icon far fa-file-alt"></i><a href="{% url 'listar_reporte' %}">Lista de
-                                    Reportes </a></li>
-                        </ul>
+
+                    <li class="active">
+                        <a href="{% url 'listar_reporte' %}" > <i class="menu-icon fas fa-file-alt"></i></i> Reporte </a>
+                       
                     </li>
-                    <li>
-                        <a href="{% url 'vista_logout' %}" aria-haspopup="true" aria-expanded="false"><i
-                                class="menu-icon fas fa-power-off "></i> Salir</a>
+
+                    <li class="active">
+                        <a href="{% url 'vista_logout' %}" aria-haspopup="true" aria-expanded="false"><i class="menu-icon fas fa-power-off "></i> Salir </a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
+            
         </nav>
     </aside>
+
+    
     <!-- /#left-panel -->
     <!-- Right Panel -->
     <div id="right-panel" class="right-panel">
@@ -94,7 +80,7 @@
         <header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="./"><img width="80px" height="50px"
+                    <a class="navbar-brand" href="./"><img width="50px" height="30px" class="center-block"
                             src="{% static 'images/login.png' %}" alt="Logo"></a>
                     <a class="navbar-brand hidden" href="./"><img src="{% static 'images/login.png' %}" alt="Logo"></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
@@ -112,73 +98,63 @@
                 </div>
             </div>
         </header>
-
         <div class="content">
-            <div>
-                <div class="row">
+            <div class="row">
                     <div class="col-lg-12">
-                      {% block body %}
-                        <div class="col-md-12 prueba">
-                            <div class="card bg-primary">
-                                <div class="card-body">
-                                    <blockquote class="blockquote mb-0 text-light text-center">
-                                        <h1 class="text-light">{{ user.username | upper }} BIENVENIDO A LA TIENDA EN LINEA</h1>
-                                        <footer class="blockquote-footer text-light">"Django 3.0" -<cite title="Neil Gaiman">Framework</cite></footer>
-                                    </blockquote>
-                                </div>
+                    {% block body %}
+                    <div class="col-md-12 prueba">
+                        <div class="card bg-primary">
+                            <div class="card-body ">
+                                <h1 class="text-light ">{{ user.username | upper }} BIENVENIDO AL CONSULTORIO ODONTOLOGICO  </h1>
                             </div>
                         </div>
-                      {% endblock body %}
+                    </div>
+                    {% endblock body %}
                 </div>
             </div>
         </div>
-       
-                <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-                <script src="/static/lib/sweetalert2-9.10.0/sweetalert2.all.min.js"></script>
-                <script src="/static/lib/adminlte-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-                <script src="/static/lib/adminlte-3.0.4/js/adminlte.min.js"></script>
-                <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
- 
-                
+            <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+            <script src="/static/lib/sweetalert2-9.10.0/sweetalert2.all.min.js"></script>
+            <script src="/static/lib/adminlte-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="/static/lib/adminlte-3.0.4/js/adminlte.min.js"></script>
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script src="/static/lib/sweetalert2-9.10.0/sweetalert2.all.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+            <script src="/static/lib/js/functions.js"></script>
+            <script src="/static/js/main.js"></script>
+            <script src="/static/lib/js/functions.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+            <script src="/static/lib/jquery-confirm-v3.3.4/jquery-confirm.min.js"></script>
+            {% if messages %}
+            {% for m in messages %}
+            <script>
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: '{{m}}"'
+                })
+            </script>
 
-                <script src="/static/lib/sweetalert2-9.10.0/sweetalert2.all.min.js"></script>             
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-                <script src="/static/lib/js/functions.js"></script>
-                <script src="/static/js/main.js"></script>
-                <script src="/static/lib/js/functions.js"></script>
-                <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-                <script src="/static/lib/jquery-confirm-v3.3.4/jquery-confirm.min.js"></script>
-
-                {% if messages %}
-                {% for m in messages %}
-                <script>
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: '{{m}}"'
-                    })
-                </script>
-
-                {% endfor %}
-                {% endif %}
-                {% block extrajs %}
-                {% endblock extrajs %}
+            {% endfor %}
+            {% endif %}
+            {% block extrajs %}
+            {% endblock extrajs %}
 </body>
 
 </html>

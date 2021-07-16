@@ -21,14 +21,15 @@ Listado de Doctores
           </div>
         </div>
     </form>
-    <div class="card-footer">
+    <div class="container">
         <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_doctor' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
     </div> 
-        <div class="card-body">
+    <br>
+        <div class="container">
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
+                <thead class="text-uppercase bg-info">
+                    <tr class="text-white">
                         <th class="text-center">Cedula</th>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Apellido</th>
@@ -61,10 +62,11 @@ Listado de Doctores
                     </tr>
                      {% endfor %}  
                 </tbody>
-                {% else %}
-                <h1>No existen Doctores Registrados</h1>
-                {% endif %}
+             
             </table>
+            {% else %}
+            <h1>No existen Doctores Registrados</h1>
+            {% endif %}
         </div>
     </div>
       <div class="modal face" id="creacion" role="dialog">
@@ -131,4 +133,5 @@ Listado de Doctores
         })
     }
    </script>
+   
    {% endblock extrajs %}

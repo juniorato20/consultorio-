@@ -20,6 +20,8 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls import handler404, handler500
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,11 +29,9 @@ urlpatterns = [
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
     path('logout/', logout_view, name="vista_logout"),  
-   path('registro/', registro_usuario, name="registro_usuario"),
+    path('registro/', registro_usuario, name="registro_usuario"),
     path('reset/password/',ResetPasswordView.as_view(),name="reset_password"),
     path('change/password/<str:token>/', ChangePasswordView.as_view(), name='change_password'),
-  
-
 
     path('',include('citas.urls')),   
 #     #=============== URL CON VISTAS BASADAS EN CLASES PACIENTE  ==============#
@@ -63,5 +63,7 @@ urlpatterns = [
     path('editar_reporte/<int:pk>/',login_required(ActualizarReporte.as_view()), name = 'editar_reporte'),
     path('eliminar_reporte/<int:pk>/',login_required(EliminarReporte.as_view()), name = 'eliminar_reporte'),
  ] 
+handler404 = Error404View.as_view()
+handler500 = Error505View.as_error_view()
 
 admin.site.site_header = 'CONSULTORIO ODONTOLOGICO '

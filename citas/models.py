@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -36,6 +36,7 @@ class Paciente(models.Model):
     apellido = models.CharField( max_length=225, unique=True, blank=False, null=False)
     direccion = models.TextField(max_length=225,blank=False, null=False)
     fecha = models.DateField()
+    observacion= models.TextField( max_length=225,blank=True, null=False)
     sexo = models.CharField(max_length=30,choices=genero, default='available')
     correo = models.EmailField()
     celular = models.CharField( max_length=10)
@@ -118,3 +119,7 @@ class Reporte(models.Model):
 def str (self):
     return self.id
  
+
+# class User(AbstractUser):
+     
+#     token = models.UUIDField(primary_key=False, editable=False, null=True, blank=True)

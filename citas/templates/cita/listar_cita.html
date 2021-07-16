@@ -3,29 +3,31 @@
 Listado de Citas
 {% endblock titulo %}
 {% block extra_css %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="/path/to/bootstrap/js/bootstrap.min.js"></script>
+
+
+<link href='https://unpkg.com/@fullcalendar/core@4.3.1/main.min.css' rel='stylesheet' />
+<link href='https://unpkg.com/@fullcalendar/daygrid@4.3.0/main.min.css' rel='stylesheet' />
+<link href='https://unpkg.com/@fullcalendar/timegrid@4.3.0/main.min.css' rel='stylesheet' />
+<link href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' rel='stylesheet' />
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css"/>
-<link rel="stylesheet" href="/static/css/lib/datatable/dataTables.bootstrap.min.css" ></link>
+<link rel="stylesheet" href="/static/css/lib/datatable/dataTables.bootstrap.min.css" >
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"></link>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css"></link>
-<link rel="stylesheet" href="/static/fullcalendar/lib/main.css" ></link>
+<link rel="stylesheet" href="/static/fullcalendar/lib/main.css" >
 {% endblock extra_css %}
 {% block body %}
-<div class="col-auto mb-4 mb-md-0">
-    <p class="pt-2">
-        <strong>Listado de Citas</strong>
-    </p>
+
+<div id="calendar"  class="col-lg-12 text-center">
+
+ 
+
 </div>
-<div class="card-footer">
-    <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')">
-        <i class="fas fa-plus"></i> Nuevo </button>
-       
-</div>
-<div id="calendar" class="card-block" style="padding: 20px;"></div>
-<div class="modal face" id="creacion" role="dialog" ></div>
+<div class="modal face" id="creacion" role="dialog"></div>
 <div class="modal face" id="edicion" role="dialog"></div>
+
+
 {% endblock body %}
 {% block extrajs %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -41,104 +43,134 @@ Listado de Citas
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/path/to/bootstrap/js/bootstrap.min.js"></script>
+<script src='https://unpkg.com/@fullcalendar/daygrid@4.3.0/main.min.js'></script>
+<script src='https://unpkg.com/@fullcalendar/timegrid@4.3.0/main.min.js'></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function(){
-        var calendarUI = document.getElementById('calendar');
-          var calendar = new FullCalendar.Calendar(calendarUI,{
+    document.addEventListener('DOMContentLoaded', function() {
+        let calendarEl = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+    
+            height: 'auto',
             initialView: 'dayGridMonth',
-            locale: 'es',
-            themeSystem: 'bootstrap',
-            headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-            },
-            events: [
-                {% for Citas  in object_list %}
-                {   
-                    id:"{{Citas.id}}",
-                    title : "{{Citas.id}} - {{Citas.paciente}}", 
-                    doctor : "{{Citas.doctor}}",
-                    tratamiento : "{{Citas.tratamiento}}",
-                    start : "{{Citas.fecha| date:'Y-m-d'}}",
-                    end : "{{Citas.fecha| date:'Y-m-d'}}", 
-                    extraParams: function(){
-                        return {
-                            id: "{{Citas.id}}",
-               }
-            },
-            failure: function() {
-                alert('there was an error while fetching events!');
-                },
-                
-                 // display: 'background',
-            },
-            {% endfor %}         
-        ],
-        eventColor: 'red',  
-        editable: true,
-        navLinks: true, // can click day/week names to navigate views   
-        firstDay : 1,
-        slotDuration: '00:30:00',
-        scrollTime: '8:00:00',
-        selectable: true,
-        selectHelper: true,
-        eventLimit: true, 
-        eventResize: function(event) {
-            var start= $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss ");
-            var end= $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-            var title= event.title;
-            var id= event.id;
-            $.ajax({
-                type:"GET",
-                url:  "{% url 'editar_cita' p.id %",
-                data: { 'title': title, 'start': start, 'end': end, 'id': id },
-                datatype: "json",  
-                success: function(data) {
-                    calendar.fullCalendar('refetchEvents');
-                    alert('Event Update');
-                    }
-                })
-            },
-            eventDrop: function(event) {
-                console.log(event.id);
-                var start= $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                var end= $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-                var title = event.title;
-                var id = event.id;
-                $.ajax({
-                    type: "GET",
-                    url: "eliminardoctor({{ p.id }})",
-                    data: {'title': title, 'start': start, 'end': end, 'id': id },
-                    dataType: "json",
-                    success: function(data) {
-                        calendar.fullCalendar('refetchEvents');
-                        alert("Evenement mis a jour");
-                        }
-                    });
-                },
-                eventClick: function (event) {
-                    console.log(event.event);
-                    if (confirm("Desea eliminar elevento?")) {
-                        var id= event.id;
+            editable: true,
+            timeZone: 'America/Guayaquil',
+            locale:'es',
+            selectable: true,
+            startTime: '08:00', // a start time (10am in this example)
+            endTime: '21:00', // an end time (6pm in this example
+          
+          headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+              },
+                      
+              navLinks : true,
+              selectHelper: true,
+              editable: true,
+              eventLimit: true,
+              events: [
+                  {% for Citas  in Citas %}
+                  {
+
+                      id:"{{Citas.id}}",
+                      title : "{{Citas.id}} - {{Citas.paciente}}", 
+                      doctor : "{{Citas.doctor}}",
+                      tratamiento : "{{Citas.tratamiento}}",
+                      start : "{{Citas.fecha| date:'Y-m-d'}}",
+                      end : "{{Citas.fecha| date:'Y-m-d'}}", 
+                      extraParams: function(){
+                           return {
+                               id: "{{Citas.id}}",
+                           }
+                       },
+                       failure: function(){
+                           alert('There is a problem!!!')
+                       },
+                   },
+                       {% endfor %} 
+                       ],
+                       selectable: true,
+                       selectHelper: true,
+                       editable: true,
+                       eventLimit: true,
+                       select: function (start, end, allDay) {
+                    var title = prompt("Enter Event Title");
+                    if (title) {
+                        var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+                        var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
                         $.ajax({
-                            type: "POST",
-                            url: "",
-                            data: { id: id },
-                            success: function(data) {
-                                calendar.fullCalendar('removeEvent', event.Citas.id);
-                                alert("Evento eliminado con existo");
-                            }
+                            type: "GET",
+                            url: '',
+                            data: {'title': +title, 'start': start, 'end': end},
+                            dataType: "json",
+                            success: function (data) {
+                                calendar.fullCalendar('refetchEvents');
+                                alert("Added Successfully");
+                            },
+                           
                         });
                     }
                 },
-            });
-            calendar.render();
+                        eventResize: function (event) {
+                            var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                            var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                            var title = event.title;
+                            var id = event.id;
+                            $.ajax({
+                                type: "POST",
+                                url: " ",
+                                data: {'title': title, 'start': start, 'end': end, 'id': id},
+                                dataType: "json",
+                                success: function (data) {
+                                    calendar.fullCalendar('refetchEvents');
+                                    alert('Event Update');
+                                    }
+                                   
+                            });
+                        },
+
+                        eventDrop: function (event) {
+                            var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                            var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                            var title = event.title;
+                            var id = event.id;
+                            $.ajax({
+                                type: "POST",
+                                url: "",
+                                data: {'title': title, 'start': start, 'end': end, 'id': id},
+                                dataType: "json",
+                                success: function (data) {
+                                    calendar.fullCalendar('refetchEvents');
+                                    alert('Event Update');
+                                    }
+                                  
+                               });
+                        },
+
+                        eventClick: function (event) {
+                            if (confirm("Are you sure you want to remove it?")) {
+                                var id = event.id;
+                                $.ajax({
+                                    type: "POST",
+                                    url: "eliminarcita({{ p.id }})",
+                                    data: {'id': id},
+                                    dataType: "json",
+                                    success: function (data) {
+                                        calendar.fullCalendar('refetchEvents');
+                                        alert('Event Removed');
+                                    }
+                                   
+                                });
+                            }
+                        },
+                });
+                calendar.render();
         });
-</script>
 
-
-
+  </script>
 <script type="text/javascript">
     var $ = jQuery.noConflict();
     function abrir_modal_creacion(url) {

@@ -27,7 +27,7 @@ from citas.models import *
 def login_view(request):
     mensaje = None
     if request.user.is_authenticated:
-        return HttpResponseRedirect('listar_paciente')
+        return HttpResponseRedirect('inicio')
     else:
         if request.method == 'POST':
             form = LoginForm(request.POST)
@@ -39,7 +39,7 @@ def login_view(request):
                     if usuario.is_active:
                         login(request,usuario)
                         messages.success(request,"BIENVENIDO AL CONSULTORIO ODONTOLOGICO")
-                        return HttpResponseRedirect('/lista_paciente/')
+                        return HttpResponseRedirect('/inicio/')
                     else: 
                         mensaje = "Usuario inactivo"     
                 else:
@@ -183,12 +183,13 @@ def registro_usuario(request):
     return render(request, 'login/registrar.html', data)
 
 # #========================== VISTAS BASADOS EN CLASES PACIENTE =======================#   
-class CrearPaciente(SuccessMessageMixin,CreateView):
+class CrearPaciente(SuccessMessageMixin, MixinFormInvalid, CreateView):
     model = Paciente
     template_name='paciente/crear_paciente.html'
     form_class = PacienteForm
     success_url = reverse_lazy('listar_paciente')
     success_message = " El paciente se ha creado correctamente"
+
 
 class ListadoPaciente(ListView): 
     model = Paciente
@@ -198,19 +199,22 @@ class ListadoPaciente(ListView):
     paginate_by = 5
     context_object_name = 'pacientes'
 
+
+
     def get_queryset(self):
         query = self.request.GET.get('q')
         print(query)
         pacientes=None
         if query != None:
-            pacientes = Paciente.objects.filter(nombre__icontains=query)
+            pacientes = Paciente.objects.filter(Q(cedula__icontains=query)| Q(nombre__contains=query)
+            | Q(apellido__contains=query)| Q(correo__contains=query))
         elif query == None:
             pacientes =Paciente.objects.all()
         else:
             pacientes =Paciente.objects.none()
         return pacientes
 
-class ActualizarPaciente(SuccessMessageMixin,UpdateView):
+class ActualizarPaciente(SuccessMessageMixin, MixinFormInvalid, UpdateView):
     model = Paciente
     template_name = 'paciente/editar_paciente.html'
     form_class = PacienteForm
@@ -237,8 +241,17 @@ class ListadoCita(ListView):
     context_object_name = 'Citas'
 
     def get_queryset(self):
-        queryset = self.model.objects.filter(estado = True)
-        return queryset
+        query = self.request.GET.get('q')
+        print(query)
+        citas=None
+        if query != None:
+            citas = Cita.objects.filter(Q(paciente__icontains=query)| Q(doctor__contains=query)
+            | Q(tratamiento__contains=query)| Q(hora__contains=query))
+        elif query == None:
+            citas =Cita.objects.all()
+        else:
+            citas =Cita.objects.none()
+        return citas
    
 class ActualizarCita(SuccessMessageMixin,UpdateView):
     model = Cita
@@ -254,7 +267,7 @@ class EliminarCita(DeleteView):
     success_message = "La cita se ha elimado correctamente"
     
 #========================== VISTAS BASADOS EN CLASES DOCTOR =======================#
-class CrearDoctor(SuccessMessageMixin,MixinFormInvalid,CreateView):
+class CrearDoctor(SuccessMessageMixin, MixinFormInvalid, CreateView):
     model = Doctor
     template_name = 'doctor/crear_doctor.html'
     form_class = DoctorForm
@@ -275,7 +288,8 @@ class ListadoDoctor(ListView):
         doctores=None
 
         if query != None:
-            doctores = Doctor.objects.filter(nombre__icontains=query)
+            doctores = Doctor.objects.filter(Q(cedula__icontains=query)  | Q(nombre__contains=query) 
+            | Q(apellido__contains=query) | Q(correo__contains=query))
         elif query == None:
             doctores=Doctor.objects.all()
         else:
@@ -283,7 +297,7 @@ class ListadoDoctor(ListView):
 
         return doctores 
 
-class ActualizarDoctor(SuccessMessageMixin, MixinFormInvalid,UpdateView):
+class ActualizarDoctor(SuccessMessageMixin, MixinFormInvalid, UpdateView):
     model = Doctor
     template_name = 'doctor/editar_doctor.html'
     form_class = DoctorForm
@@ -354,7 +368,7 @@ class ListadoReporte(ListView):
         print(query)
         reportes=None
         if query != None:
-            reportes = Reporte.objects.filter(paciente__icontains=query)
+            reportes = Reporte.objects.filter(Q(paciente__icontains=query) | Q(fecha__contains=query))
         elif query == None:
             reportes=Reporte.objects.all()
         else:
@@ -375,6 +389,23 @@ class EliminarReporte(SuccessMessageMixin,DeleteView):
     success_url = reverse_lazy('listar_reporte')
     success_message = "El reporte se ha elimado Correctamente"
     
+
+class Error404View(TemplateView):
+    template_name = "login/error_404.html"
+
+class Error505View(TemplateView):
+    template_name = "login/error_500.html"
+
+    @classmethod
+    def as_error_view(cls):
+
+        v = cls.as_view()
+        def view(request):
+            r = v(request)
+            r.render()
+        return view
+
+
 
 
 
