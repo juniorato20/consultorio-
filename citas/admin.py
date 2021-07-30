@@ -30,7 +30,7 @@ admin.site.register(Paciente,PacienteAdmin)
 admin.site.register(Doctor,DoctorAdmin)
 admin.site.register(Cita,CitaAdmin)
 admin.site.register(Reporte,ReporteAdmin)
-# admin.site.register(User)
+# admin.site.register(CustomUser)
 
 
 

@@ -1,18 +1,19 @@
 {% extends 'login/vista_principal.html' %}
-{% block titulo %}
-Listado de Pacientes
-{% endblock titulo %}
+{% block titulo %}Listado de Pacientes{% endblock titulo %}
 {% block body %}
 <div class="card-default">
+    <br>
     <form action="" method="GET">
         <div class="row">
+            
             <div class="col-auto mb-4 mb-md-0">
+              
                 <p class="pt-2"><strong>Listado de pacientes</strong></p>
             </div>
             <div class="col-auto mb-4 mb-md-0">
                 <div class="form-outline mb-4">
 
-                  <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
+                  <input class="form-control" type='search' name='q' value='{{ request.GET.q }}'>
                 </div>
               </div>
               <div class="col-auto mb-4 mb-md-0">
@@ -23,12 +24,12 @@ Listado de Pacientes
         </div>
         
     </form>
-    <div class="container">
+    <div class="card-default">
         <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_paciente' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
     </div>
     <br>
-    <div class="container">
+    <div class="card-default">
         <table id="bootstrap-data-table" class="table table-striped table-bordered">
             <thead class="text-uppercase bg-info">
                 <tr class="text-white">
@@ -49,13 +50,13 @@ Listado de Pacientes
                 {% for p in pacientes %}
                 <tr>
                     <td class="text-center">{{p.cedula}}</td>
-                    <td class="text-center">{{p.nombre}}</td>
-                    <td class="text-center">{{p.apellido}}</td>
-                    <td class="text-center">{{p.direccion}}</td>
-                    <td class="text-center">{{p.fecha}}</td>
+                    <td class="text-center">{{p.nombre| title}}</td>
+                    <td class="text-center">{{p.apellido | title}}</td>
+                    <td class="text-center">{{p.direccion | capfirst}}</td>
+                    <td class="text-center">{{p.fecha|date:'d-m-Y'}}</td>
                     <td class="text-center">{{p.sexo}}</td>
-                    <td class="text-center">{{p.observacion}}</td>
-                    <td class="text-center">{{p.correo}}</td>
+                    <td class="text-center">{{p.observacion | capfirst }}</td>
+                    <td class="text-center">{{p.correo|lower}}</td>
                     <td class="text-center">{{p.celular}}</td>
                     <td class="text-center">
                         <button class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_paciente' p.id %}')">
@@ -70,13 +71,12 @@ Listado de Pacientes
         </table>
         {% else %}
     <h1>No existen Pacientes Registrados</h1>
+    <br>
     {% endif %}
     </div>
 </div>
-<div class="modal face" id="creacion" role="dialog">
-</div>
-<div class="modal face" id="edicion" role="dialog">
-</div>
+<div class="modal face" id="creacion" role="dialog"></div>
+<div class="modal face" id="edicion" role="dialog"></div>
 {% if is_paginated %}
 <div class="mt-2">
     <ul class="pagination">
@@ -120,22 +120,28 @@ Listado de Pacientes
             $(this).modal('show')
         });
     }
-    function eliminarpaciente(id) {
-        Swal.fire({
-            "title": "¿Estás seguro?",
-            "text": "Una vez eliminado, no se puede restaurar",
-            "icon": "warning",
-            "showCancelButton": true,
-            "confirmButtonColor": '#3085d6',
-            "cancelButtonColor": '#d33',
-            "confirmButtonText": 'Yes, delete it!'
-        })
-            .then(function (result) {
-                if (result.isConfirmed) {
-                    window.location.href = "/eliminar_paciente/" + id + "/"
+    function eliminarpaciente(id){
+            //console.log(id)           
+            Swal.fire({
+                title: 'Estas seguro?',
+                text: "Se borrará de forma permanente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonText: 'Cancelar',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si eliminar'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        window.location.href= "/eliminar_paciente/"+id+"/"
+                      
+                        }
+                    })
                 }
-            })
-    }
-</script>
+
+
+// </script>
+
+
 
 {% endblock extrajs %}

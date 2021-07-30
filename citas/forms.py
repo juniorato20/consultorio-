@@ -4,14 +4,13 @@ from django.contrib.auth import authenticate
 from django.forms import fields, widgets
 from citas.models import *
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import  UserCreationForm
+from django.contrib.auth.forms import  UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import  User
 from django.forms import ValidationError
         
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput(render_value=False))
-    
 
     # def clean(self):
     #     username = self.cleaned_data['usuario']
@@ -25,27 +24,23 @@ class LoginForm(forms.Form):
         model = User
         fields = ['username', 'password']
         
-class CustomCreationForm(UserCreationForm):
+class CustomUserCreationForm(UserCreationForm):
     class Meta:
-        model = User 
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+        model = User
+        fields = ['username','last_name','email','password1','password2']
         labels = {
-            'username' : 'Usuario',
-            'first_name' : 'Nombre',
+            'username' : 'Nombre',
             'last_name':'Apellido',
-            'email' : 'Correo ',
+            'email' : 'Correo',
             'password1' : 'Contraseña',
             'password2' : 'Confirmar contraseña',
         }
         widgets = {
-            'username' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':''}),
-            'first_name' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':''}),
-            'last_name' : forms.TextInput(attrs={'class': 'form-control', 'placeholder':''}),
-            'email' : forms.EmailInput(attrs={'class': 'form-control', 'placeholder':''}),
-            'password1' : forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':''}),
-            'password2' : forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':''})
-            
-        
+            'username' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': '' }),
+            'last_name' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': '' }),
+            'email' : forms.EmailInput(attrs={'class' : 'form-control', 'placeholder': ''}),
+            'password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':''}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': ''}),
         }
        
 class ResetPasswordForm(forms.Form):
@@ -90,11 +85,10 @@ class ChangePasswordForm(forms.Form):
             #raise forms.ValidationError('Las contraseñas deben ser iguales')
         return cleaned
 
-
 class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
-        fields = ['cedula','nombre', 'apellido', 'direccion', 'fecha','sexo', 'correo','celular']
+        fields = ['cedula','nombre', 'apellido', 'direccion', 'fecha','sexo','observacion', 'correo','celular']
         labels = {
            'cedula' : 'Cedula de Identidad',
             'nombre': 'Nombres Completos',
@@ -102,20 +96,20 @@ class PacienteForm(forms.ModelForm):
             'direccion': 'Direccion',
             'fecha' : 'Fecha Nacimento',
             'sexo': 'Sexo', 
-            'observacion': 'observaciones',
+            'observacion': 'Observacion',
             'correo': 'Correo',
-            'celular': 'celular',
+            'celular': 'Celular',
         }
         widgets = {
             'cedula' : forms.NumberInput(attrs={'class':'form-control', 'placeholder':''}),
             'nombre': forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder': '', }),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
             'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ' '}),
-            'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%y"),
+            'fecha' :  forms.DateInput(attrs={'type': 'date','class': 'form-control'}, format="%Y-%m-%d"),
             'sexo' :  forms.Select(attrs={'class': 'form-control'}),
-            'observacion' : forms.TextInput(attrs={'type' : 'form-control', 'placeholder':''}) ,
+            'observacion' : forms.TextInput(attrs={'class' : 'form-control', 'placeholder':''}) ,
             'correo': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': '', }),
-            'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '', 'maxlength': '9999999999'})
+            'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': ''})
             }
 
     def clean(self):
@@ -124,8 +118,10 @@ class PacienteForm(forms.ModelForm):
                 cedula= self.cleaned_data['cedula'].upper()
                 )
             if not self.instance.pk:
-                raise forms.ValidationError("Paciente ya registrado")
+                print('Regristro ya existe')
+                raise forms.ValidationError("Ya existe paciente con este numero de cedula ")
             elif self.instance.pk!= sc.pk:
+                print('Cambio no permitido')
                 raise forms.ValidationError("Cambio no permitido")
         except Paciente.DoesNotExist: 
             pass
@@ -159,7 +155,7 @@ class DoctorForm(forms.ModelForm):
         }
         widgets = {
             'cedula' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':''}),
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
             'especialidad' :  forms.Select(attrs={'class': 'form-control'}),
             'sexo' :  forms.Select(attrs={'class': 'form-control'}),
             'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
@@ -174,13 +170,12 @@ class DoctorForm(forms.ModelForm):
                 cedula= self.cleaned_data['cedula'].upper()
                 )
             if not self.instance.pk:
-                raise forms.ValidationError("Doctor ya registrado ")
+                raise forms.ValidationError("Ya existe doctor con este numero de cedula ")
             elif self.instance.pk!= sc.pk:
                 raise forms.ValidationError("Cambio no permitido")
         except Doctor.DoesNotExist: 
             pass
         return self.cleaned_data
-
 
 class CitaForm(forms.ModelForm):
     class Meta:
@@ -194,11 +189,10 @@ class CitaForm(forms.ModelForm):
         widgets = {
             'paciente' :  forms.Select(attrs={'class': 'form-control'}),
             'doctor' :  forms.Select(attrs={'class': 'form-control'}),
-            'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
-            'hora' :  forms.Select(attrs={'class': 'form-control'}),
+            'fecha' : forms.DateInput(attrs={'type': 'date','class': 'form-control'}, format="%Y-%m-%d"),
+            'hora' :  forms.TimeInput(attrs={'type': 'time','class': 'form-control'}, format="%H:%M"),
             'tratamiento' :  forms.Select(attrs={'class': 'form-control'}),
-            
-                   }
+                }
     
 class TratamientoForm(forms.ModelForm):
     class Meta:
@@ -216,6 +210,19 @@ class TratamientoForm(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class':'form-control'}),
 
             }
+    
+    def clean(self):
+        try:
+            sc = Tratamiento.objects.get(
+                nombre= self.cleaned_data['nombre'].upper()
+                )
+            if not self.instance.pk:
+                raise forms.ValidationError("Ya existe tratamiento con el nombre ")
+            elif self.instance.pk!= sc.pk:
+                raise forms.ValidationError("Cambio no permitido")
+        except Tratamiento.DoesNotExist: 
+            pass
+        return self.cleaned_data
 
 class ReporteForm(forms.ModelForm):
     class Meta:
@@ -223,13 +230,13 @@ class ReporteForm(forms.ModelForm):
         fields = ['paciente', 'observacion', 'fecha']
         labels = {
             'paciente' : 'Paciente ',
-            'observacion' : 'Observaciones',
+            'observacion' : 'Observacion',
             'fecha' : 'Fecha'
         }
         widgets = {
             'paciente' : forms.Select(attrs={'class': 'form-control'}),
             'observacion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
-            'fecha' : forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+            'fecha' : forms.DateInput(attrs={'type': 'date','class': 'form-control'}, format="%Y-%m-%d"),
 
         }
 

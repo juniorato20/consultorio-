@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 from pathlib import Path
+from.base import *
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,17 +25,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'buvk)-5e6wdf9^n33@&y9z%^t1h8y&a62nyog0x=@$^@iswzd5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+
 # Application definition
 
+MIDDLEWARE_CLASSES = (
+    # Simplified static file serving.
+    # https://warehouse.python.org/project/whitenoise/
+  #  'whitenoise.middleware.WhiteNoiseMiddleware',
+)
 
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
 
-
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CRONJOBS = [
     ('','')
@@ -45,6 +55,7 @@ FONTAWESOME_CSS_URL = 'myapp/css/fontawesome.min.css'  # relative url
 INSTALLED_APPS = [
 
     'django.contrib.admin',
+    'django.contrib.humanize',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -55,7 +66,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_crontab',
     'crispy_forms',
-
     
 ]
 
@@ -67,10 +77,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
   
 ]
-
-
 
 ROOT_URLCONF = 'CONSULTORIO.urls'
 
@@ -110,7 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -124,24 +132,25 @@ USE_L10N = True
 
 USE_TZ = True
 
-# AUTH_USER_MODEL = "User"
+# AUTH_USER_MODEL = 'citas.CustomUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
+
 #Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-
+# Extra places for collectstatic to find static files.
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 #CORREO ELECTRONICO 
 

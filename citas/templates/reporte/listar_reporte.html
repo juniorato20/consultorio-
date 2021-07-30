@@ -5,6 +5,7 @@ Listado de Reportes
 {% block body %}
 
 <div class="card-default">
+    <br>
     <form action="" method="GET">
         <div class="row">
           <div class="col-auto mb-4 mb-md-0">
@@ -23,12 +24,12 @@ Listado de Reportes
           </div>
         </div>
     </form>
-    <div class="container">
+    <div class="card-default">
         <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_reporte' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
     </div>
     <br>
-        <div class="container">
+        <div class="card-default">
             <table id="bootstrap-data-table" class="table table-striped table-bordered">
                 <thead class="text-uppercase bg-info">
                     <tr class="text-white">
@@ -57,7 +58,8 @@ Listado de Reportes
                
             </table>
             {% else %}
-        <h1>No existen Pacientes Registrados</h1>
+        <h1>No existen reportes Registrados</h1>
+        <br>
             {% endif %}
         </div>
     </div>
@@ -110,21 +112,23 @@ Listado de Reportes
                 $(this).modal('show')
             });
         }
-        function eliminarreporte(id) {
+        function eliminarreporte(id){
+            console.log(id)           
             Swal.fire({
-                "title": "¿Estás seguro?",
-                "text": "Una vez eliminado, no se puede restaurar",
-                "icon": "warning",
-                "showCancelButton": true,
-                "confirmButtonColor": '#3085d6',
-                "cancelButtonColor": '#d33',
-                "confirmButtonText": 'Yes, delete it!'
-            }).then(function(result){
-            if(result.isConfirmed){
-                window.location.href ="/eliminar_reporte/"+id+"/"
-                }  
-        })
-    }
-  
+                title: 'Estas seguro?',
+                text: "Se borrará de forma permanente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonText: 'Cancelar',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si eliminar'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        window.location.href= "/eliminar_reporte/"+id+"/"
+                      
+                        }
+                    })
+                }
     </script>
     {% endblock extrajs %}
