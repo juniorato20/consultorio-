@@ -119,7 +119,7 @@
                     var id = event.id;
                     $.ajax({
                         type: "GET",
-                        url: "{% url 'editar_cita' p.id %}",
+                        
                         data: {'title': title, 'start': start, 'end': end, 'id': id},
                         dataType: "json",
                         success: function (data) {

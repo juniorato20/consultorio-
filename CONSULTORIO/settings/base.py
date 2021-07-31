@@ -46,7 +46,12 @@ MIDDLEWARE_CLASSES = (
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CRONJOBS = [
-    ('','')
+  # La función temporizada se ejecuta cada minuto
+  # ('*/1 * * * *', "Nombre de la aplicación. Nombre del archivo Py donde se encuentra la función temporizada. Nombre de la función temporizada"),
+    # Enviar el resultado de la ejecución de la función temporizada al archivo especificado (si la ruta o el archivo no existe, se creará automáticamente)
+ #  ('*/1 * * * *', "Nombre de la aplicación. Nombre del archivo Py donde se encuentra la función temporizada. Nombre de la función temporizada", '>> Nombre y ruta del archivo de salida')
+     # Ejecuta comandos todas las mañanas a las 6 a.m.
+   # ('0 6 * * *', 'django.core.management.call_command', ['Comando a ejecutar']),
 ]
 
 # default uses locally shipped version at 'fontawesome/css/font-awesome.min.css'

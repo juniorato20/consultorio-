@@ -29,8 +29,8 @@
         </button>
     </div>
     <br>
-    <div class="card-default">
-        <table id="bootstrap-data-table" class="table table-striped table-bordered">
+    <div class="table-responsive">
+        <table class="table table-striped table-advance table-hover ">
             <thead class="text-uppercase bg-info">
                 <tr class="text-white">
                     <th class="text-center">Cedula</th>
@@ -42,7 +42,7 @@
                     <th class="text-center">Observacion</th>
                     <th class="text-center">Correo</th>
                     <th class="text-center">Celular</th>
-                    <th class="text-center">Acciones</th>
+                    <th class="text-center"><i class="fas fa-cog"></i></th>
                 </tr>
             </thead>
             {% if pacientes %}
@@ -59,11 +59,14 @@
                     <td class="text-center">{{p.correo|lower}}</td>
                     <td class="text-center">{{p.celular}}</td>
                     <td class="text-center">
-                        <button class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_paciente' p.id %}')">
-                            <i class="fas fa-edit"></i></button>
-                        <a href="#"onclick="eliminarpaciente({{ p.id }})" class="btn btn-outline-danger btn-flat"><i
+                        <div class="btn-group">
+                            <a href="#"class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_paciente' p.id %}')">
+                                <i class="fas fa-edit"></i></a>
+                            <a href="#"onclick="eliminarpaciente({{ p.id }})" class="btn btn-outline-danger btn-flat"><i
                                 class="fas fa-trash-alt"></i></a>
-                    </td>
+
+                        </div>
+                      
                 </tr>
                 {% endfor %}
             </tbody>
@@ -74,11 +77,10 @@
     <br>
     {% endif %}
     </div>
-</div>
-<div class="modal face" id="creacion" role="dialog"></div>
-<div class="modal face" id="edicion" role="dialog"></div>
-{% if is_paginated %}
-<div class="mt-2">
+    <div class="modal face" id="creacion" role="dialog"></div>
+    <div class="modal face" id="edicion" role="dialog"></div>
+    {% if is_paginated %}
+    <div class="mt-2">
     <ul class="pagination">
         {% if page_obj.has_previous %}
         <li class="page-item">
@@ -104,8 +106,9 @@
         </li>
         {% endif %}
     </ul>
-</div>
+    </div>
 {% endif %}
+</div>
 {% endblock body %}
 {% block extrajs %}
 <script type="text/javascript">

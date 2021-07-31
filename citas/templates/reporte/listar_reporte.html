@@ -1,9 +1,6 @@
 {% extends 'login/vista_principal.html' %}
-{% block titulo %}
-Listado de Reportes
-{% endblock titulo %}
+{% block titulo %}Listado de Reportes{% endblock titulo %}
 {% block body %}
-
 <div class="card-default">
     <br>
     <form action="" method="GET">
@@ -29,46 +26,45 @@ Listado de Reportes
         </button>
     </div>
     <br>
-        <div class="card-default">
-            <table id="bootstrap-data-table" class="table table-striped table-bordered">
-                <thead class="text-uppercase bg-info">
-                    <tr class="text-white">
-                        <th class="text-center">Paciente</th>
-                        <th class="text-center">Observacion</th>
-                        <th class="text-center">Fecha</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                {% if reportes %}
-                <tbody>
-                    {% for p in reportes %}
-                    <tr>
-                        <td class="text-center">{{p.paciente}}</td>
-                        <td class="text-center">{{p.observacion}}</td>
-                        <td class="text-center">{{p.fecha}}</td>
-                        <td class="text-center">
-                            <button class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
-                                <i class="fas fa-edit"></i></button>
+    <div class="table-responsive">
+        <table class="table table-striped table-advance table-hover ">
+            <thead class="text-uppercase bg-info">
+                <tr class="text-white">
+                    <th class="text-center">Paciente</th>
+                    <th class="text-center">Observacion</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            {% if reportes %}
+            <tbody>
+                {% for p in reportes %}
+                <tr>
+                    <td class="text-center">{{p.paciente}}</td>
+                    <td class="text-center">{{p.observacion}}</td>
+                    <td class="text-center">{{p.fecha}}</td>
+                    <td class="text-center">
+                        <div>
+                            <a href="#" class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_reporte' p.id %}')">
+                                <i class="fas fa-edit"></i></a>
                             <a href="#"onclick="eliminarreporte({{ p.id }})" class="btn btn-outline-danger btn-flat"><i
-                                    class="fas fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                                class="fas fa-trash-alt"></i></a>
+
+                        </div>
+                            
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
                
-            </table>
-            {% else %}
+        </table>
+        {% else %}
         <h1>No existen reportes Registrados</h1>
         <br>
-            {% endif %}
-        </div>
-    </div>
-  
-    <div class="modal face" id="creacion" role="dialog">
-    </div>
-    <div class="modal face" id="edicion" role="dialog">
-    </div>
-    
+        {% endif %}
+    </div>  
+    <div class="modal face" id="creacion" role="dialog"></div>
+    <div class="modal face" id="edicion" role="dialog"></div>
     {% if is_paginated %}
     <div class="mt-2">
         <ul class="pagination">
@@ -99,6 +95,7 @@ Listado de Reportes
     </div>
     {% endif %}
     {% endblock body %}
+</div>
     {% block extrajs %}
     <script type="text/javascript">
         var $ = jQuery.noConflict();
