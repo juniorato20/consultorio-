@@ -3,7 +3,7 @@ from .base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['consultorioodontologico.herokuapp.com']
+ALLOWED_HOSTS = ['consultoriodecitas.herokuapp.com']
 
 
 # Database
@@ -12,10 +12,10 @@ ALLOWED_HOSTS = ['consultorioodontologico.herokuapp.com']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ddtlvkaigh28va',
-        'USER' : 'wksaantkstodfe',
-        'PASSWORD' : 'afe49a3b46b439f0735d7ac2f3c152f39e0d4296cc077e246d541383b3a09183',
-        'HOST' : 'ec2-54-163-254-204.compute-1.amazonaws.com',
+        'NAME': 'd5qpo4mtrmi8u5',
+        'USER' : 'lfdfouoshcuxcp',
+        'PASSWORD' : '4d5b12a888ccd6ed1ceae79a3aff11ba947570984f0540cd6e39112ee9b33f9a',
+        'HOST' : 'ec2-35-168-145-180.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
