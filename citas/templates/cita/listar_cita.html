@@ -2,10 +2,10 @@
 {% block titulo %} Listado de Citas {% endblock titulo %}
 {% block extra_css %}
 
-<link rel="stylesheet" href="/static/fullcalendar/lib/main.css" >
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.3.0/main.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link href="/static/fullcalendar/calender/main.css" rel="stylesheet" />
 {% endblock extra_css %}
 {% block body %}
 <div class="card-default">
@@ -46,24 +46,45 @@
 <script src="/static/fullcalendar/lib/main.js"></script>
 <script src="/static/fullcalendar/lib/locales-all.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+<script src="/static/fullcalendar/calender/main.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {       
-        var calendarEl = document.getElementById('calendar'); 
-        var calendar = new FullCalendar.Calendar(calendarEl,{
-            locale: "es",
-            height: 'auto',
-            scrollTime: '07:00',
-            selectable: "true",
-            defaultView: "timeGridWeek",
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-            },
+
+    document.addEventListener('DOMContentLoaded', function() {   
+      var calendarEl = document.getElementById('calendar'); 
+      var today = new Date();
+      var calendar = new FullCalendar.Calendar(calendarEl,{
+        locale: "es",
+        scrollTime: '07:00',
+        selectable: "true",
+        defaultView: "timeGridWeek",
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+          },
+          initialDate: today,
+          navLinks: true, // can click day/week names to navigate views
+          selectable: true,
+          selectMirror: true,
+
+          select: function(arg) {
+            console.log('clicked')
+            var modal = document.getElementById('creacion')
+            modal.style.display = 'block'
+            calendar.unselect()
+          },
+          eventClick: function(arg) {
+            if (confirm('Are you sure you want to delete this event?')) {
+              arg.event.remove()
+            }
+          },
+          editable: true,
+          dayMaxEvents: true, // allow "more" link when too many events
             events: [
                 {% for Citas  in object_list %}
                 {
@@ -72,108 +93,30 @@
                     doctor : "{{Citas.doctor}}",
                     tratamiento : "{{Citas.tratamiento}}",
                     start : "{{Citas.fecha| date:'Y-m-d'}}",
-                    end : "{{Citas.fecha| date:'Y-m-d'}}", 
-                    extraParams: function(){
-                        return {
-                            id: "{{Citas.id}}",
-               }
-            },
-            failure: function() {
-                alert('there was an error while fetching events!');
-                },
+                    end : "{{Citas.fecha| date:'Y-m-d'}}",          
        
             },
             {% endfor %}         
         ],
-        navLinks: true,
-        editable: true,
-        eventLimit: true,
-        selectable: true,
-        selectHelper: true,
-        slotDuration: '00:30:00', 
+        
+    
+              
       
-        select: function (start, end, allDay) {
-            var title = prompt("Enter Event Title");
-            if (title) {
-                var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
-                var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
-                $.ajax({
-                    type: "POST",
-                    url: "{% url 'crear_cita' %}')",
-                    data: {'title': title, 'start': start, 'end': end},
-                    dataType: "json",
-                            success: function (data) {
-                                calendar.fullCalendar('refetchEvents');
-                                alert("Added Successfully");
-                            },
-                            failure: function (data) {
-                                alert('There is a problem!!!');
-                            }
-                        });
-                    }
-                },
-                eventResize: function (event) {
-                    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-                    var title = event.title;
-                    var id = event.id;
-                    $.ajax({
-                        type: "GET",
-                        
-                        data: {'title': title, 'start': start, 'end': end, 'id': id},
-                        dataType: "json",
-                        success: function (data) {
-                            calendar.fullCalendar('refetchEvents');
-                            alert('Event Update');
-                        },
-                        failure: function (data) {
-                            alert('There is a problem!!!');
-                        }
-                    });
-                },
-
-                eventDrop: function (event) {
-                    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-                    var title = event.title;
-                    var id = event.id;
-                    $.ajax({
-                        type: "GET",
-                        url: " ",
-                        data: {'title': title, 'start': start, 'end': end, 'id': id},
-                        dataType: "json",
-                        success: function (data) {
-                            calendar.fullCalendar('refetchEvents');
-                            alert('Event Update');
-                        },
-                        failure: function (data) {
-                            alert('There is a problem!!!');
-                        }
-                    });
-                },
-                
-                eventClick: function (event) {
-                    if (confirm("Are you sure you want to remove it?")) {
-                        var id = event.id;
-                        $.ajax({
-                            type: "GET",
-                            url: "eliminardoctor({{ p.id }})",
-                            data: {'id': id},
-                            dataType: "json",
-                            success: function (data) {
-                                calendar.fullCalendar('refetchEvents');
-                                alert('Event Removed');
-                            },
-                            failure: function (data) {
-                                alert('There is a problem!!!');
-                            }
-                        });
-                    }
-                },
 
             });
             calendar.render();
         });
+
+      //   const closeBtn1 = document.getElementById('modalClose1');
+      //   const closeBtn2 = document.getElementById('modalClose2');
+      //   closeBtn1.addEventListener('click',()=>{
+      //   const eventModal = document.getElementById('eventModal')
+      //   eventModal.style.display = 'none';
+      // });
+      // closeBtn2.addEventListener('click',()=>{
+      //   const eventModal = document.getElementById('eventModal')
+      //   eventModal.style.display = 'none';
+      // });
         
 </script>
 
