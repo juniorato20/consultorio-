@@ -14,6 +14,25 @@ ocupacion = [
     ('Odontologo', 'Odontologo'),
     ('Odontologa', 'Odontologa'),
 ]
+tiempo = [
+    ('8:00 am/8:30 am', '8:00 am/8:30 am'),
+    ('8:30 am/9:00 am', '8:30 am/9:00 am'),
+    ('9:00 am/9:30 am', '9:00 am/9:30 am'),
+    ('9:30 am/10:00 am', '9:30 am/10:00 am'),
+    ('10:00 am/10:30 am', '10:00 am/10:30 am'),
+    ('10:30 am/11:00 am', '10:30 am/11:00 am'),
+    ('11:00 am/11:30 am', '11:00 am/11:30 am'),
+    ('11:30 am/12:00 pm', '11:30 am/12:00 pm'),
+    ('13:00 pm/13:30 pm', '13:00 pm/13:30 pm'),
+    ('13:30 pm/14:00 pm', '13:30 pm/14:00 pm'),
+    ('14:00 pm/14:30 pm', '14:00 pm/14:30 pm'),
+    ('14:30 pm/15:00 pm', '14:30 pm/:15:00 pm'),
+    ('15:00 pm/15:30 pm', '15:00 pm/15:30 pm'),
+    ('15:30 pm/16:00 pm', '15:30 pm/16:00 pm'),
+    ('16:00 pm/16:30 pm', '16:00 pm/16:30 pm'),
+    ('16:30 am/17:00 am', '16:30 am/17:00 am'),
+  
+]
 class Tratamiento(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255, blank=False, null=False,unique=True )
@@ -68,15 +87,13 @@ class Doctor(models.Model):
     def __str__(self):
         return self.nombre + " " + self.apellido
 
-
-
 class Cita(models.Model):
     id = models.AutoField(primary_key=True)
     paciente = models.ForeignKey( Paciente , on_delete=models.CASCADE, default='available')
     doctor = models.ForeignKey( Doctor, on_delete=models.CASCADE, default='available')
     tratamiento = models.ForeignKey(Tratamiento,  on_delete=models.CASCADE, default='available' )
     fecha = models.DateField()
-    hora = models.TimeField()
+    hora =  models.CharField( max_length=60, choices=tiempo, default='available')
     estado = models.BooleanField(default = True)
 
     class Meta:

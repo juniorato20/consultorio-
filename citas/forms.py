@@ -190,7 +190,7 @@ class CitaForm(forms.ModelForm):
             'paciente' :  forms.Select(attrs={'class': 'form-control'}),
             'doctor' :  forms.Select(attrs={'class': 'form-control'}),
             'fecha' : forms.DateInput(attrs={'type': 'date','class': 'form-control'}, format="%Y-%m-%d"),
-            'hora' :  forms.TimeInput(attrs={'type': 'time','class': 'form-control'}, format="%H:%M"),
+            'hora' :  forms.Select(attrs={'class': 'form-control'}),
             'tratamiento' :  forms.Select(attrs={'class': 'form-control'}),
                 }
     

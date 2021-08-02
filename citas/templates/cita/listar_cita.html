@@ -1,19 +1,12 @@
 {% extends 'login/vista_principal.html' %}
 {% block titulo %} Listado de Citas {% endblock titulo %}
-{% block extra_css %}
-
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.3.0/main.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<link href="/static/fullcalendar/calender/main.css" rel="stylesheet" />
-{% endblock extra_css %}
 {% block body %}
 <div class="card-default">
     <br>
     <form action="" method="GET">
         <div class="row">
           <div class="col-auto mb-4 mb-md-0">
-            <p class="pt-2"><strong>Listado de Doctores</strong></p>
+            <p class="pt-2"><strong>Listado de Citas</strong></p>
           </div>
           <div class="col-auto mb-4 mb-md-0">
             <div class="form-outline mb-4">
@@ -21,117 +14,123 @@
             </div>
           </div>
           <div class="col-auto mb-4 mb-md-0">
-            <button type="submit" class="btn btn-outline-primary btn-flat" value="listar_paciente">
+            <button type="submit" class="btn btn-outline-primary btn-flat" value="listar_cita">
                 <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
     </form>
-    <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')"><i class="fas fa-plus"></i></i> Nuevo
-    </button>
-</div> 
-<br>
-<div id="calendar"  class="col-lg-12 text-center">
-    
-    
+    <div class="card-default">
+        <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        </button>
+    </div> 
+    <br>
+    <div class="table-responsive">
+        <table class="table table-striped table-advance table-hover ">
+            <thead class="text-uppercase bg-info">
+                <tr class="text-white">
+                    <th class="text-center">Paciente</th>
+                    <th class="text-center">Doctor</th>
+                    <th class="text-center">Tratamiento</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Hora</th>
+                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                </tr>
+            </thead>
+            {% if citas %}
+            <tbody>
+            {% for p in citas %}
+                <tr>
+                    <td class="text-center">{{p.paciente}}</td>
+                    <td class="text-center">{{p.doctor}}</td>
+                    <td class="text-center">{{p.tratamiento}}</td>
+                    <td class="text-center">{{p.fecha|date:'d-m-Y'}}</td>
+                    <td class="text-center">{{p.hora}}</td>
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <a href="#"class="btn btn-outline-warning btn-flat"onclick="abrir_modal_edicion('{% url 'editar_cita' p.id %}')">
+                                <i class="fas fa-edit"></i></a>
+                            <a href="#"onclick="eliminarcita({{ p.id }})" class="btn btn-outline-danger btn-flat"><i
+                                class="fas fa-trash-alt"></i></a>
+
+                        </div>
+                                                   
+                    </td>
+                </tr>
+                {% endfor %}  
+            </tbody>
+             
+        </table>
+        {% else %}
+        <h1>No existen Citas Registrados</h1>
+        <br>
+        {% endif %}
+    </div>
+    <div class="modal face" id="creacion" role="dialog"></div>
+    <div class="modal face" id="edicion" role="dialog"></div>
+    {% if is_paginated %}
+    <div class="d-flex justify-content-end">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Anterior</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a href="#" class="page-link">Anterior</a>
+            </li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+            <li class="page-item {% if page_obj.number == i %} active {% endif %}">
+                <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+            </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.next_page_number }}" class="page-link">Proximo</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a href="#" class="page-link">Proximo</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
 </div>
-<div class="modal face" id="creacion" role="dialog"></div>
-<div class="modal face" id="edicion" role="dialog"></div>
-
-
-{% endblock body %}
-{% block extrajs %}
-
-<script src="https://code.jquery.com/jquery-1.6.2.min.js"></script>
-<script src="/static/fullcalendar/lib/main.js"></script>
-<script src="/static/fullcalendar/lib/locales-all.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
-<script src="/static/fullcalendar/calender/main.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script>
-
-    document.addEventListener('DOMContentLoaded', function() {   
-      var calendarEl = document.getElementById('calendar'); 
-      var today = new Date();
-      var calendar = new FullCalendar.Calendar(calendarEl,{
-        locale: "es",
-        scrollTime: '07:00',
-        selectable: "true",
-        defaultView: "timeGridWeek",
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-          },
-          initialDate: today,
-          navLinks: true, // can click day/week names to navigate views
-          selectable: true,
-          selectMirror: true,
-
-          select: function(arg) {
-            console.log('clicked')
-            var modal = document.getElementById('creacion')
-            modal.style.display = 'block'
-            calendar.unselect()
-          },
-          eventClick: function(arg) {
-            if (confirm('Are you sure you want to delete this event?')) {
-              arg.event.remove()
-            }
-          },
-          editable: true,
-          dayMaxEvents: true, // allow "more" link when too many events
-            events: [
-                {% for Citas  in object_list %}
-                {
-                    id:"{{Citas.id}}",
-                    title : "{{Citas.id}} - {{Citas.paciente}}", 
-                    doctor : "{{Citas.doctor}}",
-                    tratamiento : "{{Citas.tratamiento}}",
-                    start : "{{Citas.fecha| date:'Y-m-d'}}",
-                    end : "{{Citas.fecha| date:'Y-m-d'}}",          
-       
-            },
-            {% endfor %}         
-        ],
-        
-    
-              
-      
-
+    {% endblock body %}
+    {% block extrajs %}
+    <script type="text/javascript">
+        var $ = jQuery.noConflict();
+        function abrir_modal_creacion(url) {
+            $('#creacion').load(url, function () {
+                $(this).modal('show')
             });
-            calendar.render();
-        });
+        }
+        function abrir_modal_edicion(url) {
+            $('#edicion').load(url, function () {
+                $(this).modal('show')
+            });
+        }
+        function eliminarcita(id){
+            //console.log(id)           
+            Swal.fire({
+                title: 'Estas seguro?',
+                text: "Se borrará de forma permanente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonText: 'Cancelar',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si eliminar'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        window.location.href= "/eliminar_cita/"+id+"/"
+                      
+                        }
+                    })
+                }
 
-      //   const closeBtn1 = document.getElementById('modalClose1');
-      //   const closeBtn2 = document.getElementById('modalClose2');
-      //   closeBtn1.addEventListener('click',()=>{
-      //   const eventModal = document.getElementById('eventModal')
-      //   eventModal.style.display = 'none';
-      // });
-      // closeBtn2.addEventListener('click',()=>{
-      //   const eventModal = document.getElementById('eventModal')
-      //   eventModal.style.display = 'none';
-      // });
-        
-</script>
-
-
-<script type="text/javascript">
-    var $ = jQuery.noConflict();
-    function abrir_modal_creacion(url) {
-        $('#creacion').load(url, function () {
-            $(this).modal('show')
-        });
-    }
-    function abrir_modal_edicion(url) {
-        $('#edicion').load(url, function () {
-            $(this).modal('show')
-        });
-    }
-</script>
-{% endblock extrajs %}
+   </script>
+   
+   {% endblock extrajs %}

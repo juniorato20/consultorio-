@@ -1,0 +1,137 @@
+{% extends 'login/vista_principal.html' %}
+{% block titulo %} Listado de Citas {% endblock titulo %}
+{% block extra_css %}
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.3.0/main.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link href="/static/fullcalendar/calender/main.css" rel="stylesheet" />
+{% endblock extra_css %}
+{% block body %}
+<div class="card-default">
+    <br>
+    <form action="" method="GET">
+        <div class="row">
+          <div class="col-auto mb-4 mb-md-0">
+            <p class="pt-2"><strong>Listado de Doctores</strong></p>
+          </div>
+          <div class="col-auto mb-4 mb-md-0">
+            <div class="form-outline mb-4">
+              <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
+            </div>
+          </div>
+          <div class="col-auto mb-4 mb-md-0">
+            <button type="submit" class="btn btn-outline-primary btn-flat" value="listar_paciente">
+                <i class="fas fa-search fa-sm"></i>
+            </button>
+          </div>
+        </div>
+    </form>
+    <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_cita' %}')"><i class="fas fa-plus"></i></i> Nuevo
+    </button>
+</div> 
+<br>
+<div id="calendar"  class="col-lg-12 text-center">
+    
+    
+</div>
+<div class="modal face" id="creacion" role="dialog"></div>
+<div class="modal face" id="edicion" role="dialog"></div>
+
+
+{% endblock body %}
+{% block extrajs %}
+
+<script src="https://code.jquery.com/jquery-1.6.2.min.js"></script>
+<script src="/static/fullcalendar/lib/main.js"></script>
+<script src="/static/fullcalendar/lib/locales-all.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+<script src="/static/fullcalendar/calender/main.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {   
+      var calendarEl = document.getElementById('calendar'); 
+      var today = new Date();
+      var calendar = new FullCalendar.Calendar(calendarEl,{
+        locale: "es",
+        scrollTime: '07:00',
+        selectable: "true",
+        defaultView: "timeGridWeek",
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+          },
+          initialDate: today,
+          navLinks: true, // can click day/week names to navigate views
+          selectable: true,
+          selectMirror: true,
+
+         
+          editable: true,
+          dayMaxEvents: true, // allow "more" link when too many events
+            events: [
+                {% for Citas  in object_list %}
+                {
+                    id:"{{Citas.id}}",
+                    title : "{{Citas.id}} - {{Citas.paciente}}", 
+                    doctor : "{{Citas.doctor}}",
+                    tratamiento : "{{Citas.tratamiento}}",
+                    start : "{{Citas.fecha| date:'Y-m-d'}}",
+                    end : "{{Citas.fecha| date:'Y-m-d'}}",          
+       
+            },
+            {% endfor %}         
+        ],
+        select: function(arg) {
+            console.log('clicked')
+            var modal = document.getElementById('')
+            // modal.style.display = 'block'
+            calendar.unselect()
+          },
+          eventClick: function(arg) {
+            if (confirm('Are you sure you want to delete this event?')) {
+              arg.event.remove()
+            }
+          },
+    
+              
+      
+
+            });
+            calendar.render();
+        });
+
+      //   const closeBtn1 = document.getElementById('modalClose1');
+      //   const closeBtn2 = document.getElementById('modalClose2');
+      //   closeBtn1.addEventListener('click',()=>{
+      //   const eventModal = document.getElementById('eventModal')
+      //   eventModal.style.display = 'none';
+      // });
+      // closeBtn2.addEventListener('click',()=>{
+      //   const eventModal = document.getElementById('eventModal')
+      //   eventModal.style.display = 'none';
+      // });
+        
+</script>
+
+
+<script type="text/javascript">
+    var $ = jQuery.noConflict();
+    function abrir_modal_creacion(url) {
+        $('#creacion').load(url, function () {
+            $(this).modal('show')
+        });
+    }
+    function abrir_modal_edicion(url) {
+        $('#edicion').load(url, function () {
+            $(this).modal('show')
+        });
+    }
+</script>
+{% endblock extrajs %}

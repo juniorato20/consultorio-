@@ -205,7 +205,7 @@ class ListadoPaciente(ListView):
         pacientes=None
         if query != None:
             pacientes = Paciente.objects.filter(Q(cedula__icontains=query)| Q(nombre__contains=query)
-            | Q(apellido__contains=query)| Q(correo__contains=query))
+            | Q(apellido__contains=query)| Q(correo__contains=query)|Q(fecha__contains=query))
         elif query == None:
             pacientes =Paciente.objects.all()
         else:
@@ -236,15 +236,18 @@ class CrearCita(SuccessMessageMixin,CreateView):
 class ListadoCita(ListView):
     model = Cita
     template_name= 'cita/listar_cita.html'
-    context_object_name = 'Citas'
+    form_class = CitaForm
+    queryset = Doctor.objects.all()
+    paginate_by = 6
+    context_object_name = 'citas'
 
     def get_queryset(self):
         query = self.request.GET.get('q')
-        print(query)
+        #print(query)
         citas=None
         if query != None:
             citas = Cita.objects.filter(Q(paciente__nombre__icontains=query)| Q(doctor__nombre__contains=query)
-            | Q(paciente__apellido__contains=query)| Q(doctor__nombre__contains=query))
+            | Q(paciente__apellido__contains=query)| Q(doctor__nombre__contains=query)| Q(tratamiento__nombre__contains=query))
         elif query == None:
             citas =Cita.objects.all()
         else:
@@ -257,17 +260,11 @@ class ActualizarCita(SuccessMessageMixin,UpdateView):
     form_class = CitaForm
     success_url = reverse_lazy('listar_cita')
     success_message = "Actualizado!"
- 
-class EliminarCita(DeleteView):
-    model = Cita
-    template_name = 'cita/cita_confirm_delete.html'
-    success_url = reverse_lazy('listar_cita')
-    success_message = "La cita se ha elimado correctamente"
-    
+     
 def eliminar_cita(request, id):
     cita = get_object_or_404(Cita, id=id)
     cita.delete()
-    messages.success(request, "eliminado correctamente!")
+    messages.success(request, "Eliminado correctamente!")
     return redirect(to="listar_cita")
 
 #========================== VISTAS BASADOS EN CLASES Y FUNCIONES =======================#
@@ -276,7 +273,7 @@ class CrearDoctor(SuccessMessageMixin, MixinFormInvalid, CreateView):
     template_name = 'doctor/crear_doctor.html'
     form_class = DoctorForm
     success_url = reverse_lazy('listar_doctor')
-    success_message = "creada correctamente!"
+    success_message = "Creada correctamente!"
 
 class ListadoDoctor(ListView):
     model = Doctor
@@ -306,14 +303,13 @@ class ActualizarDoctor(SuccessMessageMixin, MixinFormInvalid, UpdateView):
     template_name = 'doctor/editar_doctor.html'
     form_class = DoctorForm
     success_url = reverse_lazy('listar_doctor')
-    success_message = "actualizado correctamente!"
+    success_message = "Actualizado correctamente!"
 
 def eliminar_doctor(request, id):
     doctor = get_object_or_404(Doctor, id=id)
     doctor.delete()
-    messages.success(request, "eliminado correctamente!")
+    messages.success(request, "Eliminado correctamente!")
     return redirect(to="listar_doctor")
-
 #========================== VISTAS BASADOS EN CLASES y FUNCIONES =======================#
 class CrearTratamiento(SuccessMessageMixin,MixinFormInvalid,CreateView):
     model = Tratamiento
