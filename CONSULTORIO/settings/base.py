@@ -141,7 +141,7 @@ USE_TZ = True
 # AUTH_USER_MODEL = 'citas.CustomUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
+STATIC_URL = '/static/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -155,8 +155,8 @@ STATICFILES_DIRS = (
 )
 
 # Extra places for collectstatic to find static files.
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #CORREO ELECTRONICO 
 
