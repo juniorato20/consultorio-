@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 from pathlib import Path
-from.base import *
+# from.base import *
 
 import os
 
@@ -140,11 +140,12 @@ USE_TZ = True
 
 # AUTH_USER_MODEL = 'citas.CustomUser'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-STATIC_URL = '/static/'
+# DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
