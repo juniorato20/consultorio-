@@ -10,13 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 from pathlib import Path
-# from.base import *
+from.base import *
 
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,18 +28,18 @@ SECRET_KEY = 'buvk)-5e6wdf9^n33@&y9z%^t1h8y&a62nyog0x=@$^@iswzd5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Application definition
 
-MIDDLEWARE_CLASSES = (
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-  #  'whitenoise.middleware.WhiteNoiseMiddleware',
-)
+# MIDDLEWARE_CLASSES = (
+#     # Simplified static file serving.
+#     # https://warehouse.python.org/project/whitenoise/
+#   #  'whitenoise.middleware.WhiteNoiseMiddleware',
+# )
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
@@ -72,6 +72,12 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_crontab',
     'crispy_forms',
+    'django_inlinecss',
+    'bootstrap_modal_forms',
+  
+    'bootstrapform',
+   
+   
     
 ]
 
@@ -140,32 +146,28 @@ USE_TZ = True
 
 # AUTH_USER_MODEL = 'citas.CustomUser'
 
-# DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-
 
 #Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'),)
 
 # Extra places for collectstatic to find static files.
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #CORREO ELECTRONICO 
 
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'jhunniorguerrero@gmail.com'
-EMAIL_HOST_PASSWORD = ''
-DOMAIN = ''
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'jhunniorguerrero97@outlook.com'
+EMAIL_HOST_PASSWORD = 'citasmedicas2020@'

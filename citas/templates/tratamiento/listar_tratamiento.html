@@ -1,33 +1,17 @@
-{% extends 'login/vista_principal.html' %}
+{% extends 'login/inicio.html' %}
 {% block titulo %}Listado de Tratamientos{% endblock titulo %}
 {% block body %}
 <div class="card-default">
-    <br>
-    <form action="" method="GET">
-        <div class="row">
-            <div class="col-auto mb-4 mb-md-0">
-                 <p class="pt-2"><strong>Listado de tratamiento</strong></p>
-          </div>
-          <div class="col-auto mb-4 mb-md-0">
-               <div class="form-outline mb-4">
-                
-                  <input class="form-control" type='text' name='q' value='{{ request.GET.q }}'>
-                </div>
-              </div>
-              <div class="col-auto mb-4 mb-md-0">
-                <button type="submit" class="btn btn-outline-primary btn-flat" value="listar_tratamiento">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
-            </div>
-        </div>
-    </form> 
+ 
+    <div class="text-center">
+        <p class="pt-2"><strong>Listado de Tratamiento</strong></p>
+      </div>
     <div class="card-default">
-        <button type="button" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_tratamiento' %}')"><i class="fas fa-plus"></i></i> Nuevo
+        <button type="button" href="#" class="btn btn-outline-primary btn-flat"onclick="abrir_modal_creacion('{% url 'crear_tratamiento' %}')"><i class="fas fa-plus"></i></i> Nuevo
         </button>
     </div>
-    <br>
-    <div  class="table-responsive">
-        <table class="table table-striped table-advance table-hover">
+    <div class="table-responsive">
+        <table class="table table-striped table-advance table-hover " style="width:100%" id="datatable">
             <thead class="text-uppercase bg-info">
                 <tr class="text-white">
                     <th class="text-center">Nombre</th>
@@ -36,8 +20,8 @@
                     <th class="text-center"><i class="fas fa-cog"></i></th>
                 </tr>
             </thead>
-            {% if tratamientos %}
             <tbody>
+                {% if tratamientos %}
                 {% for p in tratamientos %}
                 <tr>
                     <td class="text-center">{{p.nombre|title }}</td>
@@ -49,87 +33,19 @@
                                 <i class="fas fa-edit"></i></a>
                             <a href= "#"onclick="eliminartratamiento({{ p.id }})" class="btn btn-outline-danger btn-flat"><i
                                 class="fas fa-trash-alt"></i></a>
-
-                        </div>
-                     
+                        </div>                   
                     </td>
                 </tr>
                 {% endfor %}
+                {% else %}
+                <br>
+                <h1>No hay registro de Tratamientos </h1>
+                {% endif %}
+                <br>
             </tbody>
-
         </table>
-        {% else %}
-        <h1>No existen tratamientos registrados</h1>
-        {% endif %}
-        
     </div>
     <div class="modal face" id="creacion" role="dialog"></div>
     <div class="modal face" id="edicion" role="dialog"></div>
-    {% if is_paginated %}
-    <div class="mt-2">
-        <ul class= "pagination"  >
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a href="?page={{ page_obj.previous_page_nummber }}" class="page-link">Anterior</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <a href="#" class="page-link">Anterior</a>
-        </li>
-        {% endif %}
-        {% for i in paginator.page_range %}
-        
-        <li class="page-item {% if page_obj.number == i %} active {% endif %}">
-            <a href="?page={{ i }}" class="page-link">{{ i }}</a>
-        </li>
-        {% endfor %}
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Proximo</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <a href="#" class="page-link">Proximo</a>
-        </li>
-        {% endif %}
-        </ul>
-    </div>
-
-    {% endif %}
 </div>
-    {% endblock body %}
-
-{% block extrajs %}
-<script type="text/javascript">
-    var $ = jQuery.noConflict();
-    function abrir_modal_creacion(url) {
-        $('#creacion').load(url, function () {
-            $(this).modal('show')
-        });
-    }
-    function abrir_modal_edicion(url) {
-        $('#edicion').load(url, function () {
-            $(this).modal('show')
-        });
-    }
-    function eliminartratamiento(id){
-            //console.log(id)           
-            Swal.fire({
-                title: 'Estas seguro?',
-                text: "Se borrará de forma permanente!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonText: 'Cancelar',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si eliminar'
-                }).then(function(result) {
-                    if (result.isConfirmed) {
-                        window.location.href= "/eliminar_tratamiento/"+id+"/"
-                      
-                        }
-                    })
-                }
-  
-</script>
-{% endblock extrajs %}
+{% endblock body %}

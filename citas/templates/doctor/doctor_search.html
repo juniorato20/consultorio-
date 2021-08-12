@@ -1,0 +1,50 @@
+{% extends 'login/vista_principal.html' %}
+{% load crispy_forms_tags %}
+
+
+<div class="container mt-5 my-5">
+    {% block body %}
+
+    <div class="container my-5">
+        <form method="GET">
+            {% csrf_token %}
+            {{ filter.form |crispy}}
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Buscar</button>
+        </form>
+    </div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center">Cedula</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Apellido</th>
+                    <th class="text-center">Especialidad</th>
+                    <th class="text-center">Sexo</th>
+                    <th class="text-center">Direccion</th>
+                    <th class="text-center">Correo</th>
+                    <th class="text-center">Celular</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for equipo in filter.qs %}
+                <tr>
+                    <td class="text-center">{{p.cedula}}</td>
+                    <td class="text-center">{{p.nombre}}</td>
+                    <td class="text-center">{{p.apellido}}</td>
+                    <td class="text-center">{{p.especialidad}}</td>
+                    <td class="text-center">{{p.sexo}}</td>
+                    <td class="text-center">{{p.direccion}}</td>
+                   <td class="text-center">{{p.correo}}</td>
+                    <td class="text-center">{{p.celular}}</td>
+                 
+                    
+                </tr>
+                {% endfor%}
+                
+            </tbody>
+            
+        </table>
+        
+    {% endblock  body%}
+</div>

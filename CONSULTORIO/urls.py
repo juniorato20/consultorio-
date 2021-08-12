@@ -23,16 +23,24 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls import handler404, handler500
 
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', login_view, name="vista_login"),
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
     path('logout/', logout_view, name="vista_logout"), 
+    
 
-    path('registro/', registro, name="registro"),
+    # path('registro/', registro, name="registro"),
+    path('lista_usuario/', login_required(ListadoUsuario.as_view()), name ='listar_usuario'),
+    path('crear_usuario/', login_required(CrearPaciente.as_view()), name = 'crear_usuario'),
+    path('editar_usuario/<int:pk>/', login_required(ActualizarUsuario.as_view()), name = 'editar_usuario'),
+    path('eliminar_usuario/<id>/', eliminar_usuario, name = 'eliminar_usuario'),
+
+    # path('export/', views.export_pdf, name="export-pdf" ),
+    #####  Correo 
+    path('ejemplo/', correo, name="ejemplo"),
+    # path('buscardoctor/', doctorBuscar, name='doctor_buscar'),
 
     path('reset/password/',ResetPasswordView.as_view(),name="reset_password"),
     path('change/password/<str:token>/', ChangePasswordView.as_view(), name='change_password'),
@@ -44,12 +52,12 @@ urlpatterns = [
     path('editar_paciente/<int:pk>/', login_required(ActualizarPaciente.as_view()), name = 'editar_paciente'),
     path('eliminar_paciente/<id>/', eliminar_paciente, name = 'eliminar_paciente'),
 
-
     path('lista_cita/',login_required(ListadoCita.as_view()), name ='listar_cita'),
     path('crear_cita/',login_required(CrearCita.as_view()), name = 'crear_cita'),
     path('editar_cita/<int:pk>/',login_required(ActualizarCita.as_view()), name = 'editar_cita'),
     path('eliminar_cita/<id>/',eliminar_cita, name = 'eliminar_cita'),
-    
+    # path('search/', search, name='search'),
+    # path('reporte_excel_cita/',ReporteCitaExcel.as_view(),name='cita_reporte'),
     
     path('lista_doctor/',login_required(ListadoDoctor.as_view()), name ='listar_doctor'),
     path('crear_doctor/',login_required(CrearDoctor.as_view()), name = 'crear_doctor'),
@@ -61,12 +69,15 @@ urlpatterns = [
     path('crear_tratamiento/',login_required(CrearTratamiento.as_view()), name = 'crear_tratamiento'),
     path('editar_tratamiento/<int:pk>/',login_required(ActualizarTratamiento.as_view()), name = 'editar_tratamiento'),
     path('eliminar_tratamiento/<id>/',eliminar_tratamiento , name = 'eliminar_tratamiento'),
-    
-    
-    path('lista_reporte/',login_required(ListadoReporte.as_view()), name ='listar_reporte'),
-    path('crear_reporte/',login_required(CrearReporte.as_view()), name = 'crear_reporte'),
-    path('editar_reporte/<int:pk>/',login_required(ActualizarReporte.as_view()), name = 'editar_reporte'),
-    path('eliminar_reporte/<id>/',eliminar_reporte, name = 'eliminar_reporte'),
+     
+       #=============== URL CON VISTAS BASADAS EN CLASES Y FUNCIONES==============#
+    # path('lista_usuario/', login_required(ListadoUsuario.as_view()), name ='listar_usuario'),
+    # path('crear_usuario/', login_required(CrearUsuario.as_view()), name = 'crear_usuario'),
+    # path('editar_usuario/<int:pk>/', login_required(ActualizarUsuario.as_view()), name = 'editar_usuario'),
+    # path('eliminar_usuario/<id>/', eliminar_usuario, name = 'eliminar_usuario'),
+ 
+    path('test/', send_emails, name='test'),
+
  ] 
 handler404 = Error404View.as_view()
 handler500 = Error505View.as_error_view()

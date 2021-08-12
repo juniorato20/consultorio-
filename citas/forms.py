@@ -12,14 +12,6 @@ class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput(render_value=False))
 
-    # def clean(self):
-    #     username = self.cleaned_data['usuario']
-    #     password = self.cleaned_data['password']
-    #     username = autenticar_rest(username,password)
-    #     if (not username):
-    #         msg = "Verificar su usuario o contraseña"
-    #         self.add_error('username', msg)
-
     class Meta:
         model = User
         fields = ['username', 'password']
@@ -126,18 +118,19 @@ class PacienteForm(forms.ModelForm):
         except Paciente.DoesNotExist: 
             pass
         return self.cleaned_data
+        
     
-    def clean_email(self, *args, **kwargs):
-        email = self.cleaned_data.get("email")
-        if not email.endwith("edu"):
-            raise forms.ValidationError("")
-        return email
+    # def clean_email(self, *args, **kwargs):
+    #     email = self.cleaned_data.get("email")
+    #     if not email.endwith("edu"):
+    #         raise forms.ValidationError("")
+    #     return email
 
-    def clean_num(self):
-        numeros = self.cleaned_data
-        cedula = numeros.get('cedula')
-        if len(cedula) < 10 or len(cedula) >10:
-            raise forms.ValidationError('Debe ser de 10 Digitos')
+#    """  def clean_num(self):
+#         numeros = self.cleaned_data
+#         cedula = numeros.get('cedula')
+#         if len(cedula) < 10 or len(cedula) >10:
+#             raise forms.ValidationError('Debe ser de 10 Digitos') """
 
 class DoctorForm(forms.ModelForm):
     class Meta:
@@ -164,13 +157,26 @@ class DoctorForm(forms.ModelForm):
             'celular': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '', 'maxlength': '9999999999'})
                    }
             
-    def clean(self):
+    def clean_cedula(self):
         try:
             sc = Doctor.objects.get(
                 cedula= self.cleaned_data['cedula'].upper()
                 )
             if not self.instance.pk:
-                raise forms.ValidationError("Ya existe doctor con este numero de cedula ")
+                raise forms.ValidationError("La cedula ya esta en uso")
+            elif self.instance.pk!= sc.pk:
+                raise forms.ValidationError("Cambio no permitido")
+        except Doctor.DoesNotExist: 
+            pass
+        return self.cleaned_data
+    
+    def clean_(self):
+        try:
+            sc = Doctor.objects.get(
+                correo= self.cleaned_data['correo'].upper()
+                )
+            if not self.instance.pk:
+                raise forms.ValidationError("El correo ya esta en uso ")
             elif self.instance.pk!= sc.pk:
                 raise forms.ValidationError("Cambio no permitido")
         except Doctor.DoesNotExist: 
@@ -184,7 +190,6 @@ class CitaForm(forms.ModelForm):
         labels = {
             'fecha': 'Ingrese fecha',
             'hora': 'Ingrese hora',
-        
         }
         widgets = {
             'paciente' :  forms.Select(attrs={'class': 'form-control'}),
@@ -194,6 +199,11 @@ class CitaForm(forms.ModelForm):
             'tratamiento' :  forms.Select(attrs={'class': 'form-control'}),
                 }
     
+    def clean(self):
+        fecha = self.cleaned_data.get('fecha')
+        if Cita.objects.filter(fecha=fecha).exists():
+            raise forms.ValidationError("Campo ocupado ")
+  
 class TratamientoForm(forms.ModelForm):
     class Meta:
         model = Tratamiento
@@ -202,41 +212,15 @@ class TratamientoForm(forms.ModelForm):
             'nombre' : 'Nombre',
             'descripcion': 'Descripcion',
             'precio' : 'Precio'
-
         }
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
             'descripcion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ''}),
             'precio': forms.NumberInput(attrs={'class':'form-control'}),
-
             }
-    
-    def clean(self):
-        try:
-            sc = Tratamiento.objects.get(
-                nombre= self.cleaned_data['nombre'].upper()
-                )
-            if not self.instance.pk:
-                raise forms.ValidationError("Ya existe tratamiento con el nombre ")
-            elif self.instance.pk!= sc.pk:
-                raise forms.ValidationError("Cambio no permitido")
-        except Tratamiento.DoesNotExist: 
-            pass
-        return self.cleaned_data
-
-class ReporteForm(forms.ModelForm):
-    class Meta:
-        model = Reporte
-        fields = ['paciente', 'observacion', 'fecha']
-        labels = {
-            'paciente' : 'Paciente ',
-            'observacion' : 'Observacion',
-            'fecha' : 'Fecha'
-        }
-        widgets = {
-            'paciente' : forms.Select(attrs={'class': 'form-control'}),
-            'observacion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '', }),
-            'fecha' : forms.DateInput(attrs={'type': 'date','class': 'form-control'}, format="%Y-%m-%d"),
-
-        }
-
+    def clean_nombre(self):
+        nombre = self.cleaned_data["nombre"]
+        existe = Tratamiento.objects.filter(nombre__iexact=nombre).exists()
+        if existe:
+            raise ValidationError("Este nombre ya existe")
+        return nombre

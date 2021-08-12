@@ -14,13 +14,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
+
+   
+ 
+
     <link rel="stylesheet" href="/static/css/cs-skin-elastic.css">
     <link rel="shortcut icon" href="/static/plantilla/icono.png">
     <link rel="stylesheet" href="/static/css/style.css">
-  
     {% block head %}
     {% endblock %}
     {% block extra_css %}
@@ -34,6 +36,7 @@
                     <li class="active">
                         <a href="{% url 'vista_inicio' %}"><i class="menu-icon fa fa-laptop"></i> Inicio </a>
                     </li>
+                  
                     <li class="active">
                         <a href="{% url 'listar_doctor' %}" ><i class="menu-icon fa fa-stethoscope"></i> Doctores </a>
                     </li>
@@ -41,17 +44,13 @@
                         <a href="{% url 'listar_paciente' %}" > <i class="menu-icon fas fa-user"></i> Pacientes </a>
                     </li>
                     <li class="active">
-                      
                         <a href="{% url 'listar_cita' %}"><i class="menu-icon fas fa-teeth"></i> Citas </a></li> 
                     </li>
                     <li  class="active">
                         <a href="{% url 'listar_tratamiento' %}" > <i class="menu-icon fas fa-mortar-pestle"></i></i> Tratamientos </a>
                     </li>
                     <li class="active">
-                        <a href="{% url 'listar_reporte' %}" > <i class="menu-icon fas fa-file-alt"></i></i> Reportes </a>
-                    </li>
-                    <li class="active">
-                        <a href="{% url 'vista_logout' %}" aria-haspopup="true" aria-expanded="false"><i class="menu-icon fas fa-power-off "></i> Salir </a>
+                        <a href="#" class="btn-exit-system" aria-haspopup="true" aria-expanded="false"><i class="menu-icon fas fa-power-off "></i> Salir </a>
                     </li>
                 </ul>
             </div> 
@@ -73,7 +72,7 @@
             <div class="top-right">
                 <div class="header-menu">
                     <div class="user-area dropdown float-right">
-                        <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true"
+                        <a href="{% url 'vista_inicio' %}" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <img src="{% static 'images/admin.jpg' %}" class="rounded-circle" alt="Cinque Terre"
                                 width="50px" height="50px">
@@ -96,6 +95,9 @@
                     {% endblock body %}
                 </div>
             </div>
+            <div>
+                {% include 'login/foother.html' %}
+            </div> 
         </div>
             <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
@@ -106,12 +108,34 @@
             <script src="/static/lib/adminlte-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
             <script src="/static/lib/adminlte-3.0.4/js/adminlte.min.js"></script>
             <script src="/static/lib/js/functions.js"></script>
-            <script src="/static/js/main.js"></script>
-            <script src="/static/lib/js/functions.js"></script>
+            <script src="/static/main.js"></script>
+
+                 
             <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-            <script src="/static/lib/jquery-confirm-v3.3.4/jquery-confirm.min.js"></script>
-        
-     
+            <script src="/static/lib/jquery-confirm-v3.3.4/jquery-confirm.min.js"></script>    
+            <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+            <script>
+                $(document).ready( function () {
+                    $('#datatable').DataTable( {
+                        "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+                        "scrollY": 200,
+                        "scrollX": true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+                            "lengthMenu": "Mostrar _MENU_ ",
+                            "zeroRecords": "Registro no encontrado",
+                            "info": "Mostrando página _PAGE_ de _PAGES_",
+                            "infoEmpty": "No hay registros disponibles",
+                            "infoFiltered": "(filtered from _MAX_ registros totales)",
+                            "pagingType": "full_numbers",
+                            "search": "Buscar:",
+                           
+                           
+                            }
+                        } );
+                    } );
+            </script>
+               
             {% if messages %}
             {% for m in messages %}
             <script>
@@ -120,11 +144,9 @@
                     text : '{{m}}',
                     icon: 'success',              
                     })
-            </script>         
+            </script>  
             {% endfor %}
-            {% endif %}         
-            {% block extrajs %}
-            {% endblock extrajs %}
+            {% endif %}   
+          
 </body>
-
 </html>

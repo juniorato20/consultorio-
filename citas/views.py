@@ -2,16 +2,18 @@ from django.shortcuts import get_object_or_404, render
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+from django.conf import settings
+
 from django.contrib.auth import authenticate, login, logout
-from  CONSULTORIO.settings import base
+
 from django.db.models import query
 from django.http import response
-from django.http.response import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.http.response import BadHeaderError, HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, request
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
-from django.template.loader import render_to_string
+from django.template.loader import get_template, render_to_string
 from django.views.generic import *
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -24,6 +26,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from citas.forms import * 
 from citas.models import *
+from openpyxl import Workbook
+from django.core.mail import EmailMultiAlternatives, send_mail
+from  CONSULTORIO.settings import base
 
 def login_view(request):
     mensaje = None
@@ -42,13 +47,13 @@ def login_view(request):
                         messages.success(request,"Bienvenido al consultorio odontologico")
                         return HttpResponseRedirect('/inicio/')
                     else: 
-                        mensaje = "Usuario inactivo"     
+                        mensaje = "Usuario esta inactivo"     
                 else:
-                    mensaje = "Usuario o contraseña invalido"
+                    mensaje = "Nombre de usuario y/o contraseña incorrecta"
             else:
                 form = LoginForm()
-        ctx = {'mensaje': mensaje}
-        return render(request, 'login/login.html', ctx)
+        
+        return render(request, 'login/login.html', {'mensaje': mensaje})
 
 def logout_view(request):
     logout(request)
@@ -58,7 +63,7 @@ def logout_view(request):
 def inicio_view(request):
     citas = Paciente.objects.all()
     ctx = {'citas': citas}
-    return render(request,'login/vista_principal.html',ctx)
+    return render(request,'login/inicio.html',ctx)
 
 ##------------METODO REGISTRAR USUARIO------------
 class  MixinFormInvalid:
@@ -165,23 +170,49 @@ class ChangePasswordView(FormView):
         context['login_url'] = settings.LOGIN_URL
         return context
 
-def registro(request):
-    data = {
-        'form' : CustomUserCreationForm()
-    }
-    if request.method == 'POST':
-        form = CustomUserCreationForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            usuario = authenticate(username=username,password=password)
-            login(request, usuario)
-            messages.success(request, "Te has registrado correctamente")
-            return redirect('/inicio/')
-        data["form"] = form
+# def registro(request):
+#     data = {
+#         'form' : CustomUserCreationForm()
+#     }
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password1']
+#             usuario = authenticate(username=username,password=password)
+#             login(request, usuario)
+#             messages.success(request, "Te has registrado correctamente")
+#             return redirect('/inicio/')
+#         data["form"] = form
 
-    return render(request, 'login/registrar.html', data)
+#     return render(request, 'login/inicio.html', data)
+
+class CrearUsuario(SuccessMessageMixin, CreateView):
+    model = User
+    template_name='usuario/crear_usuario.html'
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('listar_usuario')
+    success_message = "creado correctamente!"
+
+
+class ListadoUsuario(ListView):
+    model = User
+    template_name = 'usuario/listar_usuario.html'
+    form_class = CustomUserCreationForm
+    content_object_name = 'usuarios'
+
+class ActualizarUsuario(SuccessMessageMixin,UpdateView):
+    model = User
+    template_name = 'usuario/editar_usuario.html'
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('listar_usuario')
+    success_message = 'actualizado correctamente!'
+
+def eliminar_usuario(request, id):
+    usuario = get_object_or_404(User, id=id)
+    usuario .delete()
+    messages.success(to="listar_usuario")
 
 # #========================== VISTAS BASADOS EN CLASES Y FUNCIONES =======================#   
 class CrearPaciente(SuccessMessageMixin, MixinFormInvalid, CreateView):
@@ -194,23 +225,8 @@ class CrearPaciente(SuccessMessageMixin, MixinFormInvalid, CreateView):
 class ListadoPaciente(ListView): 
     model = Paciente
     template_name= 'paciente/listar_paciente.html'
-    form_class = PacienteForm
-    queryset = Paciente.objects.all()
-    paginate_by = 3
+    form_class = PacienteForm  
     context_object_name = 'pacientes'
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        print(query)
-        pacientes=None
-        if query != None:
-            pacientes = Paciente.objects.filter(Q(cedula__icontains=query)| Q(nombre__contains=query)
-            | Q(apellido__contains=query)| Q(correo__contains=query)|Q(fecha__contains=query))
-        elif query == None:
-            pacientes =Paciente.objects.all()
-        else:
-            pacientes =Paciente.objects.none()
-        return pacientes
 
 class ActualizarPaciente(SuccessMessageMixin, MixinFormInvalid, UpdateView):
     model = Paciente
@@ -231,40 +247,25 @@ class CrearCita(SuccessMessageMixin,CreateView):
     template_name='cita/crear_cita.html'
     form_class = CitaForm
     success_url = reverse_lazy('listar_cita')
-    success_message = "Creada correctamente!"
+    success_message = "creado correctamente!"
 
 class ListadoCita(ListView):
     model = Cita
     template_name= 'cita/listar_cita.html'
     form_class = CitaForm
-    queryset = Doctor.objects.all()
-    paginate_by = 6
     context_object_name = 'citas'
 
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        #print(query)
-        citas=None
-        if query != None:
-            citas = Cita.objects.filter(Q(paciente__nombre__icontains=query)| Q(doctor__nombre__contains=query)
-            | Q(paciente__apellido__contains=query)| Q(doctor__nombre__contains=query)| Q(tratamiento__nombre__contains=query))
-        elif query == None:
-            citas =Cita.objects.all()
-        else:
-            citas =Cita.objects.none()
-        return citas
-   
 class ActualizarCita(SuccessMessageMixin,UpdateView):
     model = Cita
     template_name = 'cita/editar_cita.html'
     form_class = CitaForm
     success_url = reverse_lazy('listar_cita')
-    success_message = "Actualizado!"
+    success_message = "actualizado correctamente!"
      
 def eliminar_cita(request, id):
     cita = get_object_or_404(Cita, id=id)
     cita.delete()
-    messages.success(request, "Eliminado correctamente!")
+    messages.success(request, "eliminado correctamente!")
     return redirect(to="listar_cita")
 
 #========================== VISTAS BASADOS EN CLASES Y FUNCIONES =======================#
@@ -273,45 +274,28 @@ class CrearDoctor(SuccessMessageMixin, MixinFormInvalid, CreateView):
     template_name = 'doctor/crear_doctor.html'
     form_class = DoctorForm
     success_url = reverse_lazy('listar_doctor')
-    success_message = "Creada correctamente!"
+    success_message = "creada correctamente!"
 
 class ListadoDoctor(ListView):
     model = Doctor
     template_name = 'doctor/listar_doctor.html'
     form_class = DoctorForm
-    queryset = Doctor.objects.all()
-    paginate_by = 3
-    context_object_name = 'doctores'  
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        # print(query)
-        doctores=None
-
-        if query != None:
-            doctores = Doctor.objects.filter(Q(cedula__icontains=query)  | Q(nombre__contains=query) 
-            | Q(apellido__contains=query) | Q(correo__contains=query))
-        elif query == None:
-            doctores=Doctor.objects.all()
-        else:
-            doctores=Doctor.objects.none()
-
-        return doctores 
+    context_object_name = 'doctores'   
 
 class ActualizarDoctor(SuccessMessageMixin, MixinFormInvalid, UpdateView):
     model = Doctor
     template_name = 'doctor/editar_doctor.html'
     form_class = DoctorForm
     success_url = reverse_lazy('listar_doctor')
-    success_message = "Actualizado correctamente!"
+    success_message = "actualizado correctamente!"
 
 def eliminar_doctor(request, id):
     doctor = get_object_or_404(Doctor, id=id)
     doctor.delete()
-    messages.success(request, "Eliminado correctamente!")
+    messages.success(request, "eliminado correctamente!")
     return redirect(to="listar_doctor")
 #========================== VISTAS BASADOS EN CLASES y FUNCIONES =======================#
-class CrearTratamiento(SuccessMessageMixin,MixinFormInvalid,CreateView):
+class CrearTratamiento(SuccessMessageMixin,CreateView):
     model = Tratamiento
     template_name = 'tratamiento/crear_tratamiento.html'
     form_class = TratamientoForm
@@ -319,25 +303,12 @@ class CrearTratamiento(SuccessMessageMixin,MixinFormInvalid,CreateView):
     success_message = "creada correctamente!"
 
 class ListadoTratamiento(ListView):
+    model = Tratamiento
     template_name = 'tratamiento/listar_tratamiento.html'
-    queryset = Tratamiento.objects.all()
-    paginate_by = 5
+    form_class = TratamientoForm
     context_object_name = 'tratamientos'  
 
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        print(query)
-        tratamientos=None
-        if query != None:
-            tratamientos = Tratamiento.objects.filter(Q(nombre__icontains=query) | Q(descripcion__contains=query))
-        elif query == None:
-            tratamientos=Tratamiento.objects.all()
-        else:
-            tratamientos=Tratamiento.objects.none()
-
-        return tratamientos 
-
-class ActualizarTratamiento(SuccessMessageMixin,MixinFormInvalid,UpdateView):
+class ActualizarTratamiento(SuccessMessageMixin,UpdateView):
     model = Tratamiento
     template_name = 'tratamiento/editar_tratamiento.html'
     form_class = TratamientoForm
@@ -349,46 +320,7 @@ def eliminar_tratamiento(request, id):
     tratamiento.delete()
     messages.success(request, "eliminado correctamente!")
     return redirect(to="listar_tratamiento")
-        
-class CrearReporte(SuccessMessageMixin,CreateView):
-    model = Reporte
-    template_name = 'reporte/crear_reporte.html'
-    form_class = ReporteForm
-    success_url = reverse_lazy('listar_reporte')
-    success_message = " creada correctamente!"
-
-class ListadoReporte(ListView):
-    template_name = 'reporte/listar_reporte.html'
-    queryset = Reporte.objects.all()
-    paginate_by = 5
-    context_object_name = 'reportes'  
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        print(query)
-        reportes=None
-        if query != None:
-            reportes = Reporte.objects.filter(Q(paciente__nombre__icontains=query) | Q(observacion__contains=query))
-        elif query == None:
-            reportes=Reporte.objects.all()
-        else:
-            reportes=Reporte.objects.none()
-
-        return reportes
-
-class ActualizarReporte(SuccessMessageMixin,UpdateView):
-    model = Reporte
-    template_name = 'reporte/editar_reporte.html'
-    form_class = ReporteForm
-    success_url = reverse_lazy('listar_reporte')
-    success_message = " actualizado correctamente!"
-
-def eliminar_reporte(request, id):
-    reporte = get_object_or_404(Reporte, id=id)
-    reporte.delete()
-    messages.success(request, "eliminado correctamente!")
-    return redirect(to="listar_reporte")
-        
+                
 class Error404View(TemplateView):
     template_name = "login/error_404.html"
 
@@ -403,3 +335,49 @@ class Error505View(TemplateView):
             r = v(request)
             r.render()
         return view
+
+def send_emails(mail):
+    print(base.EMAIL_HOST_USER)
+    subject = 'Thank you for registering to our site'
+    message = ' it  means a world to us '
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ['receiver@gmail.com',]
+    #send_mail( subject, message, email_from, recipient_list )
+   
+    try:
+        email = EmailMultiAlternatives('Un correo de prueba',
+        'Consultorio Odontologico',
+        base.EMAIL_HOST_USER,
+        ["jeffrinalvarez16@gmail.com"])
+        email.send()
+        print("se envio")
+    except smtplib.SMTPException as e:
+        print("error", e)
+        pass
+import smtplib
+def correo(request):
+    if request.method =='POST':
+        print("Envio de correo")
+        mail=request.POST.get('mail',"")
+        print(mail)
+        server = smtplib.SMTP('smtp.gmail.com',587)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login('jhunniorguerrero97@outlook.com','citasmedicas2020@')
+        msg = "test message"
+        server.sendmail('jhunniorguerrero97@outlook.com','jeffrinalvarez16@gmail.com',msg)
+        server.quit()
+        try:
+            send_mail('Un correo de prueba',
+            'Consultorio Odontologico',
+            base.EMAIL_HOST_USER,
+            ["jeffrinalvarez16@gmail.com"], fail_silently = False)
+            
+            print("se envio")
+        except BadHeaderError as e:
+            print("error", e)
+            
+    return render(request,'ejemplo.html',{} )
+
+

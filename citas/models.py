@@ -2,9 +2,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, User
 from django.utils.safestring  import mark_safe
-
+from django.utils import timezone
 
 genero = [
     ('Hombre', 'Hombre'),
@@ -35,10 +35,10 @@ tiempo = [
 ]
 class Tratamiento(models.Model):
     id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=255, blank=False, null=False,unique=True )
+    nombre = models.CharField(max_length=255, blank=False, null=False)
     descripcion = models.CharField(max_length=255, blank=False, null=False)
     precio = models.DecimalField(max_digits=5, decimal_places=2)
-
+   
     class Meta:
         ordering = ["nombre"]
         verbose_name = 'Tratamiento'
@@ -77,7 +77,7 @@ class Doctor(models.Model):
     direccion = models.TextField( max_length=225,blank=False, null=False)
     correo = models.EmailField()
     celular = models.CharField( max_length=10)
-
+    # fecha_entrega = models.DateTimeField(default=timezone.now)
   
     class Meta:
         ordering = ["apellido", "nombre"]
@@ -95,36 +95,23 @@ class Cita(models.Model):
     fecha = models.DateField()
     hora =  models.CharField( max_length=60, choices=tiempo, default='available')
     estado = models.BooleanField(default = True)
-
+    
     class Meta:
-        ordering = ["doctor","id"]
+        ordering = ["doctor","fecha"]
         verbose_name = 'Cita'
         verbose_name_plural = 'Citas'
 
     def __str__ (self):
         return self.paciente.nombre + " " + self.paciente.apellido
 
-class Reporte(models.Model):
-    id = models.AutoField(primary_key=True)
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, default='available')
-    observacion= models.TextField( max_length=225,blank=False, null=False)
-    fecha = models.DateField()
 
-    class Meta:
-        ordering = ["id"]
-        verbose_name = 'Reporte'
-        verbose_name_plural = 'Reportes'
-
-    def __str__ (self):
-        return self.paciente.nombre + " " + self.paciente.apellido
- 
-
-# class CustomUser(AbstractUser):
-     
-#     token = models.UUIDField(primary_key=False, editable=False, null=True, blank=True)
-#     class Meta: 
-#         verbose_name  = 'User'
-#         verbose_name_plural = 'Users'
+class Usuario(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     
-#     def __str__(self):
-#         return self.username
+    class Meta:
+        verbose_name = 'Usuario'
+        verbose_name_plural = 'Usuarios'
+    
+    def __str__(self):
+        return self.usuario.username
+

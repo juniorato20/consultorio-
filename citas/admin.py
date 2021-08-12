@@ -1,8 +1,6 @@
 from django.contrib import admin
 from citas.models import  *
 
-
-
 class TratamientoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'descripcion','precio')
     search_fields = ['nombre']
@@ -18,19 +16,17 @@ class DoctorAdmin(admin.ModelAdmin):
 class CitaAdmin(admin.ModelAdmin):
     list_display = ('paciente','doctor','tratamiento','fecha','hora','estado')
     search_fields = ['fecha']
-    
-class ReporteAdmin(admin.ModelAdmin):
-    list_display = ('id','paciente','observacion','fecha')
-    search_fields = ['id']
-    
-
+       
+# class UsuarioAdmin(admin.ModelAdmin):
+#     list_display = ('usuario','nombre','apellido')
+#     search_fields =['id']
     
 admin.site.register(Tratamiento,TratamientoAdmin)    
 admin.site.register(Paciente,PacienteAdmin)
 admin.site.register(Doctor,DoctorAdmin)
 admin.site.register(Cita,CitaAdmin)
-admin.site.register(Reporte,ReporteAdmin)
-# admin.site.register(CustomUser)
+# admin.site.register(Usuario,UsuarioAdmin)
+
 
 
 
