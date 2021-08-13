@@ -2,8 +2,6 @@ from django.shortcuts import get_object_or_404, render
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-from django.conf import settings
-
 from django.contrib.auth import authenticate, login, logout
 
 from django.db.models import query
@@ -337,47 +335,38 @@ class Error505View(TemplateView):
         return view
 
 def send_emails(mail):
-    print(base.EMAIL_HOST_USER)
-    subject = 'Thank you for registering to our site'
-    message = ' it  means a world to us '
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['receiver@gmail.com',]
-    #send_mail( subject, message, email_from, recipient_list )
-   
+    body = 'Subject: Subject Here .\nDear ContactName, \n\n' + 'Email\'s BODY text' + '\nYour :: Signature/Innitials'
     try:
-        email = EmailMultiAlternatives('Un correo de prueba',
-        'Consultorio Odontologico',
-        base.EMAIL_HOST_USER,
-        ["jeffrinalvarez16@gmail.com"])
-        email.send()
-        print("se envio")
-    except smtplib.SMTPException as e:
-        print("error", e)
-        pass
-import smtplib
+        smtpObj = smtplib.SMTP('smtp-mail.outlook.com', 587)
+    except Exception as e:
+        print(e)
+        smtpObj = smtplib.SMTP_SSL('smtp-mail.outlook.com', 465)
+    #type(smtpObj) 
+    smtpObj.ehlo()
+    smtpObj.starttls()
+    smtpObj.login('jhunniorguerrero97@outlook.com', "citasmedicas2020@") 
+    smtpObj.sendmail('jhunniorguerrero97@outlook.com', 'jhunniorguerrero@gmail.com', body) # Or recipient@outlook
+
+    smtpObj.quit()
+    pass
+
 def correo(request):
     if request.method =='POST':
         print("Envio de correo")
         mail=request.POST.get('mail',"")
         print(mail)
-        server = smtplib.SMTP('smtp.gmail.com',587)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.login('jhunniorguerrero97@outlook.com','citasmedicas2020@')
-        msg = "test message"
-        server.sendmail('jhunniorguerrero97@outlook.com','jeffrinalvarez16@gmail.com',msg)
-        server.quit()
-        try:
-            send_mail('Un correo de prueba',
-            'Consultorio Odontologico',
-            base.EMAIL_HOST_USER,
-            ["jeffrinalvarez16@gmail.com"], fail_silently = False)
-            
-            print("se envio")
-        except BadHeaderError as e:
-            print("error", e)
+        send_emails(mail)
             
     return render(request,'ejemplo.html',{} )
 
-
+def send_email():
+    try:
+        mailServer =smtplib.SMTP(base.EMAIL_HOST, base.EMAIL_PORT)
+        print(mailServer.ehlo())
+        mailServer.starttls()
+        mailServer.ehlo()
+        mailServer.login(base.EMAIL_HOST_USER, base.EMAIL_HOST_PASSWORD)
+        print('conectado')
+    except Exception as e:
+        print(e)
+send_email()

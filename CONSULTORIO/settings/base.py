@@ -28,7 +28,7 @@ SECRET_KEY = 'buvk)-5e6wdf9^n33@&y9z%^t1h8y&a62nyog0x=@$^@iswzd5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
@@ -73,9 +73,7 @@ INSTALLED_APPS = [
     'django_crontab',
     'crispy_forms',
     'django_inlinecss',
-    'bootstrap_modal_forms',
-  
-    'bootstrapform',
+
    
    
     
@@ -166,7 +164,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'jhunniorguerrero97@outlook.com'
